@@ -1,0 +1,93 @@
+import { SEED_HACKATHONS } from "@/seed/hackathons";
+import { Hackathon, HackathonStatus } from "@/lib/types";
+import { computeHackathonStatus } from "@/lib/status";
+import { isSupabaseConfigured, getSupabaseClient } from "@/lib/supabase";
+
+// Local in-memory store for guest/fallback bookmarks
+const inMemoryBookmarks = new Set<string>([
+  // Seed sample-1 as initial bookmarked item
+  "a1000000-0000-0000-0000-000000000001",
+]);
+
+export async function getUserBookmarkedHackathons(
+  userId?: string
+): Promise<(Hackathon & { status: HackathonStatus })[]> {
+  if (isSupabaseConfigured && userId) {
+    try {
+      const supabase = getSupabaseClient();
+      const { data: bms, error } = await supabase
+        .from("bookmarks")
+        .select("hackathon_id")
+        .eq("user_id", userId);
+
+      if (!error && bms) {
+        const ids = bms.map((b) => b.hackathon_id);
+        const { data: hackathons } = await supabase
+          .from("hackathons")
+          .select("*")
+          .in("id", ids);
+
+        if (hackathons) {
+          return hackathons.map((h: Hackathon) => ({
+            ...h,
+            status: computeHackathonStatus(h.reg_start, h.reg_deadline),
+            is_bookmarked: true,
+          }));
+        }
+      }
+    } catch (err) {
+      console.warn("Supabase bookmarks fetch failed, using fallback:", err);
+    }
+  }
+
+  // Fallback to in-memory items
+  return SEED_HACKATHONS.filter((h) => inMemoryBookmarks.has(h.id)).map(
+    (h) => ({
+      ...h,
+      status: computeHackathonStatus(h.reg_start, h.reg_deadline),
+      is_bookmarked: true,
+    })
+  );
+}
+
+export async function toggleBookmark(
+  hackathonId: string,
+  userId?: string
+): Promise<{ bookmarked: boolean }> {
+  if (isSupabaseConfigured && userId) {
+    try {
+      const supabase = getSupabaseClient();
+      const { data: existing } = await supabase
+        .from("bookmarks")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("hackathon_id", hackathonId)
+        .single();
+
+      if (existing) {
+        await supabase
+          .from("bookmarks")
+          .delete()
+          .eq("user_id", userId)
+          .eq("hackathon_id", hackathonId);
+        return { bookmarked: false };
+      } else {
+        await supabase
+          .from("bookmarks")
+          .insert({ user_id: userId, hackathon_id: hackathonId });
+        return { bookmarked: true };
+      }
+    } catch (err) {
+      console.warn("Supabase toggle bookmark failed, using fallback:", err);
+    }
+  }
+
+  // Local fallback toggle
+  if (inMemoryBookmarks.has(hackathonId)) {
+    inMemoryBookmarks.delete(hackathonId);
+    return { bookmarked: false };
+  } else {
+    inMemoryBookmarks.add(hackathonId);
+    return { bookmarked: true };
+  }
+}
