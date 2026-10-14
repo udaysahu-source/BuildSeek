@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>SideQuest Discover Mobile</title>
+<script src="ef01a1a6-1e34-40c1-8575-65baf99b0bb3"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("386fc48e-104e-47b2-8fb3-dcdd9d89d1db") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("bbb174a4-4489-4275-92b3-30256e18ee6b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("386fc48e-104e-47b2-8fb3-dcdd9d89d1db") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("bbb174a4-4489-4275-92b3-30256e18ee6b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("386fc48e-104e-47b2-8fb3-dcdd9d89d1db") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("bbb174a4-4489-4275-92b3-30256e18ee6b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f433994d-8298-4c93-b619-880f48815e02") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("33aa2ea8-7cac-4497-9ed3-0dd336a34d41") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("7fbca061-231e-44f1-82ee-be61e1d66aa1") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("60867200-0cbb-48ef-907f-588902915cf5") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("313e1854-8442-4b30-98c9-6d7b4f214851") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("b549e1bc-1204-4f28-b261-78e28cd78d56") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("af2fe198-ba98-4780-bd52-7084fe009dcc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("f433994d-8298-4c93-b619-880f48815e02") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("33aa2ea8-7cac-4497-9ed3-0dd336a34d41") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("7fbca061-231e-44f1-82ee-be61e1d66aa1") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("60867200-0cbb-48ef-907f-588902915cf5") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("313e1854-8442-4b30-98c9-6d7b4f214851") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("b549e1bc-1204-4f28-b261-78e28cd78d56") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("af2fe198-ba98-4780-bd52-7084fe009dcc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("f433994d-8298-4c93-b619-880f48815e02") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("33aa2ea8-7cac-4497-9ed3-0dd336a34d41") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("7fbca061-231e-44f1-82ee-be61e1d66aa1") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("60867200-0cbb-48ef-907f-588902915cf5") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("313e1854-8442-4b30-98c9-6d7b4f214851") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("b549e1bc-1204-4f28-b261-78e28cd78d56") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("af2fe198-ba98-4780-bd52-7084fe009dcc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("f433994d-8298-4c93-b619-880f48815e02") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("33aa2ea8-7cac-4497-9ed3-0dd336a34d41") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("7fbca061-231e-44f1-82ee-be61e1d66aa1") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("60867200-0cbb-48ef-907f-588902915cf5") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("313e1854-8442-4b30-98c9-6d7b4f214851") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("b549e1bc-1204-4f28-b261-78e28cd78d56") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("af2fe198-ba98-4780-bd52-7084fe009dcc") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+body{margin:0;background:#FFFBE8}
+a{color:inherit;text-decoration:none}
+</style>
+</helmet>
+<div style="position:relative; width:390px; height:844px; background:#FFFBE8; color:#0B1033; font-family:'Inter',system-ui,sans-serif; overflow:hidden">
+
+<div style="padding:24px 20px 0; display:flex; flex-direction:column; gap:14px">
+<div style="display:flex; align-items:center; justify-content:space-between">
+<div style="display:flex; align-items:center; gap:10px">
+<svg aria-hidden="true" width="36" height="36" sc-camel-view-box="0 0 36 36"><rect width="36" height="36" rx="12" fill="#0B1033"></rect><path d="M13 27V9" stroke="#B6F500" stroke-width="3" stroke-linecap="round"></path><path d="M14 10L27 15L14 20Z" fill="#B6F500"></path></svg>
+<h1 style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:800; font-size:30px; letter-spacing:-0.03em; margin:0">Discover</h1>
+</div>
+<a href="#" aria-label="Alerts" style="width:44px; height:44px; border-radius:50%; background:#B6F500; display:flex; align-items:center; justify-content:center">
+<svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="#0B1033" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 21h4"></path></svg>
+</a>
+</div>
+
+<div style="display:flex; gap:10px">
+<label style="flex:1; height:52px; background:#fff; border-radius:999px; display:flex; align-items:center; gap:10px; padding:0 18px; box-shadow:0 6px 16px rgba(11,16,51,.08); font-size:15px; color:#3A4070">
+<svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+Search hackathons
+</label>
+<a href="#" aria-label="Filters" style="position:relative; width:52px; height:52px; border-radius:50%; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 16px rgba(11,16,51,.3)">
+<svg aria-hidden="true" width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="#B6F500" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"></path><circle cx="16" cy="7" r="2"></circle><circle cx="8" cy="17" r="2"></circle></svg>
+<span style="position:absolute; top:-2px; right:-2px; width:20px; height:20px; border-radius:50%; background:#B6F500; color:#0B1033; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center">2</span>
+</a>
+</div>
+
+<div style="display:flex; gap:8px; overflow:hidden">
+<span style="flex:none; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); color:#fff; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600; box-shadow:inset 0 1px 0 rgba(255,255,255,.2)">Closing soon</span>
+<span style="flex:none; background:#fff; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600">Online ✕</span>
+<span style="flex:none; background:#fff; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600">Students ✕</span>
+<span style="flex:none; background:#fff; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600">AI</span>
+</div>
+</div>
+
+<div style="padding:16px 20px 0; display:flex; flex-direction:column; gap:14px">
+<article style="background:#fff; border-radius:28px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 10px 24px rgba(11,16,51,.07)">
+<div style="display:flex; align-items:center; justify-content:space-between">
+<span style="background:#F2F0E2; border-radius:999px; padding:5px 10px; font-size:12px; font-weight:600; color:#3A4070">Offline · Raipur</span>
+<button aria-label="Bookmark" style="width:40px; height:40px; border-radius:50%; border:none; background:#F2F0E2; display:flex; align-items:center; justify-content:center; color:#0B1033">
+<svg aria-hidden="true" width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+</button>
+</div>
+<h2 style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:700; font-size:22px; line-height:1.15; margin:2px 0 0">Smart Campus Hackathon</h2>
+<div style="font-size:13px; color:#3A4070">Sample Institute of Technology · via Unstop</div>
+<div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px">
+<span style="background:#FFB020; border-radius:999px; padding:8px 14px; font-size:14px; font-weight:700">Closes in 2d 4h</span>
+<span style="font-size:14px; font-weight:700">₹1,00,000</span>
+</div>
+</article>
+<article style="background:#fff; border-radius:28px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 10px 24px rgba(11,16,51,.07)">
+<div style="display:flex; align-items:center; justify-content:space-between">
+<span style="background:#F2F0E2; border-radius:999px; padding:5px 10px; font-size:12px; font-weight:600; color:#3A4070">Online</span>
+<button aria-label="Bookmark" style="width:40px; height:40px; border-radius:50%; border:none; background:#0B1033; display:flex; align-items:center; justify-content:center; color:#B6F500">
+<svg aria-hidden="true" width="18" height="18" sc-camel-view-box="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+</button>
+</div>
+<h2 style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:700; font-size:22px; line-height:1.15; margin:2px 0 0">Green Tech Build-a-thon</h2>
+<div style="font-size:13px; color:#3A4070">Sample Climate Club · via Devpost</div>
+<div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px">
+<span style="background:#EAF8C8; color:#1F6B00; border-radius:999px; padding:8px 14px; font-size:14px; font-weight:700">Closes in 6d 12h</span>
+<span style="font-size:14px; font-weight:700">₹50,000</span>
+</div>
+</article>
+<article style="background:#fff; border-radius:28px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 10px 24px rgba(11,16,51,.07)">
+<div style="display:flex; align-items:center; justify-content:space-between">
+<span style="background:#F2F0E2; border-radius:999px; padding:5px 10px; font-size:12px; font-weight:600; color:#3A4070">Online</span>
+<span style="background:#C62F3A; color:#fff; border-radius:999px; padding:6px 12px; font-size:12px; font-weight:700">Closes today</span>
+</div>
+<h2 style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:700; font-size:22px; line-height:1.15; margin:2px 0 0">AI for Bharat Sprint</h2>
+</article>
+</div>
+
+<!-- floating pill nav -->
+<nav aria-label="Main" style="position:absolute; left:16px; right:16px; bottom:18px; height:68px; background:#fff; border-radius:999px; display:flex; align-items:center; justify-content:space-between; padding:0 10px; box-shadow:0 14px 34px rgba(11,16,51,.22)">
+<a href="#" style="display:inline-flex; align-items:center; gap:8px; height:50px; padding:0 20px; border-radius:999px; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); color:#fff; font-weight:600; font-size:15px; box-shadow:inset 0 1px 0 rgba(255,255,255,.2)">
+<svg aria-hidden="true" width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="#B6F500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg>
+Discover
+</a>
+<a href="#" aria-label="Quest Log" style="width:50px; height:50px; display:flex; align-items:center; justify-content:center; color:#0B1033">
+<svg aria-hidden="true" width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+</a>
+<a href="#" aria-label="Alerts" style="width:50px; height:50px; display:flex; align-items:center; justify-content:center; color:#0B1033">
+<svg aria-hidden="true" width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 21h4"></path></svg>
+</a>
+<a href="#" aria-label="Profile" style="width:50px; height:50px; display:flex; align-items:center; justify-content:center; color:#0B1033">
+<svg aria-hidden="true" width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1-4 4-6 8-6s7 2 8 6"></path></svg>
+</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+
+
+</body></html>

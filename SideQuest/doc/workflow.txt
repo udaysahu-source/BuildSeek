@@ -1,0 +1,252 @@
+Hackathon Finder
+Workflow Document
+Version 1.0 | 14 Oct 2026 | How data, users and developers move through the system
+
+Overview
+Five workflows make up the product: data ingestion, user discovery, alerts, submission and moderation, and the
+developer release flow. Each is shown below as a step diagram followed by notes on edge cases.
+Workflow
+
+Trigger
+
+Actor
+
+Output
+
+Ingestion
+
+Cron every 6 hours
+
+GitHub Actions
+
+Fresh, deduplicated listings in the database
+
+Discovery
+
+User opens the app
+
+Student
+
+Shortlist, bookmark, register on source site
+
+Alerts
+
+Cron every hour
+
+GitHub Actions
+
+Telegram and email messages
+
+Submission
+
+User submits the form
+
+Organiser and admin
+
+Approved listing goes live
+
+Release
+
+Git push
+
+Developer
+
+Preview and production deploys
+
+1. Data ingestion workflow
+Cron trigger
+every 6 hours
+
+Fetch all sources
+in parallel
+
+Normalize to
+common schema
+
+Validate required
+fields and dates
+
+Dedupe against
+existing rows
+
+Enrich: tags and
+AI summary
+
+Upsert into
+Supabase
+
+Log scrape_run
+(counts, errors)
+
+Health check:
+any source failing?
+
+Alert owner after
+3 failed runs
+
+Revalidate cached
+pages (ISR)
+
+• A failed source is retried once, then skipped; the other sources still complete.
+• Rows missing a title, link or any date are dropped and counted in the log.
+• Enrichment runs only for new or changed rows, so AI usage stays inside the free tier.
+• Listings not seen for 14 days are hidden, not deleted.
+
+Hackathon Finder | Workflow Document
+
+Page 1
+
+2. User discovery workflow
+Open app
+(web / PWA)
+
+Search by keyword
+
+Apply filters:
+mode, city, prize,
+team size, theme
+
+Sort: closing soon
+or best match
+
+Open hackathon
+detail card
+
+Bookmark it
+
+Add to calendar
+(.ics feed)
+
+Click Register:
+opens source site
+
+Get alert before
+the deadline
+
+Registers on the
+original platform
+
+• Browsing needs no login; bookmarks, alerts and the calendar feed need an account.
+• Closed events are hidden by default, with a toggle to show them.
+• Each card always shows the source name and a direct link so users can verify details.
+
+3. Alerts workflow
+Hourly cron
+
+Find new and
+closing-soon
+hackathons
+
+Match against
+alert_rules
+
+Check
+notifications_log
+(no duplicates)
+
+Send Telegram
+message
+
+Send email
+(if enabled)
+
+Write to
+notifications_log
+
+Done
+
+• Closing-soon alerts fire at 48 hours and 24 hours before the registration deadline.
+• The unique key (user, hackathon, kind) in notifications_log stops repeat messages if a job reruns.
+• A user can mute alerts from the Telegram bot with /mute.
+
+4. Submission and moderation workflow
+User fills the
+submit form
+
+Validate fields and
+spam check
+
+Saved with
+status = pending
+
+Admin reviews
+in queue
+
+Approve
+
+Insert into
+hackathons
+(verified = true)
+
+Notify submitter
+
+Live on site
+
+• Reject path: admin picks a reason, status becomes rejected, and the submitter is notified.
+• The form is rate limited and has a hidden honeypot field to catch bots.
+• Approved user-submitted events are labelled so people know the source.
+
+Hackathon Finder | Workflow Document
+
+Page 2
+
+5. Developer release workflow
+Create feature
+branch
+
+Commit and push
+
+Vercel preview
+deploy
+
+Test on the
+preview URL
+
+Merge to main
+
+Auto-deploy to
+production
+
+Apply Supabase
+SQL migration
+
+Monitor scrape_runs
+and Vercel logs
+
+Build timeline
+Week
+
+Focus
+
+Done when
+
+1
+
+Schema, 2 scrapers, list page
+
+Real hackathons from two sources show in the app
+
+2
+
+Search, filters, deadline radar, detail card
+
+A student can find and open an event in under a minute
+
+3
+
+Accounts, bookmarks, calendar feed, submit and
+moderation
+
+A submitted event can be approved and appear live
+
+4
+
+Alerts, AI summaries, polish, launch
+
+Alerts arrive on Telegram; shared in campus groups
+
+Hackathon Finder | Workflow Document
+
+Page 3
+
+

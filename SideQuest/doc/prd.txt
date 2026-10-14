@@ -1,0 +1,412 @@
+Hackathon Finder
+Product Requirements Document (PRD)
+Version 1.0 | 14 Oct 2026 | Status: draft | Working name: HackRadar
+
+1. Summary
+A web app (installable as a PWA) that gathers hackathons from many platforms and colleges into one searchable,
+filterable list, highlights what is closing soon, and sends alerts so students never miss a registration deadline.
+
+2. Problem statement
+• Hackathons are spread across many sites (Unstop, Devfolio, Devpost, MLH, Hack2skill, college pages and
+social posts).
+
+• Registration windows are short and easy to miss; many events open and close quietly.
+• College and local hackathons often appear on no major platform at all.
+• Existing sites filter poorly for what a student cares about: eligibility, city, team size, prize and theme together.
+
+3. Vision, goals and non-goals
+Vision: the one place a student checks to know which hackathons they can join right now.
+Goals (V1)
+
+Non-goals (V1)
+
+Aggregate 3 to 4 sources automatically
+
+Handling registrations or payments inside the app
+
+Fast search and rich filters
+
+Team formation and chat
+
+Deadline-first discovery and alerts
+
+Native mobile apps (PWA only)
+
+Crowdsourced listings with moderation
+
+Global coverage from day one (start India-first)
+
+Run entirely on free tiers
+
+Monetisation
+
+4. Target users
+Persona
+
+Needs
+
+Pain today
+
+Student hacker (2nd to 4th year,
+tier-2 or tier-3 city)
+
+Find hackathons they are eligible for, near
+them or online, before deadlines
+
+Checks 5 sites manually, misses
+deadlines
+
+Beginner
+
+Beginner-friendly, low-pressure events with
+small team sizes
+
+Cannot tell which events suit a first-timer
+
+Organiser (college club)
+
+Get their event seen by students
+
+No reach beyond their own college
+
+Hackathon Finder | Product Requirements Document
+
+Page 1
+
+5. User stories
+ID
+
+As a...
+
+I want to...
+
+So that...
+
+Priority
+
+US-1
+
+Student
+
+search by keyword
+
+I find relevant hackathons fast
+
+P0
+
+US-2
+
+Student
+
+filter by mode, city, prize, team size,
+theme and eligibility
+
+I only see events I can join
+
+P0
+
+US-3
+
+Student
+
+sort by closing soon
+
+I never miss a deadline
+
+P0
+
+US-4
+
+Student
+
+open a detail card with a clear summary
+and register link
+
+I decide quickly and go register
+
+P0
+
+US-5
+
+Student
+
+bookmark hackathons
+
+I can track the ones I like
+
+P1
+
+US-6
+
+Student
+
+add events to my calendar
+
+deadlines show up in Google Calendar
+
+P1
+
+US-7
+
+Student
+
+get Telegram or email alerts for matching
+events
+
+I hear about them without checking
+
+P1
+
+US-8
+
+Organiser
+
+submit my hackathon
+
+students discover it
+
+P1
+
+US-9
+
+Student
+
+see a match score for each event
+
+I focus on best-fit hackathons
+
+P2
+
+US-10
+
+Student
+
+see an AI summary of each event
+
+I skip reading long pages
+
+P2
+
+6. Feature list and priorities
+Feature
+
+Description
+
+Priority
+
+Multi-source aggregation
+
+Scheduled ingestion from Unstop, Devfolio and 1 to 2 more, normalised and
+deduplicated
+
+P0
+
+Search and filters
+
+Keyword plus mode, city, prize, team size, theme, student-eligible, status
+
+P0
+
+Deadline radar
+
+Closing-soon sort, live countdowns, 48-hour highlight
+
+P0
+
+Detail card
+
+Dates, prize, eligibility, summary, link to original
+
+P0
+
+Accounts and bookmarks
+
+Sign in with email or Google; save events
+
+P1
+
+Calendar feed
+
+Private .ics link that stays in sync
+
+P1
+
+Alerts
+
+Telegram bot and email for new matches and closing soon
+
+P1
+
+Submit a hackathon
+
+Form plus admin moderation queue
+
+P1
+
+Match score
+
+Rank by skills, eligibility, urgency and prize
+
+P2
+
+AI summaries
+
+3-line summary and auto tags
+
+P2
+
+Effort vs reward score
+
+Combined worth-it indicator
+
+P2
+
+Team finder
+
+Post needs and find teammates
+
+Later
+
+7. Functional requirements
+• FR-1 The system shall refresh listings from every configured source at least every 6 hours.
+• FR-2 Each listing shall store title, organiser, mode, location, event dates, registration deadline, prize, team size,
+eligibility, tags and source link.
+
+• FR-3 Duplicate listings from different sources shall appear once, with links to all sources.
+• FR-4 Users shall filter by any combination of mode, city, status, tag, prize minimum and team size.
+• FR-5 Status (open, closing soon, closed) shall be computed from dates, with closing soon meaning within 72
+hours.
+
+• FR-6 Closed hackathons shall be hidden from the default view but remain reachable by link.
+
+Hackathon Finder | Product Requirements Document
+
+Page 2
+
+• FR-7 Signed-in users shall be able to bookmark, manage alert rules and get a private calendar link.
+• FR-8 The system shall never send the same alert to the same user twice.
+• FR-9 Submitted hackathons shall stay unpublished until an admin approves them.
+• FR-10 Every card shall link to the original source page for registration.
+
+8. Non-functional requirements
+Area
+
+Requirement
+
+Performance
+
+List page loads in under 2 seconds on a typical 4G connection; filter responses under 500 ms
+
+Freshness
+
+Data at most 6 hours old; deadlines checked hourly for alerts
+
+Cost
+
+Rs 0 hosting; stay inside free-tier limits
+
+Reliability
+
+One failing source must not affect others; best-effort uptime is acceptable for V1
+
+Usability
+
+Mobile-first, installable PWA, readable without sign-in
+
+Security and privacy
+
+RLS on user data, minimal personal data, secrets never in the repo
+
+Accessibility
+
+Keyboard navigable, sufficient colour contrast, semantic HTML
+
+9. Success metrics
+Initial targets to review after the first month of real use:
+Metric
+
+Why it matters
+
+Initial target
+
+Hackathons indexed and live
+
+Coverage
+
+150+ active listings
+
+Sources healthy
+
+Reliability
+
+At least 90% of scheduled runs succeed
+
+Data freshness
+
+Trust
+
+95% of listings updated within 12 hours
+
+Weekly active users
+
+Adoption
+
+100+ within a month (campus word of mouth)
+
+Alert click-through
+
+Value of alerts
+
+30%+
+
+User submissions approved
+
+Crowdsourcing edge
+
+20+ college events
+
+10. Release plan
+Week
+
+Deliverable
+
+1
+
+Database schema, 2 scrapers (Unstop, Devfolio), basic list page
+
+2
+
+Search, filters, deadline radar, detail card
+
+3
+
+Accounts, bookmarks, calendar feed, submit form with moderation
+
+4
+
+Telegram and email alerts, AI summaries, polish and launch to campus groups
+
+11. Risks and assumptions
+• Sources may restrict scraping or change formats; mitigated by adapters, multiple sources and user
+submissions.
+
+• Free-tier limits could throttle growth; mitigated by caching and monitoring.
+• Assumes students prefer a single curated feed over checking each platform.
+• Assumes enough public data exists per listing to power filters (prize and team size are sometimes missing).
+
+12. Open questions
+• India-first or global at launch? (Recommended: India-first with 3 to 4 sources.)
+
+Hackathon Finder | Product Requirements Document
+
+Page 3
+
+• Should browsing require login, or only bookmarks and alerts? (Recommended: browsing is open.)
+• Final product name and domain.
+• Who moderates submissions at the start, and how fast must they be reviewed?
+
+Hackathon Finder | Product Requirements Document
+
+Page 4
+
+

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>SideQuest Filters Mobile</title>
+<script src="4b1969d0-ef71-4fab-9217-e2a889709390"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("a13a2908-74ec-4536-9896-a3dae42f3061") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fc705fc7-8202-4725-afc5-69bc73af2769") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("a13a2908-74ec-4536-9896-a3dae42f3061") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fc705fc7-8202-4725-afc5-69bc73af2769") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGHInHEVA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("a13a2908-74ec-4536-9896-a3dae42f3061") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("fc705fc7-8202-4725-afc5-69bc73af2769") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f9e03bc0-b871-4b4f-9730-208bc87b4409") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("1f82e7d5-8b4c-47bc-952a-21044cebe63e") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9cd3c5e2-4359-4806-b65e-163faf58cbbc") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("cf031222-a792-47d8-9184-f6d3e2167f6a") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fc5362ac-5c3b-499e-970d-ddba90ad29e6") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("00979665-2142-4ec6-bad1-ce8aa537fdea") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("5038fd61-0b4f-42b1-b9b7-6fb0ac1aabdb") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("f9e03bc0-b871-4b4f-9730-208bc87b4409") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("1f82e7d5-8b4c-47bc-952a-21044cebe63e") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9cd3c5e2-4359-4806-b65e-163faf58cbbc") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("cf031222-a792-47d8-9184-f6d3e2167f6a") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fc5362ac-5c3b-499e-970d-ddba90ad29e6") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("00979665-2142-4ec6-bad1-ce8aa537fdea") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("5038fd61-0b4f-42b1-b9b7-6fb0ac1aabdb") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("f9e03bc0-b871-4b4f-9730-208bc87b4409") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("1f82e7d5-8b4c-47bc-952a-21044cebe63e") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("9cd3c5e2-4359-4806-b65e-163faf58cbbc") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("cf031222-a792-47d8-9184-f6d3e2167f6a") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fc5362ac-5c3b-499e-970d-ddba90ad29e6") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("00979665-2142-4ec6-bad1-ce8aa537fdea") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("5038fd61-0b4f-42b1-b9b7-6fb0ac1aabdb") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("f9e03bc0-b871-4b4f-9730-208bc87b4409") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("1f82e7d5-8b4c-47bc-952a-21044cebe63e") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("9cd3c5e2-4359-4806-b65e-163faf58cbbc") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("cf031222-a792-47d8-9184-f6d3e2167f6a") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fc5362ac-5c3b-499e-970d-ddba90ad29e6") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("00979665-2142-4ec6-bad1-ce8aa537fdea") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("5038fd61-0b4f-42b1-b9b7-6fb0ac1aabdb") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+body{margin:0;background:#FFFBE8}
+a{color:inherit;text-decoration:none}
+</style>
+</helmet>
+<div style="position:relative; width:390px; height:844px; background:#FFFBE8; color:#0B1033; font-family:'Inter',system-ui,sans-serif; overflow:hidden">
+
+<!-- dimmed screen behind -->
+<div aria-hidden="true" style="padding:24px 20px 0">
+<div style="display:flex; align-items:center; gap:10px">
+<svg width="36" height="36" sc-camel-view-box="0 0 36 36"><rect width="36" height="36" rx="12" fill="#0B1033"></rect><path d="M13 27V9" stroke="#B6F500" stroke-width="3" stroke-linecap="round"></path><path d="M14 10L27 15L14 20Z" fill="#B6F500"></path></svg>
+<span style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:800; font-size:30px; letter-spacing:-0.03em">Discover</span>
+</div>
+<div style="margin-top:14px; height:52px; background:#fff; border-radius:999px"></div>
+<div style="margin-top:14px; height:150px; background:#fff; border-radius:28px"></div>
+</div>
+<div aria-hidden="true" style="position:absolute; left:0; top:0; right:0; bottom:0; background:rgba(11,16,51,.5)"></div>
+
+<!-- bottom sheet -->
+<section aria-label="Filters" style="position:absolute; left:0; right:0; bottom:0; top:92px; background:#FFFBE8; border-radius:36px 36px 0 0; padding:12px 20px 20px; box-sizing:border-box; display:flex; flex-direction:column; gap:16px; box-shadow:0 -12px 40px rgba(11,16,51,.25)">
+<div aria-hidden="true" style="align-self:center; width:44px; height:5px; border-radius:999px; background:#CFCBB4"></div>
+<div style="display:flex; align-items:center; justify-content:space-between">
+<h2 style="font-family:'Bricolage Grotesque',system-ui,sans-serif; font-weight:800; font-size:30px; letter-spacing:-0.03em; margin:0">Filters</h2>
+<a href="#" style="font-size:15px; font-weight:600; color:#3A4070; text-decoration:underline">Clear all</a>
+</div>
+
+<div>
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#3A4070; margin-bottom:8px">Mode</div>
+<div style="display:flex; background:#fff; border-radius:999px; padding:4px; gap:2px">
+<span style="flex:1; text-align:center; padding:11px 0; border-radius:999px; font-size:14px; font-weight:600">All</span>
+<span style="flex:1; text-align:center; padding:11px 0; border-radius:999px; font-size:14px; font-weight:600; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); color:#fff; box-shadow:inset 0 1px 0 rgba(255,255,255,.2)">Online</span>
+<span style="flex:1; text-align:center; padding:11px 0; border-radius:999px; font-size:14px; font-weight:600">Offline</span>
+<span style="flex:1; text-align:center; padding:11px 0; border-radius:999px; font-size:14px; font-weight:600">Hybrid</span>
+</div>
+</div>
+
+<div>
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#3A4070; margin-bottom:8px">Status</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px">
+<span style="background:#EAF8C8; color:#1F6B00; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:700">Open</span>
+<span style="background:#FFB020; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:700">Closing soon</span>
+<span style="background:#fff; border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600; color:#3A4070">Upcoming</span>
+</div>
+</div>
+
+<div>
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#3A4070; margin-bottom:8px">City</div>
+<div style="height:50px; background:#fff; border-radius:999px; display:flex; align-items:center; gap:10px; padding:0 18px; font-size:15px; color:#3A4070">
+<svg aria-hidden="true" width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+Any city
+</div>
+</div>
+
+<div>
+<div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#3A4070; margin-bottom:14px"><span>Minimum prize</span><span style="color:#0B1033">₹25,000</span></div>
+<div style="position:relative; height:10px; background:#fff; border-radius:999px">
+<div style="position:absolute; left:0; top:0; height:10px; width:35%; background:#B6F500; border-radius:999px"></div>
+<div style="position:absolute; left:35%; top:-9px; width:28px; height:28px; margin-left:-14px; background:#0B1033; border-radius:50%; box-shadow:0 4px 8px rgba(11,16,51,.3)"></div>
+</div>
+</div>
+
+<div>
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#3A4070; margin-bottom:8px">Theme</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px">
+<span style="background:#0B1033; color:#fff; border-radius:999px; padding:9px 15px; font-size:14px; font-weight:600">AI</span>
+<span style="background:#fff; border-radius:999px; padding:9px 15px; font-size:14px; font-weight:600">Web</span>
+<span style="background:#fff; border-radius:999px; padding:9px 15px; font-size:14px; font-weight:600">IoT</span>
+<span style="background:#fff; border-radius:999px; padding:9px 15px; font-size:14px; font-weight:600">Fintech</span>
+<span style="background:#fff; border-radius:999px; padding:9px 15px; font-size:14px; font-weight:600">Climate</span>
+</div>
+</div>
+
+<label style="display:flex; align-items:center; gap:12px; font-size:16px; font-weight:600">
+<span style="width:38px; height:38px; border-radius:13px; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 12px rgba(11,16,51,.3)">
+<svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="#B6F500" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>
+</span>
+Students only
+</label>
+
+<a href="#" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:10px; height:58px; border-radius:999px; background:linear-gradient(180deg,#262d63 0%,#0B1033 65%); color:#fff; font-weight:700; font-size:17px; box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 12px 24px rgba(11,16,51,.32)">
+Show [N] hackathons
+<svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="#B6F500" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+
+
+</body></html>

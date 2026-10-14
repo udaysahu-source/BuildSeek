@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FFFBE8;
+    --foreground: #0B1033;
+  }
+
+  body {
+    background-color: #FFFBE8;
+    color: #0B1033;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-bricolage), sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* Retro/Playful Card style matching approved mockups */
+  .retro-card {
+    background-color: #FFFFFF;
+    border: 2px solid #0B1033;
+    box-shadow: 3px 3px 0px #0B1033;
+    border-radius: 16px;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  .retro-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px #0B1033;
+  }
+
+  .retro-card-active:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px #0B1033;
+  }
+
+  /* Retro pill button */
+  .btn-retro-lime {
+    background-color: #B6F500;
+    color: #0B1033;
+    border: 2px solid #0B1033;
+    box-shadow: 2px 2px 0px #0B1033;
+    border-radius: 9999px;
+    font-weight: 700;
+    transition: transform 100ms ease, box-shadow 100ms ease;
+  }
+
+  .btn-retro-lime:hover {
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 0px #0B1033;
+  }
+
+  .btn-retro-lime:active {
+    transform: translateY(1px);
+    box-shadow: 0px 0px 0px #0B1033;
+  }
+
+  .btn-retro-ink {
+    background-color: #0B1033;
+    color: #FFFFFF;
+    border: 2px solid #0B1033;
+    box-shadow: 2px 2px 0px rgba(11, 16, 51, 0.4);
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: transform 100ms ease, box-shadow 100ms ease;
+  }
+
+  .btn-retro-ink:hover {
+    background-color: #1C2350;
+    transform: translateY(-1px);
+  }
+
+  .btn-retro-outline {
+    background-color: #FFFFFF;
+    color: #0B1033;
+    border: 2px solid #0B1033;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: background 100ms ease;
+  }
+
+  .btn-retro-outline:hover {
+    background-color: #F2F0E2;
+  }
+
+  /* Badge / chip styles */
+  .chip-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #F2F0E2;
+    color: #1C2350;
+    border: 1px solid #D9D6C4;
+  }
+
+  .chip-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #DDE2FF;
+    color: #0B1033;
+    border: 1px solid #8A9BFF;
+  }
+
+  .chip-closing {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: #FFEAEA;
+    color: #C62F3A;
+    border: 1.5px solid #C62F3A;
+  }
+
+  .chip-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: #EAF8C8;
+    color: #1F6B00;
+    border: 1.5px solid #1F6B00;
+  }
+}
