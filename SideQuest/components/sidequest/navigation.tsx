@@ -42,11 +42,10 @@ export function Navigation() {
             <Link
               key={href}
               href={href}
-              className={`sq-nav-item ${
-                activePath === href || (activePath === "/" && href === "/discover")
+              className={`sq-nav-item ${activePath === href || (activePath === "/" && href === "/discover")
                   ? "is-active"
                   : ""
-              }`}
+                }`}
             >
               <Icon size={17} />
               <span>{href === "/profile" ? (user ? "Account" : "Log in") : label}</span>
@@ -66,11 +65,10 @@ export function Navigation() {
             key={href}
             href={href}
             aria-label={href === "/profile" ? (user ? "Account" : "Log in") : label}
-            className={`sq-mobile-item ${
-              activePath === href || (activePath === "/" && href === "/discover")
+            className={`sq-mobile-item ${activePath === href || (activePath === "/" && href === "/discover")
                 ? "is-active"
                 : ""
-            }`}
+              }`}
           >
             <Icon size={21} />
             <span>{href === "/profile" ? (user ? "Account" : "Log in") : label}</span>

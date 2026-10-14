@@ -20,7 +20,7 @@ interface BookmarkContextType {
 
 const BookmarkContext = createContext<BookmarkContextType>({
   saved: [],
-  toggle: () => {},
+  toggle: () => { },
   pending: [],
   loading: false,
   error: null,
