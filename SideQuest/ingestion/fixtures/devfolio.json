@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "bengaluru-eth-build-2026",
+    "name": "Bengaluru ETH Buildathon 2026",
+    "organizer_name": "Devfolio Web3 Guild",
+    "desc": "Build next-generation dApps, smart contracts, and decentralized storage applications.",
+    "is_online": false,
+    "location": "Bengaluru",
+    "starts_at": "2026-11-20T10:00:00Z",
+    "ends_at": "2026-11-22T18:00:00Z",
+    "reg_starts_at": "2026-10-10T00:00:00Z",
+    "reg_ends_at": "2026-10-30T18:00:00Z",
+    "prize_pool": "$12,000 Cash Pool",
+    "prize_inr": 1000000,
+    "min_team_size": 2,
+    "max_team_size": 4,
+    "themes": ["Web3", "Ethereum", "Solidity", "Crypto"],
+    "hackathon_setting_url": "https://devfolio.co/bengaluru-eth-build-2026"
+  },
+  {
+    "slug": "delhi-fintech-sprint-duplicate",
+    "name": "Delhi Open Fintech Sprint 2026 Edition",
+    "organizer_name": "IIT Delhi E-Cell Partner",
+    "desc": "Cross-platform duplicate test of the Delhi Open FinTech event to verify trigram deduplication.",
+    "is_online": false,
+    "location": "New Delhi",
+    "starts_at": "2026-11-05T10:00:00Z",
+    "ends_at": "2026-11-07T16:00:00Z",
+    "reg_starts_at": "2026-10-05T00:00:00Z",
+    "reg_ends_at": "2026-10-18T18:00:00Z",
+    "prize_pool": "₹3,50,000",
+    "prize_inr": 350000,
+    "min_team_size": 1,
+    "max_team_size": 3,
+    "themes": ["FinTech", "Blockchain"],
+    "hackathon_setting_url": "https://devfolio.co/delhi-fintech-sprint-duplicate"
+  }
+]

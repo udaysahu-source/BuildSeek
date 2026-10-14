@@ -1,0 +1,25 @@
+name: Supabase Keepalive
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC to prevent free-tier database pause
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Database
+        run: |
+          if [ -n "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" ] && [ -n "${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" ]; then
+            echo "Pinging Supabase health endpoint..."
+            curl -s -f -H "apikey: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+              -H "Authorization: Bearer ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+              "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}/rest/v1/hackathons?select=id&limit=1" || true
+            echo "Ping complete."
+          else
+            echo "Supabase credentials not configured in secrets. Skipping."
+          fi

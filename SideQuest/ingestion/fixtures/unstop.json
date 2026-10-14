@@ -1,0 +1,50 @@
+[
+  {
+    "id": 901234,
+    "title": "National AI Srijan Hackathon 2026",
+    "organisation": "Ministry of Electronics & IT Partner",
+    "details": "Pan-India college challenge solving agriculture and healthcare using computer vision.",
+    "region_type": "online",
+    "city": null,
+    "state": null,
+    "start_date": "2026-11-15T09:00:00Z",
+    "end_date": "2026-11-17T18:00:00Z",
+    "registration_start_date": "2026-10-01T00:00:00Z",
+    "registration_end_date": "2026-10-28T23:59:59Z",
+    "prizes": "₹10,00,000",
+    "prize_amount": 1000000,
+    "team_min": 2,
+    "team_max": 4,
+    "tags": ["AI", "Healthcare", "Agriculture", "Python"],
+    "public_url": "https://unstop.com/hackathons/national-ai-srijan-2026",
+    "banner_image": null
+  },
+  {
+    "id": 901235,
+    "title": "Delhi Open FinTech Sprint",
+    "organisation": "IIT Delhi Entrepreneurship Cell",
+    "details": "Revolutionizing rural credit underwriting and cross-border digital rupee transactions.",
+    "region_type": "offline",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "start_date": "2026-11-05T10:00:00Z",
+    "end_date": "2026-11-07T16:00:00Z",
+    "registration_start_date": "2026-10-05T00:00:00Z",
+    "registration_end_date": "2026-10-18T18:00:00Z",
+    "prizes": "₹3,50,000",
+    "prize_amount": 350000,
+    "team_min": 1,
+    "team_max": 3,
+    "tags": ["FinTech", "Blockchain", "Web"],
+    "public_url": "https://unstop.com/hackathons/delhi-open-fintech-sprint",
+    "banner_image": null
+  },
+  {
+    "id": 901236,
+    "title": "",
+    "organisation": "Broken Event",
+    "details": "Should be skipped because title is empty",
+    "registration_end_date": "2026-10-20T00:00:00Z",
+    "public_url": "https://unstop.com/hackathons/broken"
+  }
+]
