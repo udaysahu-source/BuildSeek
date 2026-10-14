@@ -3,7 +3,7 @@
 import React from "react";
 import { HackathonFilterOptions } from "@/lib/db/hackathons";
 import { HackathonMode, HackathonStatus } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Filter, RotateCcw, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 

@@ -1,230 +1,281 @@
-import React from "react";
 import Link from "next/link";
-import Mascot from "@/components/ui/Mascot";
-import Button from "@/components/ui/Button";
-import Badge from "@/components/ui/Badge";
-import HackathonCard from "@/components/hackathon/HackathonCard";
-import { getHackathons } from "@/lib/db/hackathons";
 import {
-  Compass,
-  ArrowRight,
-  Clock,
-  Sparkles,
-  Search,
+  ArrowUpRight,
   Bell,
-  CheckCircle2,
-  Share2,
+  Bookmark,
+  CalendarDays,
+  Check,
+  Clock3,
+  Compass,
+  Filter,
+  Globe2,
+  Heart,
+  Layers3,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Zap,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/sidequest/mascot";
+import { PhonePreview } from "@/components/sidequest/phone-preview";
 
-export default async function HomePage() {
-  // Fetch closing soon hackathons for the live radar section
-  const { hackathons: closingSoonList } = await getHackathons({
-    status: "closing_soon",
-    limit: 3,
-  });
-
+export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* 1. Hero Section */}
-      <section className="relative overflow-hidden pt-8 pb-16 sm:pt-14 sm:pb-24 border-b-2 border-ink bg-parchment">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-            {/* Left Column: Headlines & Search */}
-            <div className="flex-1 space-y-6 text-center lg:text-left">
-              {/* Radar Live Chip */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-urgent-light border-2 border-urgent text-urgent text-xs font-bold animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-urgent" />
-                <span>LIVE RADAR: Closing soon hackathons tracked</span>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="font-display font-extrabold text-4xl sm:text-6xl lg:text-6.5xl text-ink tracking-tight leading-[1.08]">
-                Every college hackathon.{" "}
-                <br className="hidden sm:inline" />
-                One place.{" "}
-                <span className="relative inline-block text-ink underline decoration-lime decoration-4 underline-offset-4">
-                  Zero missed deadlines.
-                </span>
-              </h1>
-
-              {/* Subheading */}
-              <p className="text-base sm:text-lg text-ink-700 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                SideQuest gathers hackathons from Unstop, Devfolio, MLH, and campus clubs into one searchable list with live countdowns and Telegram alerts. Built for Indian college students.
-              </p>
-
-              {/* Quick Search Box */}
-              <form
-                action="/discover"
-                method="GET"
-                className="max-w-md mx-auto lg:mx-0 flex items-center gap-2 p-1.5 bg-white border-2 border-ink rounded-full shadow-solid-md"
-              >
-                <div className="pl-3.5 text-ink-500">
-                  <Search className="w-4 h-4" />
-                </div>
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Search by skill, topic, or city..."
-                  className="w-full bg-transparent text-xs sm:text-sm font-semibold text-ink placeholder:text-ink-500 focus:outline-none"
-                />
-                <Button variant="lime" size="sm" type="submit" className="shrink-0">
-                  Find
-                </Button>
-              </form>
-
-              {/* Source Platform Badges */}
-              <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-bold text-ink-500">
-                <span>Aggregating:</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white border border-parchment-border text-ink">
-                  Unstop
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white border border-parchment-border text-ink">
-                  Devfolio
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white border border-parchment-border text-ink">
-                  MLH
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white border border-parchment-border text-ink">
-                  College Clubs
-                </span>
-              </div>
+    <main>
+      <section className="sq-hero">
+        <div className="sq-container sq-hero-content">
+          <div className="sq-hero-copy">
+            <div className="sq-eyebrow sq-hero-eyebrow">
+              <Zap size={12} fill="currentColor" /> Big ideas. Zero missed deadlines.
             </div>
-
-            {/* Right Column: Mascot Showcase */}
-            <div className="lg:w-96 flex flex-col items-center justify-center relative">
-              <div className="relative">
-                <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-lime/30 border-4 border-ink flex items-center justify-center shadow-solid-xl">
-                  <Mascot size={220} expression="excited" />
-                </div>
-
-                {/* Floating deadline speech bubble */}
-                <div className="absolute -top-3 -right-2 sm:-right-4 bg-white border-2 border-ink shadow-solid-md px-3 py-1.5 rounded-2xl text-xs font-extrabold text-urgent flex items-center gap-1.5 animate-bounce">
-                  <Clock className="w-4 h-4" />
-                  <span>3 close within 48h!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Live Radar Section (Closing Soon) */}
-      <section className="py-14 border-b-2 border-ink bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-urgent animate-ping" />
-                <span className="text-xs font-extrabold text-urgent uppercase tracking-wider">
-                  Deadline Radar
-                </span>
-              </div>
-              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-ink mt-1">
-                Closing in the Next 72 Hours
-              </h2>
-              <p className="text-xs sm:text-sm text-ink-500 mt-0.5">
-                These registration windows are about to shut. Register before time runs out.
-              </p>
-            </div>
-
-            <Link href="/discover?status=closing_soon">
-              <Button variant="outline" size="sm" icon={<ArrowRight className="w-4 h-4" />}>
-                View All Closing Soon
-              </Button>
-            </Link>
-          </div>
-
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {closingSoonList.map((hackathon) => (
-              <HackathonCard key={hackathon.id} hackathon={hackathon} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Three Pillars (Why SideQuest) */}
-      <section className="py-16 bg-parchment border-b-2 border-ink">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-lime text-ink border border-ink rounded">
-              Built for Student Hackers
-            </span>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-ink">
-              Everything you need to never miss an opportunity
-            </h2>
-            <p className="text-sm text-ink-500">
-              No sponsored junk, no login walls to browse, zero spam.
+            <h1>
+              Every hackathon.
+              <br />
+              One place.
+              <br />
+              <span className="sq-highlight">
+                Never miss
+                <br />a deadline.
+              </span>
+            </h1>
+            <p className="sq-hero-description">
+              Your next big idea deserves a shot. Find hackathons across platforms and
+              colleges, save your favourites, and show up before the clock runs out.
             </p>
+            <div className="sq-hero-actions">
+              <Button asChild size="lg">
+                <Link href="/discover">
+                  Browse hackathons <ArrowUpRight size={17} />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/alerts">
+                  <Send size={15} /> Get Telegram alerts
+                </Link>
+              </Button>
+            </div>
+            <div className="sq-social-proof">
+              <div className="sq-avatars" aria-hidden="true">
+                <span className="sq-avatar">A</span>
+                <span className="sq-avatar">R</span>
+                <span className="sq-avatar">S</span>
+                <span className="sq-avatar">K</span>
+              </div>
+              <p>
+                <strong>For the late-night idea people.</strong>
+                <br />
+                The campus builders. The “what if?” crowd.
+              </p>
+            </div>
           </div>
+          <PhonePreview />
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="retro-card p-6 bg-white space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-urgent-light border-2 border-ink flex items-center justify-center">
-                <Clock className="w-6 h-6 text-urgent" />
-              </div>
-              <h3 className="font-display font-bold text-lg text-ink">
-                Deadline-First Radar
-              </h3>
-              <p className="text-xs sm:text-sm text-ink-700 leading-relaxed">
-                Most hackathon sites hide deadlines deep inside tabs. SideQuest puts live countdown chips right on every card and alerts you at 48h and 24h.
-              </p>
-            </div>
+      <div className="sq-container sq-trust-strip">
+        <span>
+          <Globe2 /> All platforms. One feed.
+        </span>
+        <span>
+          <ShieldCheck /> Free for students. Always.
+        </span>
+        <span>
+          <Heart /> Built for India’s builders.
+        </span>
+      </div>
 
-            <div className="retro-card p-6 bg-white space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-lime border-2 border-ink flex items-center justify-center">
-                <Compass className="w-6 h-6 text-ink" />
+      <section className="sq-container sq-section">
+        <SectionHeading
+          eyebrow="Sound familiar?"
+          title={<>Great ideas. Missed opportunities.</>}
+          description="The hard part should be building something cool. Not finding where to build it."
+        />
+        <div className="sq-problem-grid">
+          {[
+            {
+              icon: Layers3,
+              title: "Too many tabs. Not enough time.",
+              body: "One on Unstop. One on a college website. Another buried in a WhatsApp group. Finding a hackathon shouldn’t be a hackathon.",
+            },
+            {
+              icon: Clock3,
+              title: "“Wait, registration closed?”",
+              body: "You find the perfect event. Promise to register later. Later turns into too late. We’ve all been there.",
+            },
+            {
+              icon: Target,
+              title: "Cool event. But is it for you?",
+              body: "Online or on campus? Solo or squad? AI or open innovation? Cut through the noise and find your kind of challenge.",
+            },
+          ].map(({ icon: Icon, title, body }) => (
+            <article key={title} className="sq-problem-card">
+              <div className="sq-icon-box">
+                <Icon size={23} />
               </div>
-              <h3 className="font-display font-bold text-lg text-ink">
-                Unified Multi-Source
-              </h3>
-              <p className="text-xs sm:text-sm text-ink-700 leading-relaxed">
-                We crawl Unstop, Devfolio, MLH, and community club submissions every 6 hours. One place, deduplicated and normalised.
-              </p>
-            </div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-            <div className="retro-card p-6 bg-white space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-accentBlue-soft border-2 border-ink flex items-center justify-center">
-                <Bell className="w-6 h-6 text-ink" />
+      <section className="sq-container sq-steps-section">
+        <SectionHeading
+          eyebrow="Less scrolling. More shipping."
+          title="Your next quest, in three steps."
+        />
+        <div className="sq-steps-grid">
+          {[
+            {
+              title: "Discover",
+              description: "Find the hackathon that feels like your thing.",
+              icon: Compass,
+            },
+            {
+              title: "Save",
+              description: "Keep your next big opportunities in one place.",
+              icon: Bookmark,
+            },
+            {
+              title: "Get reminded",
+              description: "A little nudge before your window closes.",
+              icon: Bell,
+            },
+          ].map(({ title, description, icon: Icon }, i) => (
+            <article key={title} className="sq-step">
+              <span className="sq-step-number">0{i + 1}</span>
+              <Icon />
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="sq-features-section">
+        <div className="sq-container">
+          <SectionHeading
+            eyebrow="Small superpowers. Big possibilities."
+            title="Your unfair advantage."
+            description="All the good stuff that gets you from “maybe I’ll join” to “we actually built that.”"
+          />
+          <div className="sq-bento">
+            <article className="sq-feature">
+              <div>
+                <h3>Deadline Radar</h3>
+                <p>
+                  No mental maths. No missed moments. Live countdowns keep every deadline on
+                  your radar.
+                </p>
+                <div className="sq-match-score">
+                  <Clock3 size={12} /> 02d : 14h : 38m left
+                </div>
               </div>
-              <h3 className="font-display font-bold text-lg text-ink">
-                Private Calendar & Telegram
-              </h3>
-              <p className="text-xs sm:text-sm text-ink-700 leading-relaxed">
-                Subscribe your bookmarks directly into Google Calendar via private .ics link, or receive instant Telegram alerts when a match appears.
+              <div className="sq-radar" aria-hidden="true">
+                <Clock3 />
+                <span className="sq-radar-dot" />
+              </div>
+            </article>
+            <article className="sq-feature">
+              <Filter />
+              <h3>Your kind of hackathon.</h3>
+              <p>
+                Smart filters for your city, interests, team, and budget. Less noise. More
+                “this is the one.”
               </p>
-            </div>
+              <div className="sq-feature-filters">
+                <span>Online</span>
+                <span>AI / ML</span>
+                <span>Students only</span>
+              </div>
+            </article>
+            <article className="sq-feature">
+              <Sparkles />
+              <h3>Meet your match.</h3>
+              <p>
+                Challenges that line up with your skills and interests. A little less
+                guesswork.
+              </p>
+              <div className="sq-match-score">
+                <Check size={13} /> 92% match · Sample
+              </div>
+            </article>
+            <article className="sq-feature">
+              <CalendarDays />
+              <h3>Make room for big ideas.</h3>
+              <p>
+                Your saved deadlines, right in your calendar. Keep the date. Build something
+                great.
+              </p>
+            </article>
+            <article className="sq-feature">
+              <Send />
+              <h3>A nudge, not noise.</h3>
+              <p>
+                New opportunities and timely reminders, straight to Telegram. Just the stuff
+                you care about.
+              </p>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* 4. Bottom Banner CTA */}
-      <section className="py-14 bg-ink text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">
-            Ready to find your next winning hackathon?
+      <section className="sq-container" aria-label="Illustrative community counts">
+        <div className="sq-counts">
+          {[
+            ["120+", "Hackathons to explore"],
+            ["25+", "Platforms, one place"],
+            ["40+", "Cities. Endless possibilities."],
+            ["100%", "Free for students"],
+          ].map(([number, label]) => (
+            <div key={label}>
+              <strong>{number}</strong>
+              <p>{label}</p>
+            </div>
+          ))}
+        </div>
+        <p className="sq-sample-note">
+          Illustrative counts for this preview · Fictional events are labelled as sample data.
+        </p>
+      </section>
+
+      <section className="sq-container sq-organizer">
+        <div>
+          <span className="sq-eyebrow">Calling all campus organisers</span>
+          <h2>
+            Organising a hackathon?
+            <br />
+            Put it on the board.
           </h2>
-          <p className="text-sm sm:text-base text-white/70 max-w-xl mx-auto">
-            100% free, no login needed to search. Filter by online/offline, city, prize, and themes.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link href="/discover">
-              <Button variant="lime" size="lg" icon={<Compass className="w-5 h-5" />}>
-                Explore Hackathons Now
-              </Button>
-            </Link>
+          <p>The next great team might be one SideQuest away.</p>
+          <Button asChild>
             <Link href="/submit">
-              <Button
-                variant="outline"
-                size="lg"
-                className="bg-transparent text-white border-white hover:bg-white/10"
-              >
-                Submit College Hackathon
-              </Button>
+              Submit your hackathon <ArrowUpRight size={16} />
             </Link>
-          </div>
+          </Button>
         </div>
+        <Mascot className="sq-organizer-mascot" />
       </section>
+    </main>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: React.ReactNode;
+  description?: string;
+}) {
+  return (
+    <div className="sq-section-header">
+      <span className="sq-eyebrow">{eyebrow}</span>
+      <h2>{title}</h2>
+      {description && <p>{description}</p>}
     </div>
   );
 }

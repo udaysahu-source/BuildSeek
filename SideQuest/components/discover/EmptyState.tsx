@@ -1,6 +1,6 @@
 import React from "react";
 import Mascot from "@/components/ui/Mascot";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 
 interface EmptyStateProps {

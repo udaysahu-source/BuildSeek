@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/button";
 import Badge from "@/components/ui/Badge";
 import Mascot from "@/components/ui/Mascot";
 import HackathonCard, { HackathonCardData } from "@/components/hackathon/HackathonCard";

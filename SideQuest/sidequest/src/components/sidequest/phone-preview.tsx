@@ -1,0 +1,24 @@
+import { ArrowUpRight, Bookmark, Clock3, Globe2, MapPin, Sparkles, Trophy, Users, Zap } from "lucide-react";
+import { Mascot } from "./mascot";
+
+export function PhonePreview() {
+  return <div className="sq-phone-scene" aria-label="Preview featuring fictional sample hackathons">
+    <span className="sq-orbit sq-orbit-one" /><span className="sq-orbit sq-orbit-two" />
+    <div className="sq-float-chip sq-float-top"><Clock3 size={17} /> Your next big thing awaits <Sparkles size={17} /></div>
+    <div className="sq-phone"><div className="sq-phone-camera" /><div className="sq-phone-content">
+      <div className="sq-phone-brand"><span><Zap size={15} fill="currentColor" /> sidequest.</span><span className="sq-mini-avatar">U</span></div>
+      <div className="sq-phone-heading">Find your next<br /><span>main character moment.</span></div>
+      <div className="sq-phone-tabs"><span className="selected">For you</span><span>Closing soon</span><span>Online</span></div>
+      <SampleCard title="Buildverse 2026" organizer="Nexus Institute of Technology" prize="₹2,00,000" kind="build" />
+      <SampleCard title="Hack the Horizon" organizer="Horizon Student Collective" prize="₹1,50,000" kind="horizon" />
+      <div className="sq-phone-label">Fictional events · Sample data</div>
+    </div><div className="sq-phone-home" /></div>
+    <div className="sq-float-chip sq-float-deadline"><span className="sq-status-dot" /><strong>02d : 14h : 38m</strong><span>left to make your move</span></div>
+    <div className="sq-float-chip sq-float-saved"><Bookmark size={18} fill="currentColor" /><span>Saved. Sorted. SideQuest.</span></div>
+    <Mascot className="sq-hero-mascot" /><span className="sq-scene-spark sq-scene-spark-one">✳</span><span className="sq-scene-spark sq-scene-spark-two">✦</span>
+  </div>;
+}
+
+function SampleCard({ title, organizer, prize, kind }: { title: string; organizer: string; prize: string; kind: "build" | "horizon" }) {
+  return <div className={`sq-sample-card ${kind}`}><div className="sq-sample-top"><span className="sq-event-icon">{kind === "build" ? <Zap size={21} fill="currentColor" /> : <Globe2 size={22} />}</span><span className={`sq-sample-status ${kind === "build" ? "closing" : "open"}`}>{kind === "build" ? "◷ Closing soon" : "● Registration open"}</span><Bookmark size={15} /></div><h3>{title}</h3><p>{organizer}</p><div className="sq-sample-meta"><span><Globe2 size={10} /> {kind === "build" ? "Online" : "Hybrid"}</span><span><MapPin size={10} /> {kind === "build" ? "Pan India" : "Bengaluru"}</span></div><div className="sq-sample-facts"><span><Trophy size={13} /> {prize}</span><span><Users size={13} /> 2–4 members</span></div><div className="sq-sample-bottom"><span>{kind === "build" ? "AI / ML" : "Open innovation"}</span><span>Students</span><span className="sq-sample-arrow"><ArrowUpRight size={15} /></span></div></div>;
+}

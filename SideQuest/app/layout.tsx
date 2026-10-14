@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
-import TopNav from "@/components/navigation/TopNav";
-import BottomPillNav from "@/components/navigation/BottomPillNav";
+import { Navigation } from "@/components/sidequest/navigation";
+import { Footer } from "@/components/sidequest/footer";
+import { AuthProvider } from "@/components/sidequest/auth-state";
+import { BookmarksProvider } from "@/components/sidequest/discovery-state";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -17,20 +20,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SideQuest | Find & Track Hackathons with Deadline Radar",
+  title: "Every hackathon. One place. — SideQuest",
   description:
-    "Free radar for Indian college students to discover hackathons across Unstop, Devfolio, MLH and campus clubs before deadlines close.",
+    "Find your next hackathon with SideQuest. One place for Indian student hackathons, deadlines, saved events, and reminders.",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
   },
+  openGraph: {
+    siteName: "SideQuest",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B1033",
+  themeColor: "#B6F500",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -40,10 +49,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${bricolage.variable} ${inter.variable}`}>
-      <body className="bg-parchment text-ink min-h-screen flex flex-col antialiased selection:bg-lime selection:text-ink pb-20 md:pb-0">
-        <TopNav />
-        <main className="flex-1 flex flex-col">{children}</main>
-        <BottomPillNav />
+      <body>
+        <AuthProvider>
+          <BookmarksProvider>
+            <Navigation />
+            <div className="sq-page-content">{children}</div>
+            <Footer />
+            <Toaster />
+          </BookmarksProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,300 +1,334 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { HackathonFilterOptions, getHackathons, HackathonListResult } from "@/lib/db/hackathons";
-import { parseSearchParamsToFilters, filtersToQueryString } from "@/lib/filters";
-import HackathonCard from "@/components/hackathon/HackathonCard";
-import FilterSidebar from "@/components/discover/FilterSidebar";
-import MobileFilterSheet from "@/components/discover/MobileFilterSheet";
-import ActiveFilterChips from "@/components/discover/ActiveFilterChips";
-import EmptyState from "@/components/discover/EmptyState";
-import Button from "@/components/ui/Button";
-import { Search, SlidersHorizontal, ArrowUpDown, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Mascot } from "@/components/sidequest/mascot";
+import { HackathonCard } from "@/components/sidequest/hackathon-card";
+import { HackathonDetail } from "@/components/sidequest/hackathon-detail";
+import { DiscoveryFiltersPanel } from "@/components/sidequest/discovery-filters";
+import { DiscoverySkeleton } from "@/components/sidequest/discovery-skeleton";
+import { QuestDialog } from "@/components/sidequest/quest-dialog";
+import { useCountdownClock, useBookmarks } from "@/components/sidequest/discovery-state";
+import { useAuth } from "@/components/sidequest/auth-state";
+import {
+  activeFilterCount,
+  filterHackathons,
+  normalizeHackathon,
+  type DiscoveryFilters,
+  type HackathonUI,
+} from "@/lib/hackathons";
+import { getHackathons } from "@/lib/db/hackathons";
 
-function DiscoverContent() {
+function DiscoverView() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
-  // Parse filters from URL search params
-  const paramObj: Record<string, string> = {};
-  searchParams.forEach((val, key) => {
-    paramObj[key] = val;
-  });
+  const [rawEvents, setRawEvents] = useState<HackathonUI[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const now = useCountdownClock(Date.now());
+  const { saved } = useBookmarks();
+  const { user } = useAuth();
 
-  const activeFilters = React.useMemo(
-    () => parseSearchParamsToFilters(paramObj),
-    [searchParams]
+  // Parse filters from URL
+  const filters: DiscoveryFilters = React.useMemo(() => {
+    const q = searchParams.get("q") || undefined;
+    const mode = (searchParams.get("mode") as any) || undefined;
+    const status = (searchParams.get("status") as any) || undefined;
+    const city = searchParams.get("city") || undefined;
+    const prize = searchParams.get("prize") ? Number(searchParams.get("prize")) : undefined;
+    const tags = searchParams.get("tags") ? searchParams.get("tags")!.split(",") : undefined;
+    const students = searchParams.get("students") === "true" || undefined;
+    const sort = (searchParams.get("sort") as any) || "closing";
+    const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+    const event = searchParams.get("event") || undefined;
+
+    return { q, mode, status, city, prize, tags, students, sort, page, event };
+  }, [searchParams]);
+
+  // Load hackathons
+  useEffect(() => {
+    let mounted = true;
+    getHackathons({ limit: 100 })
+      .then((res) => {
+        if (!mounted) return;
+        const normalized = res.hackathons.map(normalizeHackathon);
+        setRawEvents(normalized);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const results = React.useMemo(
+    () => filterHackathons(rawEvents, filters, now),
+    [rawEvents, filters, now]
   );
 
-  const [searchInput, setSearchInput] = React.useState(activeFilters.q || "");
-  const [data, setData] = React.useState<HackathonListResult | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [isFilterSheetOpen, setIsFilterSheetOpen] = React.useState(false);
+  const pageCount = Math.max(1, Math.ceil(results.length / 6));
+  const page = Math.min(filters.page ?? 1, pageCount);
+  const visible = results.slice((page - 1) * 6, page * 6);
+  const selected = rawEvents.find((event) => event.id === filters.event);
+  const count = activeFilterCount(filters);
 
-  // Sync search input when URL changes
-  React.useEffect(() => {
-    setSearchInput(activeFilters.q || "");
-  }, [activeFilters.q]);
+  const update = (patch: Partial<DiscoveryFilters>) => {
+    const nextParams = new URLSearchParams(searchParams.toString());
+    const merged = { ...filters, ...patch };
 
-  // Fetch hackathons whenever activeFilters change
-  React.useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
+    // Reset page if filtering changed (unless page explicitly in patch)
+    if (!("page" in patch)) {
+      merged.page = undefined;
+    }
 
-    getHackathons(activeFilters).then((res) => {
-      if (isMounted) {
-        setData(res);
-        setLoading(false);
+    Object.entries(merged).forEach(([k, v]) => {
+      if (v === undefined || v === null || v === "") {
+        nextParams.delete(k);
+      } else if (Array.isArray(v)) {
+        if (v.length === 0) nextParams.delete(k);
+        else nextParams.set(k, v.join(","));
+      } else {
+        nextParams.set(k, String(v));
       }
     });
 
-    return () => {
-      isMounted = false;
-    };
-  }, [activeFilters]);
-
-  // Update URL params
-  const updateFilters = (newFilters: Partial<HackathonFilterOptions>) => {
-    const merged = { ...activeFilters, ...newFilters };
-    const qs = filtersToQueryString(merged);
-    router.push(`/discover${qs}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`/discover?${nextParams.toString()}`, { scroll: false });
+    });
   };
 
-  const resetAllFilters = () => {
-    router.push("/discover", { scroll: false });
+  const reset = () => {
+    const nextParams = new URLSearchParams();
+    if (filters.sort) nextParams.set("sort", filters.sort);
+    startTransition(() => {
+      router.replace(`/discover?${nextParams.toString()}`, { scroll: false });
+    });
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateFilters({ q: searchInput.trim() || null, page: 1 });
-  };
-
-  // Count active non-default filters for mobile badge
-  const activeFilterCount = [
-    activeFilters.q,
-    activeFilters.mode,
-    activeFilters.city,
-    activeFilters.status && activeFilters.status !== "all",
-    activeFilters.tags && activeFilters.tags.length > 0,
-    activeFilters.prize_min,
-    activeFilters.team_max,
-    activeFilters.include_closed,
-  ].filter(Boolean).length;
+  const chips = [
+    ...(filters.q ? [{ label: `“${filters.q}”`, clear: () => update({ q: undefined }) }] : []),
+    ...(filters.mode ? [{ label: filters.mode, clear: () => update({ mode: undefined }) }] : []),
+    ...(filters.status ? [{ label: filters.status.replace("-", " "), clear: () => update({ status: undefined }) }] : []),
+    ...(filters.city ? [{ label: filters.city, clear: () => update({ city: undefined }) }] : []),
+    ...(filters.prize ? [{ label: `₹${filters.prize.toLocaleString("en-IN")}+`, clear: () => update({ prize: undefined }) }] : []),
+    ...(filters.tags ?? []).map((tag) => ({
+      label: tag,
+      clear: () => update({ tags: filters.tags?.filter((t) => t !== tag) }),
+    })),
+    ...(filters.students ? [{ label: "Students only", clear: () => update({ students: undefined }) }] : []),
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
-      {/* Top Banner / Search bar */}
-      <div className="mb-6 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-ink tracking-tight">
-              Discover Hackathons
-            </h1>
-            <p className="text-xs sm:text-sm text-ink-500 mt-0.5">
-              Live radar across Indian colleges & platforms with countdown alerts
-            </p>
-          </div>
-
-          {/* Search Box */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex items-center gap-2 max-w-md w-full"
-          >
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-ink-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search hackathons, topics, colleges..."
-                className="w-full pl-9 pr-4 py-2 bg-white text-xs sm:text-sm font-semibold rounded-full border-2 border-ink shadow-solid-sm focus:outline-none focus:ring-2 focus:ring-lime"
-              />
-            </div>
-            <Button variant="lime" size="sm" type="submit">
-              Search
-            </Button>
-          </form>
+    <main className="sq-discover sq-container">
+      <header className="sq-discover-heading">
+        <div>
+          <span className="sq-eyebrow">
+            <Sparkles size={13} /> Your next main character moment
+          </span>
+          <h1>
+            Find your next <span>SideQuest.</span>
+          </h1>
+          <p>Big ideas, fresh challenges, and a deadline worth beating.</p>
         </div>
+        <Mascot className="sq-discover-mascot" />
+      </header>
 
-        {/* Mobile Filter Button & Quick Mode Bar */}
-        <div className="flex md:hidden items-center justify-between gap-2 pt-2">
-          {/* Quick mode pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-            {(["all", "online", "offline", "hybrid"] as const).map((m) => {
-              const isSelected =
-                (m === "all" && !activeFilters.mode) || activeFilters.mode === m;
-              return (
-                <button
-                  key={m}
-                  onClick={() =>
-                    updateFilters({ mode: m === "all" ? null : m, page: 1 })
-                  }
-                  className={cn(
-                    "px-3 py-1 rounded-full text-xs font-bold capitalize whitespace-nowrap border transition-all",
-                    isSelected
-                      ? "bg-ink text-white border-ink shadow-solid-sm"
-                      : "bg-white text-ink-700 border-parchment-border"
-                  )}
-                >
-                  {m}
-                </button>
-              );
-            })}
-          </div>
+      <div className="sq-discovery-notice">
+        <span>
+          <strong>Live radar</strong> · {rawEvents.length} hackathons across India’s campus clubs & platforms.
+        </span>
+        <span role="status">
+          {user
+            ? `${saved.length} saved in your Quest Log`
+            : "Log in to keep your favourite quests"}
+        </span>
+      </div>
 
-          {/* Filter Sheet trigger */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsFilterSheetOpen(true)}
-            icon={<SlidersHorizontal className="w-3.5 h-3.5" />}
-            className="shrink-0 relative"
-          >
-            <span>Filters</span>
-            {activeFilterCount > 0 && (
-              <span className="w-4 h-4 rounded-full bg-lime border border-ink text-[10px] font-bold flex items-center justify-center text-ink ml-1">
-                {activeFilterCount}
-              </span>
-            )}
+      <div className="sq-search-row">
+        <label className="sq-search-box">
+          <Search size={20} />
+          <input
+            aria-label="Search hackathons"
+            placeholder="Search hackathons, themes, colleges…"
+            value={filters.q ?? ""}
+            onChange={(e) => update({ q: e.target.value || undefined })}
+          />
+          {filters.q && (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Clear search"
+              onClick={() => update({ q: undefined })}
+            >
+              <X />
+            </Button>
+          )}
+        </label>
+        <Button
+          variant="outline"
+          className="sq-mobile-filter-button"
+          onClick={() => setSheetOpen(true)}
+          aria-label={`Filters${count ? `, ${count} active` : ""}`}
+        >
+          <SlidersHorizontal />
+          {count > 0 && <span>{count}</span>}
+        </Button>
+      </div>
+
+      {chips.length > 0 && (
+        <div className="sq-active-filters">
+          {chips.map((chip) => (
+            <Button
+              key={chip.label}
+              variant="outline"
+              size="sm"
+              onClick={chip.clear}
+              aria-label={`Remove ${chip.label} filter`}
+            >
+              {chip.label}
+              <X size={12} />
+            </Button>
+          ))}
+          <Button variant="ghost" size="sm" onClick={reset}>
+            Clear all
           </Button>
         </div>
-      </div>
+      )}
 
-      {/* Main Grid: Sidebar (Desktop) + Hackathon Cards List */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
-        {/* Desktop Left Sidebar */}
-        <div className="hidden md:block md:col-span-1">
-          <FilterSidebar
-            filters={activeFilters}
-            onFilterChange={updateFilters}
-            onReset={resetAllFilters}
-          />
-        </div>
+      <div className="sq-discovery-layout">
+        <aside className="sq-desktop-filters">
+          <DiscoveryFiltersPanel filters={filters} onChange={update} onReset={reset} />
+        </aside>
 
-        {/* Hackathon Cards List */}
-        <div className="md:col-span-3 space-y-4">
-          {/* Active Filter Chips & Sort header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-parchment-border pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-bold text-ink">
-                {loading
-                  ? "Scanning hackathons..."
-                  : `${data?.total || 0} active hackathons found`}
-              </span>
-            </div>
-
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 text-xs font-bold text-ink">
-              <ArrowUpDown className="w-3.5 h-3.5 text-ink-500" />
-              <label htmlFor="sort-select" className="text-ink-500">
-                Sort:
-              </label>
+        <section className="sq-discovery-results" aria-label="Hackathon results">
+          <div className="sq-results-toolbar">
+            <p>
+              <strong>{results.length}</strong> hackathons
+              {count ? " for you" : " to explore"}
+            </p>
+            <label>
+              Sort by
               <select
-                id="sort-select"
-                value={activeFilters.sort || "closing_soon"}
-                onChange={(e) =>
-                  updateFilters({
-                    sort: e.target.value as HackathonFilterOptions["sort"],
-                    page: 1,
-                  })
-                }
-                className="bg-white border-2 border-ink rounded-lg px-2 py-1 text-xs font-bold focus:outline-none cursor-pointer"
+                aria-label="Sort hackathons"
+                value={filters.sort ?? "closing"}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  update({
+                    sort: value === "match" || value === "prize" ? value : "closing",
+                  });
+                }}
               >
-                <option value="closing_soon">⚡ Closing Soonest</option>
-                <option value="prize_high">🏆 Prize (High to Low)</option>
-                <option value="newest">✨ Recently Added</option>
+                <option value="closing">Closing soon</option>
+                <option value="match">Best match</option>
+                <option value="prize">Prize</option>
               </select>
-            </div>
+            </label>
           </div>
 
-          {/* Active Chips */}
-          <ActiveFilterChips
-            filters={activeFilters}
-            onFilterChange={updateFilters}
-            onReset={resetAllFilters}
-          />
-
-          {/* Hackathon Cards Grid */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={i}
-                  className="retro-card p-5 h-64 animate-pulse bg-white space-y-4"
-                >
-                  <div className="h-4 w-24 bg-parchment rounded" />
-                  <div className="h-6 w-3/4 bg-parchment rounded" />
-                  <div className="h-4 w-1/2 bg-parchment rounded" />
-                  <div className="h-10 bg-parchment/60 rounded-xl" />
-                </div>
-              ))}
-            </div>
-          ) : !data || data.hackathons.length === 0 ? (
-            <EmptyState onReset={resetAllFilters} />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {data.hackathons.map((hackathon) => (
-                <HackathonCard
-                  key={hackathon.id}
-                  hackathon={hackathon}
-                  className="h-full"
-                />
-              ))}
-            </div>
-          )}
+            <DiscoverySkeleton />
+          ) : visible.length ? (
+            <>
+              <div className="sq-event-grid">
+                {visible.map((event) => (
+                  <HackathonCard
+                    key={event.id}
+                    event={event}
+                    now={now}
+                    onOpen={(id) => update({ event: id })}
+                  />
+                ))}
+              </div>
 
-          {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-6">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={data.page <= 1}
-                onClick={() => updateFilters({ page: data.page - 1 })}
-              >
-                Previous
-              </Button>
-              <span className="text-xs font-bold px-3 py-1 bg-white border border-ink rounded-lg">
-                Page {data.page} of {data.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={data.page >= data.totalPages}
-                onClick={() => updateFilters({ page: data.page + 1 })}
-              >
-                Next
-              </Button>
+              <nav className="sq-pagination" aria-label="Results pages">
+                <Button
+                  size="icon"
+                  variant="outline"
+                  disabled={page === 1}
+                  aria-label="Previous page"
+                  onClick={() => update({ page: page - 1 })}
+                >
+                  <ArrowLeft />
+                </Button>
+                {Array.from({ length: pageCount }, (_, i) => (
+                  <Button
+                    key={i}
+                    size="icon"
+                    variant={page === i + 1 ? "default" : "outline"}
+                    aria-label={`Page ${i + 1}`}
+                    aria-current={page === i + 1 ? "page" : undefined}
+                    onClick={() => update({ page: i + 1 })}
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+                <Button
+                  size="icon"
+                  variant="outline"
+                  disabled={page === pageCount}
+                  aria-label="Next page"
+                  onClick={() => update({ page: page + 1 })}
+                >
+                  <ArrowRight />
+                </Button>
+              </nav>
+            </>
+          ) : (
+            <div className="sq-discovery-empty">
+              <Mascot />
+              <h2>No quests on this trail.</h2>
+              <p>Try a different theme or city. Your next big idea is still out there.</p>
+              <Button onClick={reset}>Reset filters</Button>
             </div>
           )}
-        </div>
+        </section>
       </div>
 
-      {/* Mobile Filter Sheet Modal */}
-      <MobileFilterSheet
-        isOpen={isFilterSheetOpen}
-        onClose={() => setIsFilterSheetOpen(false)}
-        filters={activeFilters}
-        onFilterChange={updateFilters}
-        onReset={resetAllFilters}
-        totalResults={data?.total || 0}
-      />
-    </div>
+      <QuestDialog
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title="Find your kind of quest"
+        kind="filters"
+      >
+        <DiscoveryFiltersPanel filters={filters} onChange={update} onReset={reset} />
+        <div className="sq-sheet-actions">
+          <Button onClick={() => setSheetOpen(false)}>
+            Show {results.length} hackathons <ArrowRight />
+          </Button>
+        </div>
+      </QuestDialog>
+
+      <QuestDialog
+        open={Boolean(filters.event)}
+        onClose={() => update({ event: undefined })}
+        title={selected?.title ?? "Hackathon not found"}
+        kind="detail"
+      >
+        {selected ? (
+          <HackathonDetail event={selected} now={now} drawer />
+        ) : (
+          <div className="sq-discovery-empty">
+            <Mascot />
+            <h2>This quest isn’t on the board.</h2>
+            <Button onClick={() => update({ event: undefined })}>Back to results</Button>
+          </div>
+        )}
+      </QuestDialog>
+    </main>
   );
 }
 
 export default function DiscoverPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex-1 flex items-center justify-center py-20 text-sm font-bold">
-          Loading SideQuest Radar...
-        </div>
-      }
-    >
-      <DiscoverContent />
+    <Suspense fallback={<DiscoverySkeleton />}>
+      <DiscoverView />
     </Suspense>
   );
 }

@@ -4,7 +4,7 @@ import React from "react";
 import { FilterSidebar } from "./FilterSidebar";
 import { HackathonFilterOptions } from "@/lib/db/hackathons";
 import { X } from "lucide-react";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/button";
 
 interface MobileFilterSheetProps {
   isOpen: boolean;

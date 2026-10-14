@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Compass, Bookmark, PlusCircle, Bell, User } from "lucide-react";
 import Mascot from "@/components/ui/Mascot";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const TopNav: React.FC = () => {
