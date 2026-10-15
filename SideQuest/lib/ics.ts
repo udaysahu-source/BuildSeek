@@ -95,3 +95,39 @@ export function generateIcsFeed(
 
   return lines.join("\r\n");
 }
+
+/**
+ * Generates a direct Google Calendar add event URL for a single hackathon.
+ */
+export function generateGoogleCalendarUrl(h: Hackathon): string {
+  const title = `⏰ [Deadline] ${h.title}`;
+  const details = `Registration deadline for ${h.title} (by ${h.organizer}).\nPrize: ${h.prize_text || "Trophy/Swag"}\nRegister: ${h.source_url}`;
+  const location = h.mode === "online" ? "Online" : h.city || "In-person";
+
+  // If deadline exists, set a 1-hour window on that deadline
+  let dates = "";
+  if (h.reg_deadline) {
+    const d = new Date(h.reg_deadline);
+    if (!isNaN(d.getTime())) {
+      const end = new Date(d.getTime() + 60 * 60 * 1000);
+      dates = `${formatIcsDate(d)}/${formatIcsDate(end)}`;
+    }
+  } else if (h.start_date) {
+    const s = new Date(h.start_date);
+    const e = h.end_date ? new Date(h.end_date) : new Date(s.getTime() + 24 * 60 * 60 * 1000);
+    dates = `${formatIcsDate(s)}/${formatIcsDate(e)}`;
+  }
+
+  const base = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+  const params = new URLSearchParams({
+    text: title,
+    details: details,
+    location: location,
+  });
+
+  if (dates) {
+    return `${base}&${params.toString()}&dates=${dates}`;
+  }
+
+  return `${base}&${params.toString()}`;
+}

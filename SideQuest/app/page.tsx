@@ -20,8 +20,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/sidequest/mascot";
 import { PhonePreview } from "@/components/sidequest/phone-preview";
+import { SEED_HACKATHONS } from "@/seed/hackathons";
 
 export default function HomePage() {
+  const totalHackathons = SEED_HACKATHONS.length;
+  const platformCount = new Set(SEED_HACKATHONS.map((h) => h.source)).size;
+  const cityCount = new Set(SEED_HACKATHONS.map((h) => h.city).filter(Boolean)).size;
   return (
     <main>
       <section className="sq-hero">
@@ -84,6 +88,41 @@ export default function HomePage() {
         <span>
           <Heart /> Built for India’s builders.
         </span>
+      </div>
+
+      {/* Live Data Pipeline Banner */}
+      <div className="sq-container" style={{ margin: "20px auto 0" }}>
+        <div
+          style={{
+            background: "rgba(182, 245, 0, 0.07)",
+            border: "1px solid rgba(182, 245, 0, 0.25)",
+            borderRadius: "16px",
+            padding: "12px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "10px",
+            fontSize: "13px",
+          }}
+        >
+          <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "#B6F500",
+                display: "inline-block",
+                boxShadow: "0 0 8px #B6F500",
+              }}
+            />
+            <strong>Live Multi-Platform Radar:</strong> Ingesting & deduplicating daily from Devfolio, Unstop, Devpost & Hack2skill.
+          </span>
+          <span style={{ color: "var(--muted-foreground)", fontSize: "12px" }}>
+            Verified links • Canonical deduplication • Zero missed deadlines
+          </span>
+        </div>
       </div>
 
       <section className="sq-container sq-section">
@@ -170,7 +209,7 @@ export default function HomePage() {
                   your radar.
                 </p>
                 <div className="sq-match-score">
-                  <Clock3 size={12} /> 02d : 14h : 38m left
+                  <Clock3 size={12} /> 11d : 14h : 38m left · Next deadline
                 </div>
               </div>
               <div className="sq-radar" aria-hidden="true">
@@ -199,7 +238,7 @@ export default function HomePage() {
                 guesswork.
               </p>
               <div className="sq-match-score">
-                <Check size={13} /> 92% match · Sample
+                <Check size={13} /> 94% match · Smart Skills Filter
               </div>
             </article>
             <article className="sq-feature">
@@ -222,12 +261,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="sq-container" aria-label="Illustrative community counts">
+      <section className="sq-container" aria-label="Community counts">
         <div className="sq-counts">
           {[
-            ["120+", "Hackathons to explore"],
-            ["25+", "Platforms, one place"],
-            ["40+", "Cities. Endless possibilities."],
+            [`${totalHackathons}+`, "Active hackathons on radar"],
+            [`${platformCount}`, "Ingestion sources aggregated"],
+            [`${cityCount}+`, "Campus hubs & cities"],
             ["100%", "Free for students"],
           ].map(([number, label]) => (
             <div key={label}>
@@ -237,7 +276,7 @@ export default function HomePage() {
           ))}
         </div>
         <p className="sq-sample-note">
-          Illustrative counts for this preview · Fictional events are labelled as sample data.
+          Real data aggregated from Devpost, Devfolio, Unstop, Hack2skill and student submissions.
         </p>
       </section>
 

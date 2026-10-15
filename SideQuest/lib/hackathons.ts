@@ -245,6 +245,11 @@ export function toCalendar(event: HackathonUI): string {
   return generateIcsFeed([event as any], event.title);
 }
 
+export function toGoogleCalendar(event: HackathonUI): string {
+  const { generateGoogleCalendarUrl } = require("./ics");
+  return generateGoogleCalendarUrl(event as any);
+}
+
 export function activeFilterCount(filters: DiscoveryFilters) {
   return (
     Number(Boolean(filters.q)) +

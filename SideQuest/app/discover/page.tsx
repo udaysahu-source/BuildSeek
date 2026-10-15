@@ -20,14 +20,17 @@ import {
   type HackathonUI,
 } from "@/lib/hackathons";
 import { getHackathons } from "@/lib/db/hackathons";
+import { SEED_HACKATHONS } from "@/seed/hackathons";
 
 function DiscoverView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [rawEvents, setRawEvents] = useState<HackathonUI[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [rawEvents, setRawEvents] = useState<HackathonUI[]>(() =>
+    SEED_HACKATHONS.map(normalizeHackathon)
+  );
+  const [loading, setLoading] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const now = useCountdownClock();
   const { saved } = useBookmarks();
@@ -296,6 +299,88 @@ function DiscoverView() {
           </Button>
         </div>
       )}
+
+      {/* Quick filter presets */}
+      <div
+        className="sq-quick-presets"
+        style={{
+          display: "flex",
+          gap: "8px",
+          overflowX: "auto",
+          paddingBottom: "10px",
+          marginBottom: "12px",
+          scrollbarWidth: "none",
+        }}
+        role="group"
+        aria-label="Popular filter presets"
+      >
+        <Button
+          size="sm"
+          variant={filters.status === "closing-soon" ? "default" : "outline"}
+          onClick={() =>
+            update({
+              status: filters.status === "closing-soon" ? undefined : "closing-soon",
+            })
+          }
+          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
+        >
+          ⏰ Closing in 7 days
+        </Button>
+        <Button
+          size="sm"
+          variant={filters.price === "free" ? "default" : "outline"}
+          onClick={() =>
+            update({
+              price: filters.price === "free" ? undefined : "free",
+            })
+          }
+          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
+        >
+          🆓 Free only
+        </Button>
+        <Button
+          size="sm"
+          variant={filters.mode === "online" ? "default" : "outline"}
+          onClick={() =>
+            update({
+              mode: filters.mode === "online" ? undefined : "online",
+            })
+          }
+          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
+        >
+          🌐 Online
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            filters.organizer_types?.includes("college") ? "default" : "outline"
+          }
+          onClick={() =>
+            update({
+              organizer_types: filters.organizer_types?.includes("college")
+                ? undefined
+                : ["college"],
+            })
+          }
+          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
+        >
+          🎓 College
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            filters.scope === "national" ? "default" : "outline"
+          }
+          onClick={() =>
+            update({
+              scope: filters.scope === "national" ? undefined : "national",
+            })
+          }
+          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
+        >
+          🇮🇳 National
+        </Button>
+      </div>
 
       <div className="sq-discovery-layout">
         <aside className="sq-desktop-filters">

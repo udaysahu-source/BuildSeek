@@ -23,6 +23,7 @@ import {
   formatPrize,
   formatFee,
   toCalendar,
+  toGoogleCalendar,
   type HackathonUI,
 } from "@/lib/hackathons";
 import { BookmarkButton, CountdownChip } from "./hackathon-card";
@@ -376,13 +377,27 @@ export function HackathonDetail({
           </Button>
         )}
 
+        <Button asChild variant="outline">
+          <a
+            href={toGoogleCalendar(event)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open in Google Calendar"
+            aria-label={`Add ${event.title} to Google Calendar`}
+          >
+            <CalendarDays size={16} />
+            <span>Google Calendar</span>
+          </a>
+        </Button>
+
         <Button
           variant="outline"
           onClick={downloadCalendar}
-          aria-label={`Add ${event.title} to calendar`}
+          aria-label={`Download .ics file for ${event.title}`}
+          title="Download .ics calendar file"
         >
           <CalendarDays size={16} />
-          <span>Add to calendar</span>
+          <span>Download .ics</span>
         </Button>
       </div>
     </div>

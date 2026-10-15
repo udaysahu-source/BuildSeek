@@ -12,6 +12,7 @@ import {
   Users,
   Zap,
   AlertCircle,
+  CalendarDays,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   formatFee,
   getStatus,
   statusLabel,
+  toGoogleCalendar,
   type HackathonUI,
 } from "@/lib/hackathons";
 import { useBookmarks } from "./discovery-state";
@@ -230,17 +232,45 @@ export function HackathonCard({
         ))}
       </div>
 
-      <div className="sq-card-footer">
-        <span>{event.source}</span>
-        <Button asChild size="icon">
-          <Link
-            href={`/h/${event.id}`}
-            aria-label={`View ${event.title}`}
-            onClick={handleClick}
+      <div className="sq-card-footer" style={{ gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontWeight: 600, fontSize: "11px", textTransform: "capitalize" }}>
+            {event.source}
+          </span>
+          <a
+            href={toGoogleCalendar(event)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Add deadline to Google Calendar"
+            aria-label="Add deadline to Google Calendar"
+            style={{ display: "inline-flex", alignItems: "center", color: "var(--muted-foreground)", padding: "2px" }}
           >
-            <ArrowUpRight />
-          </Link>
-        </Button>
+            <CalendarDays size={13} />
+          </a>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
+          <Button asChild variant="outline" size="sm" style={{ height: "32px", fontSize: "12px", padding: "0 10px" }}>
+            <Link
+              href={`/h/${event.id}`}
+              onClick={handleClick}
+              title="View full hackathon details"
+            >
+              Details
+            </Link>
+          </Button>
+
+          <Button asChild size="sm" style={{ height: "32px", fontSize: "12px", padding: "0 12px" }}>
+            <a
+              href={event.apply_url || event.official_page || event.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Register for ${event.title}`}
+            >
+              Register <ArrowUpRight size={13} style={{ marginLeft: 3 }} />
+            </a>
+          </Button>
+        </div>
       </div>
     </article>
   );

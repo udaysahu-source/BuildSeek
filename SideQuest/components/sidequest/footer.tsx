@@ -21,8 +21,8 @@ export function Footer() {
         </div>
         <div className="sq-footer-bottom">
           <span>© 2026 SideQuest. Built for the builders.</span>
-          <span className="inline-flex items-center gap-1">
-            Made with <Heart size={11} /> for India’s student community.
+          <span className="inline-flex items-center gap-1.5">
+            Made with <Heart size={13} className="inline fill-rose-500 text-rose-500" /> for India’s student community.
           </span>
         </div>
       </div>

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { ArrowUpRight, Bookmark, Clock3, Globe2, MapPin, Sparkles, Trophy, Users, Zap } from "lucide-react";
 import { Mascot } from "./mascot";
 
@@ -51,7 +54,7 @@ export function PhonePreview() {
       </div>
       <div className="sq-float-chip sq-float-deadline">
         <span className="sq-status-dot" />
-        <strong>02d : 14h : 38m</strong>
+        <LiveTicker targetIso="2026-10-27T06:59:00Z" fallback="11d : 14h : 38m" />
         <span>left to make your move</span>
       </div>
       <div className="sq-float-chip sq-float-saved">
@@ -63,6 +66,32 @@ export function PhonePreview() {
       <span className="sq-scene-spark sq-scene-spark-two">✦</span>
     </div>
   );
+}
+
+function LiveTicker({ targetIso, fallback }: { targetIso: string; fallback: string }) {
+  const [display, setDisplay] = useState(fallback);
+
+  useEffect(() => {
+    const update = () => {
+      const target = new Date(targetIso).getTime();
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        setDisplay("Closing soon");
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      setDisplay(`${String(d).padStart(2, "0")}d : ${String(h).padStart(2, "0")}h : ${String(m).padStart(2, "0")}m : ${String(s).padStart(2, "0")}s`);
+    };
+
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [targetIso]);
+
+  return <strong>{display}</strong>;
 }
 
 function SampleCard({

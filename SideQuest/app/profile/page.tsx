@@ -52,7 +52,9 @@ export default function ProfilePage() {
         <h1>Your account.</h1>
 
         {loading ? (
-          <p role="status">Loading account…</p>
+          <p role="status" style={{ color: "var(--muted-foreground)", fontSize: "14px" }}>
+            Checking account session…
+          </p>
         ) : user ? (
           <>
             <p className="sq-account-email">{user.email}</p>
@@ -93,12 +95,19 @@ export default function ProfilePage() {
             )}
           </>
         ) : (
-          <>
-            <p>Log in to keep your next big opportunities close.</p>
-            <Button asChild>
-              <Link href="/login?next=%2Fprofile">Log in or sign up</Link>
-            </Button>
-          </>
+          <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginTop: "12px" }}>
+            <p style={{ color: "var(--muted-foreground)", maxWidth: "340px", fontSize: "15px" }}>
+              Log in to sync your saved quests across devices and get Telegram deadline reminders.
+            </p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "8px" }}>
+              <Button asChild>
+                <Link href="/login?next=%2Fprofile">Log in or Sign up</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/discover">Browse Quests</Link>
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </main>

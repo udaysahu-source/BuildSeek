@@ -13,6 +13,8 @@ import { normalizeHackathon, type HackathonUI } from "@/lib/hackathons";
 import { questGroups, questTab, type QuestTab } from "@/lib/quests";
 import { getHackathons } from "@/lib/db/hackathons";
 
+import { SEED_HACKATHONS } from "@/seed/hackathons";
+
 function QuestLogView() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,8 +22,10 @@ function QuestLogView() {
 
   const { user, loading: authLoading } = useAuth();
   const { saved, loading: bookmarksLoading, error } = useBookmarks();
-  const [allEvents, setAllEvents] = useState<HackathonUI[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
+  const [allEvents, setAllEvents] = useState<HackathonUI[]>(() =>
+    SEED_HACKATHONS.map(normalizeHackathon)
+  );
+  const [dataLoading, setDataLoading] = useState(false);
   const [calendarCopied, setCalendarCopied] = useState(false);
   const now = useCountdownClock(Date.now());
 
@@ -75,43 +79,51 @@ function QuestLogView() {
         <Mascot />
       </header>
 
-      {authLoading ? (
-        <p role="status">Opening your Quest Log…</p>
-      ) : !user ? (
-        <div className="sq-discovery-empty">
-          <Mascot />
-          <h2>Your quests need a home.</h2>
-          <p>Log in to keep your saved hackathons together.</p>
-          <Button asChild>
-            <Link href="/login?next=%2Fquest-log">
-              Log in or sign up <ArrowUpRight size={17} />
-            </Link>
+      {/* Guest notice if not signed in */}
+      {!authLoading && !user && (
+        <div
+          style={{
+            background: "rgba(182, 245, 0, 0.08)",
+            border: "1px dashed var(--brand)",
+            borderRadius: "16px",
+            padding: "12px 18px",
+            marginBottom: "24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "10px",
+          }}
+        >
+          <span style={{ fontSize: "13px" }}>
+            ⚡ <strong>Saved locally in your browser.</strong> Sign in to sync across devices or enable Telegram deadline alerts.
+          </span>
+          <Button asChild size="sm" variant="outline">
+            <Link href="/login?next=%2Fquest-log">Sign in to sync</Link>
           </Button>
-          <Link href="/discover" className="sq-browse-link">
-            Browse hackathons
-          </Link>
         </div>
-      ) : (
-        <>
-          <div className="sq-quest-tabs" role="group" aria-label="Quest timeline">
-            {(["active", "upcoming", "past"] as QuestTab[]).map((value) => (
-              <Button
-                key={value}
-                variant={tab === value ? "default" : "ghost"}
-                aria-pressed={tab === value}
-                onClick={() => setTab(value)}
-              >
-                {value}
-                <span>
-                  {
-                    allEvents.filter(
-                      (e) => saved.includes(e.id) && questTab(e, now) === value
-                    ).length
-                  }
-                </span>
-              </Button>
-            ))}
-          </div>
+      )}
+
+      <>
+        <div className="sq-quest-tabs" role="group" aria-label="Quest timeline">
+          {(["active", "upcoming", "past"] as QuestTab[]).map((value) => (
+            <Button
+              key={value}
+              variant={tab === value ? "default" : "ghost"}
+              aria-pressed={tab === value}
+              onClick={() => setTab(value)}
+            >
+              {value}
+              <span>
+                {
+                  allEvents.filter(
+                    (e) => saved.includes(e.id) && questTab(e, now) === value
+                  ).length
+                }
+              </span>
+            </Button>
+          ))}
+        </div>
 
           {saved.length > 0 && (
             <div className="sq-trust-strip mb-8" style={{ marginTop: 0, justifyContent: "space-between" }}>
@@ -169,7 +181,6 @@ function QuestLogView() {
             </div>
           )}
         </>
-      )}
     </main>
   );
 }

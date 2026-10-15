@@ -20,6 +20,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"),
   title: "Every hackathon. One place. — SideQuest",
   description:
     "Find your next hackathon with SideQuest. One place for Indian student hackathons, deadlines, saved events, and reminders.",

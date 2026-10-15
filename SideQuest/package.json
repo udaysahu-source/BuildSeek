@@ -10,10 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "ingest": "tsx ingestion/run.ts",
-    "ingest:dry": "tsx ingestion/run.ts --dry-run",
-    "build:worker": "opennextjs-cloudflare build",
-    "preview:worker": "opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare deploy"
+    "ingest:dry": "tsx ingestion/run.ts --dry-run"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.3.1",
