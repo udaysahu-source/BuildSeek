@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { RawItem, SourceAdapter, detectOrganizerType } from "./types";
 import { Hackathon } from "@/lib/types";
+import { generateRichDetails } from "@/lib/detail-generator";
 
 export class UnstopAdapter implements SourceAdapter {
   name = "unstop";
@@ -120,6 +121,26 @@ export class UnstopAdapter implements SourceAdapter {
 
     const nowIso = new Date().toISOString();
 
+    const rich = generateRichDetails({
+      title,
+      organizer,
+      mode,
+      city: raw.city || null,
+      state: raw.state || null,
+      country: "India",
+      prize_amount: prizeAmount > 0 ? prizeAmount : null,
+      prize_amount_inr: prizeAmount > 0 ? prizeAmount : null,
+      prize_text: raw.prizes || (prizeAmount > 0 ? `₹${prizeAmount.toLocaleString("en-IN")}` : null),
+      team_min: raw.team_min ? Number(raw.team_min) : 1,
+      team_max: raw.team_max ? Number(raw.team_max) : 4,
+      tags,
+      reg_deadline: new Date(regDeadline).toISOString(),
+      start_date: new Date(startDate).toISOString(),
+      end_date: new Date(endDate).toISOString(),
+      eligibility_text: "College and university students in India (check Unstop eligibility tabs)",
+      description: raw.details || raw.description || null,
+    });
+
     return {
       id: `u-${sourceId}`.padEnd(36, "0").substring(0, 36),
       source: this.name,
@@ -159,6 +180,14 @@ export class UnstopAdapter implements SourceAdapter {
       apply_url: sourceUrl,
       image_url: raw.banner_image || raw.logo_url || null,
       canonical_id: null,
+      summary: rich.summary,
+      description: rich.description,
+      rounds: rich.rounds as any,
+      tracks: rich.tracks as any,
+      prizes_breakdown: rich.prizes_breakdown as any,
+      submission_guidelines: rich.submission_guidelines,
+      rules: rich.rules,
+      judging_criteria: rich.judging_criteria as any,
       verified: true,
       data_confidence: "platform_listed",
       last_verified_at: nowIso.split("T")[0],

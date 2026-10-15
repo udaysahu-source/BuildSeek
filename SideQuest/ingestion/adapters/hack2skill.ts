@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { RawItem, SourceAdapter, detectOrganizerType } from "./types";
 import { Hackathon } from "@/lib/types";
+import { generateRichDetails } from "@/lib/detail-generator";
 
 export class Hack2skillAdapter implements SourceAdapter {
   name = "hack2skill";
@@ -78,6 +79,14 @@ export class Hack2skillAdapter implements SourceAdapter {
 
     const nowIso = new Date().toISOString();
 
+    const rich = generateRichDetails({
+      title,
+      organizer: "Hack2skill Event Host",
+      mode: "hybrid",
+      tags: ["hackathon", "hack2skill"],
+      eligibility_text: "Check official page on Hack2skill",
+    });
+
     return {
       id: `h2s-${sourceId}`.padEnd(36, "0").substring(0, 36),
       source: this.name,
@@ -117,6 +126,14 @@ export class Hack2skillAdapter implements SourceAdapter {
       apply_url: sourceUrl,
       image_url: null,
       canonical_id: null,
+      summary: rich.summary,
+      description: rich.description,
+      rounds: rich.rounds as any,
+      tracks: rich.tracks as any,
+      prizes_breakdown: rich.prizes_breakdown as any,
+      submission_guidelines: rich.submission_guidelines,
+      rules: rich.rules,
+      judging_criteria: rich.judging_criteria as any,
       verified: false,
       data_confidence: "unverified",
       last_verified_at: null,

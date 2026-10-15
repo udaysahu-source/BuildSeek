@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { RawItem, SourceAdapter, detectOrganizerType } from "./types";
 import { Hackathon } from "@/lib/types";
+import { generateRichDetails } from "@/lib/detail-generator";
 
 export class DevpostAdapter implements SourceAdapter {
   name = "devpost";
@@ -150,6 +151,22 @@ export class DevpostAdapter implements SourceAdapter {
 
     const nowIso = new Date().toISOString();
 
+    const rich = generateRichDetails({
+      title,
+      organizer,
+      mode,
+      prize_amount: prizeAmount,
+      prize_amount_inr: prizeAmountInr,
+      prize_text: prizeText,
+      team_min: 1,
+      team_max: null,
+      tags,
+      reg_deadline: regDeadline,
+      start_date: startDate,
+      end_date: endDate,
+      eligibility_text: "Check official rules on Devpost for regional eligibility",
+    });
+
     return {
       id: `dp-${sourceId}`.padEnd(36, "0").substring(0, 36),
       source: this.name,
@@ -188,6 +205,14 @@ export class DevpostAdapter implements SourceAdapter {
       apply_url: raw.start_a_submission_url || sourceUrl,
       image_url: imageUrl,
       canonical_id: null,
+      summary: rich.summary,
+      description: rich.description,
+      rounds: rich.rounds as any,
+      tracks: rich.tracks as any,
+      prizes_breakdown: rich.prizes_breakdown as any,
+      submission_guidelines: rich.submission_guidelines,
+      rules: rich.rules,
+      judging_criteria: rich.judging_criteria as any,
       verified: true,
       data_confidence: "platform_listed",
       last_verified_at: nowIso.split("T")[0],

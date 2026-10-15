@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { RawItem, SourceAdapter, detectOrganizerType } from "./types";
 import { Hackathon } from "@/lib/types";
+import { generateRichDetails } from "@/lib/detail-generator";
 
 export class DevfolioAdapter implements SourceAdapter {
   name = "devfolio";
@@ -106,6 +107,24 @@ export class DevfolioAdapter implements SourceAdapter {
 
     const nowIso = new Date().toISOString();
 
+    const rich = generateRichDetails({
+      title,
+      organizer,
+      mode,
+      city: raw.location || null,
+      country: "India",
+      prize_amount: prizeAmount > 0 ? prizeAmount : null,
+      prize_amount_inr: prizeAmount > 0 ? prizeAmount : null,
+      prize_text: raw.prize_pool || (prizeAmount > 0 ? `₹${prizeAmount.toLocaleString("en-IN")}` : null),
+      team_min: raw.min_team_size ? Number(raw.min_team_size) : 1,
+      team_max: raw.max_team_size ? Number(raw.max_team_size) : 4,
+      tags,
+      reg_deadline: regDeadline ? new Date(regDeadline).toISOString() : null,
+      start_date: startDate ? new Date(startDate).toISOString() : null,
+      end_date: endDate ? new Date(endDate).toISOString() : null,
+      eligibility_text: "Builders and developers; see Devfolio rules",
+    });
+
     return {
       id: `d-${sourceId}`.padEnd(36, "0").substring(0, 36),
       source: this.name,
@@ -145,6 +164,14 @@ export class DevfolioAdapter implements SourceAdapter {
       apply_url: sourceUrl,
       image_url: raw.banner_url || null,
       canonical_id: null,
+      summary: rich.summary,
+      description: rich.description,
+      rounds: rich.rounds as any,
+      tracks: rich.tracks as any,
+      prizes_breakdown: rich.prizes_breakdown as any,
+      submission_guidelines: rich.submission_guidelines,
+      rules: rich.rules,
+      judging_criteria: rich.judging_criteria as any,
       verified: true,
       data_confidence: "platform_listed",
       last_verified_at: nowIso.split("T")[0],

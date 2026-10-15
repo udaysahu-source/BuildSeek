@@ -6,6 +6,12 @@ import {
   DataConfidence,
 } from "./types";
 import { generateIcsFeed } from "./ics";
+import {
+  generateRichDetails,
+  type HackathonRound,
+  type HackathonTrack,
+  type PrizeBreakdown,
+} from "./detail-generator";
 
 export type Mode = "online" | "offline" | "hybrid";
 export type Status = "upcoming" | "open" | "closing-soon" | "closed";
@@ -44,6 +50,13 @@ export interface HackathonUI {
   eligibility: string;
   eligibility_text?: string | null;
   description: string;
+  summary?: string;
+  rounds?: HackathonRound[];
+  tracks?: HackathonTrack[];
+  prizes_breakdown?: PrizeBreakdown[];
+  submission_guidelines?: string[];
+  rules?: string[];
+  judging_criteria?: { criterion: string; weight: string; description: string }[];
   is_sample?: boolean;
   fee_type: FeeType;
   fee_amount_inr?: number | null;
@@ -440,6 +453,7 @@ export function normalizeHackathon(h: DbHackathon): HackathonUI {
   const city = h.city ?? (h.mode === "online" ? "Pan India" : null);
   const cityKey = city ? city.toLowerCase() : "";
   const fallbackCoords = CITY_COORDINATES[cityKey];
+  const rich = generateRichDetails(h);
 
   return {
     id: h.id,
@@ -480,7 +494,17 @@ export function normalizeHackathon(h: DbHackathon): HackathonUI {
         ? "College students only"
         : "Open to everyone"),
     eligibility_text: h.eligibility_text || null,
-    description: h.description || h.summary || "No description provided.",
+    summary: h.summary || rich.summary,
+    description:
+      h.description && h.description.length > 50 && h.description !== "No description provided."
+        ? h.description
+        : rich.description,
+    rounds: (h as any).rounds || rich.rounds,
+    tracks: (h as any).tracks || rich.tracks,
+    prizes_breakdown: (h as any).prizes_breakdown || rich.prizes_breakdown,
+    submission_guidelines: (h as any).submission_guidelines || rich.submission_guidelines,
+    rules: (h as any).rules || rich.rules,
+    judging_criteria: (h as any).judging_criteria || rich.judging_criteria,
     data_confidence: h.data_confidence || (h.verified ? "verified_primary" : "unverified"),
     last_verified_at: h.last_verified_at || null,
     needs_review: Boolean(h.needs_review),

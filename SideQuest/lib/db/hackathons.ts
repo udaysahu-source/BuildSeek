@@ -162,11 +162,11 @@ export async function getHackathons(
       status: computeHackathonStatus(h.reg_start, h.reg_deadline, now),
     }));
 
-  // Filter: Keyword Search (title, organizer, summary, description)
+  // Filter: Keyword Search (title, organizer, tags)
   if (filters.q && filters.q.trim().length > 0) {
     const terms = filters.q.toLowerCase().split(/\s+/).filter(Boolean);
     results = results.filter((h) => {
-      const haystack = `${h.title} ${h.organizer} ${h.summary || ""} ${h.description || ""} ${h.tags.join(" ")}`.toLowerCase();
+      const haystack = `${h.title} ${h.organizer} ${h.tags.join(" ")}`.toLowerCase();
       return terms.every((term) => haystack.includes(term));
     });
   }
