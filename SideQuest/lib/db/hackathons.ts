@@ -1,6 +1,7 @@
 import { Hackathon, HackathonStatus } from "@/lib/types";
 import { computeHackathonStatus } from "@/lib/status";
 import { SEED_HACKATHONS } from "@/seed/hackathons";
+import hackathonsData from "@/data/hackathons.json";
 
 export interface HackathonFilterOptions {
   q?: string | null;
@@ -45,37 +46,22 @@ let cachedDataset: Hackathon[] | null = null;
 export function getLocalDataset(): Hackathon[] {
   if (cachedDataset) return cachedDataset;
 
-  if (typeof window === "undefined") {
-    try {
-      const nodeRequire = (globalThis as any).require;
-      if (nodeRequire) {
-        const fs = nodeRequire("fs");
-        const path = nodeRequire("path");
-        const dataPath = path.join(process.cwd(), "data/hackathons.json");
-        if (fs.existsSync(dataPath)) {
-          const content = fs.readFileSync(dataPath, "utf-8");
-          const parsed = JSON.parse(content);
-          const list: Hackathon[] = Array.isArray(parsed)
-            ? parsed
-            : Array.isArray(parsed?.hackathons)
-            ? parsed.hackathons
-            : [];
-          if (list.length > 0) {
-            const existingIds = new Set(list.map((h: Hackathon) => h.id));
-            const combined = [...list];
-            for (const seed of SEED_HACKATHONS) {
-              if (!existingIds.has(seed.id)) {
-                combined.push(seed);
-              }
-            }
-            cachedDataset = combined;
-            return combined;
-          }
-        }
+  const jsonList: Hackathon[] = Array.isArray(hackathonsData)
+    ? (hackathonsData as any)
+    : Array.isArray((hackathonsData as any)?.hackathons)
+    ? (hackathonsData as any).hackathons
+    : [];
+
+  if (jsonList.length > 0) {
+    const existingIds = new Set(jsonList.map((h: Hackathon) => h.id));
+    const combined = [...jsonList];
+    for (const seed of SEED_HACKATHONS) {
+      if (!existingIds.has(seed.id)) {
+        combined.push(seed);
       }
-    } catch (e) {
-      // browser / client fallback
     }
+    cachedDataset = combined;
+    return combined;
   }
 
   cachedDataset = SEED_HACKATHONS;

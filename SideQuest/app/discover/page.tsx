@@ -113,9 +113,10 @@ function DiscoverView() {
     [rawEvents, filters, now]
   );
 
-  const pageCount = Math.max(1, Math.ceil(results.length / 6));
+  const PAGE_SIZE = 12;
+  const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const page = Math.min(filters.page ?? 1, pageCount);
-  const visible = results.slice((page - 1) * 6, page * 6);
+  const visible = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const selected = rawEvents.find((event) => event.id === filters.event);
   const count = activeFilterCount(filters);
 

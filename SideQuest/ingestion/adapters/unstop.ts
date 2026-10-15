@@ -71,15 +71,16 @@ export class UnstopAdapter implements SourceAdapter {
     }
 
     const regDeadline =
-      raw.registration_end_date || raw.reg_deadline || raw.end_date;
+      raw.end_date || raw.regn_end_date || raw.registration_end_date || raw.reg_deadline;
     const startDate =
-      raw.start_date || raw.starts_at || raw.registration_end_date;
-    const endDate = raw.end_date || raw.ends_at || startDate;
+      raw.start_date || raw.starts_at || raw.approved_date || raw.updated_at || new Date().toISOString();
+    const endDate = raw.end_date || raw.ends_at || regDeadline;
     const regStart =
       raw.registration_start_date ||
+      raw.approved_date ||
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    if (!regDeadline || !startDate) {
+    if (!regDeadline) {
       return null;
     }
 
