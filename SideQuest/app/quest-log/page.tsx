@@ -3,7 +3,7 @@
 import React, { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Bookmark, ArrowUpRight, CalendarDays, Copy, Check } from "lucide-react";
+import { Bookmark, ArrowUpRight, CalendarDays, Copy, Check, Send } from "lucide-react";
 import { useAuth } from "@/components/sidequest/auth-state";
 import { useBookmarks, useCountdownClock } from "@/components/sidequest/discovery-state";
 import { HackathonCard } from "@/components/sidequest/hackathon-card";
@@ -126,16 +126,70 @@ function QuestLogView() {
         </div>
 
           {saved.length > 0 && (
-            <div className="sq-trust-strip mb-8" style={{ marginTop: 0, justifyContent: "space-between" }}>
-              <span className="text-xs">
-                <CalendarDays size={14} className="inline mr-1" />
-                Live iCal Feed: Sync your quests to Google Calendar / Apple Calendar
-              </span>
-              <Button size="sm" variant="outline" onClick={copyCalendarUrl}>
-                {calendarCopied ? <Check size={14} /> : <Copy size={14} />}
-                {calendarCopied ? "Feed Copied!" : "Copy iCal Link"}
-              </Button>
-            </div>
+            <>
+              {/* Telegram Sync Banner */}
+              <div
+                style={{
+                  background: "linear-gradient(135deg, rgba(34, 158, 217, 0.08) 0%, rgba(182, 245, 0, 0.08) 100%)",
+                  border: "1.5px solid rgba(34, 158, 217, 0.35)",
+                  borderRadius: "20px",
+                  padding: "16px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "14px",
+                  marginBottom: "20px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div
+                    style={{
+                      width: "38px",
+                      height: "38px",
+                      borderRadius: "10px",
+                      background: "#229ED9",
+                      color: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      boxShadow: "0 4px 10px rgba(34, 158, 217, 0.25)",
+                    }}
+                  >
+                    <Send size={18} />
+                  </div>
+                  <div>
+                    <strong style={{ fontSize: "14px", display: "block", color: "var(--ink)" }}>
+                      Sync your Quest Log with @SideQuestAlertsBot
+                    </strong>
+                    <span style={{ fontSize: "12px", color: "#475569" }}>
+                      Get instant 24h & 3h Telegram pings for your {saved.length} saved {saved.length === 1 ? "quest" : "quests"}.
+                    </span>
+                  </div>
+                </div>
+                <Button asChild size="sm" style={{ background: "#229ED9", color: "#fff", fontWeight: 700 }}>
+                  <a
+                    href="https://t.me/SideQuestAlertsBot?start=sync_saved_quests"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Send size={14} /> Open Telegram Bot <ArrowUpRight size={14} />
+                  </a>
+                </Button>
+              </div>
+
+              <div className="sq-trust-strip mb-8" style={{ marginTop: 0, justifyContent: "space-between" }}>
+                <span className="text-xs">
+                  <CalendarDays size={14} className="inline mr-1" />
+                  Live iCal Feed: Sync your quests to Google Calendar / Apple Calendar
+                </span>
+                <Button size="sm" variant="outline" onClick={copyCalendarUrl}>
+                  {calendarCopied ? <Check size={14} /> : <Copy size={14} />}
+                  {calendarCopied ? "Feed Copied!" : "Copy iCal Link"}
+                </Button>
+              </div>
+            </>
           )}
 
           {error ? (

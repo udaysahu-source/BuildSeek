@@ -13,6 +13,7 @@ import {
   Zap,
   AlertCircle,
   CalendarDays,
+  Send,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -233,8 +234,8 @@ export function HackathonCard({
       </div>
 
       <div className="sq-card-footer" style={{ gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontWeight: 600, fontSize: "11px", textTransform: "capitalize" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+          <span style={{ fontWeight: 600, fontSize: "11px", textTransform: "capitalize", color: "#475569" }}>
             {event.source}
           </span>
           <a
@@ -243,9 +244,19 @@ export function HackathonCard({
             rel="noopener noreferrer"
             title="Add deadline to Google Calendar"
             aria-label="Add deadline to Google Calendar"
-            style={{ display: "inline-flex", alignItems: "center", color: "var(--muted-foreground)", padding: "2px" }}
+            style={{ display: "inline-flex", alignItems: "center", color: "#64748b", padding: "2px" }}
           >
             <CalendarDays size={13} />
+          </a>
+          <a
+            href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Get Telegram deadline ping (@SideQuestAlertsBot)"
+            aria-label="Get Telegram deadline ping"
+            style={{ display: "inline-flex", alignItems: "center", color: "#229ED9", padding: "2px" }}
+          >
+            <Send size={13} />
           </a>
         </div>
 

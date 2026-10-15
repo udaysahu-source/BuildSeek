@@ -86,6 +86,29 @@ export default function SubmitPage() {
     }
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "11px 14px",
+    borderRadius: "12px",
+    background: "#ffffff",
+    border: "1.5px solid #cbd5e1",
+    color: "var(--ink)",
+    fontSize: "14px",
+    fontWeight: 500,
+    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+  };
+
+  const sectionStyle: React.CSSProperties = {
+    background: "#ffffff",
+    border: "1.5px solid var(--border)",
+    padding: "24px",
+    borderRadius: "20px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+  };
+
   if (submitted) {
     return (
       <main className="sq-container" style={{ padding: "60px 16px", maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
@@ -128,7 +151,7 @@ export default function SubmitPage() {
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Core details */}
-        <section style={{ background: "var(--muted)", padding: "24px", borderRadius: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
+        <section style={sectionStyle}>
           <h2 style={{ fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
             <Zap size={18} fill="currentColor" /> Event Basics
           </h2>
@@ -143,7 +166,7 @@ export default function SubmitPage() {
               placeholder="e.g. HackSphere 2026, BitBuild v2"
               value={form.title}
               onChange={handleChange}
-              style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+              style={inputStyle}
             />
           </div>
 
@@ -158,7 +181,7 @@ export default function SubmitPage() {
                 placeholder="e.g. IIT Bombay / IEEE Student Branch"
                 value={form.organizer}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
             <div>
@@ -169,7 +192,7 @@ export default function SubmitPage() {
                 name="organizer_type"
                 value={form.organizer_type}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               >
                 <option value="college">College / University Club</option>
                 <option value="company">Company / Startup</option>
@@ -191,13 +214,13 @@ export default function SubmitPage() {
               placeholder="https://unstop.com/..., https://devfolio.co/..., or your website"
               value={form.apply_url}
               onChange={handleChange}
-              style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+              style={inputStyle}
             />
           </div>
         </section>
 
         {/* Location & Format */}
-        <section style={{ background: "var(--muted)", padding: "24px", borderRadius: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
+        <section style={sectionStyle}>
           <h2 style={{ fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
             <Globe2 size={18} /> Location & Mode
           </h2>
@@ -211,7 +234,7 @@ export default function SubmitPage() {
                 name="mode"
                 value={form.mode}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               >
                 <option value="online">Online / Virtual</option>
                 <option value="offline">In-Person (On Campus / Venue)</option>
@@ -228,7 +251,7 @@ export default function SubmitPage() {
                 placeholder="e.g. Bengaluru, New Delhi, Pune"
                 value={form.city}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
           </div>
@@ -242,7 +265,7 @@ export default function SubmitPage() {
                 name="scope"
                 value={form.scope}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               >
                 <option value="national">National (Open across India)</option>
                 <option value="global">Global (International)</option>
@@ -259,7 +282,7 @@ export default function SubmitPage() {
                 name="fee_type"
                 value={form.fee_type}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               >
                 <option value="free">Free Registration</option>
                 <option value="paid">Paid Entry</option>
@@ -269,7 +292,7 @@ export default function SubmitPage() {
         </section>
 
         {/* Deadlines & Prizes */}
-        <section style={{ background: "var(--muted)", padding: "24px", borderRadius: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
+        <section style={sectionStyle}>
           <h2 style={{ fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
             <Trophy size={18} /> Deadlines & Rewards
           </h2>
@@ -284,7 +307,7 @@ export default function SubmitPage() {
                 type="date"
                 value={form.reg_deadline}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
 
@@ -297,7 +320,7 @@ export default function SubmitPage() {
                 placeholder="e.g. ₹1,50,000 + Swag & Cloud Credits"
                 value={form.prize_text}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
           </div>
@@ -311,13 +334,13 @@ export default function SubmitPage() {
               placeholder="e.g. AI / ML, Web3, Open Innovation, FinTech, HealthTech"
               value={form.tags}
               onChange={handleChange}
-              style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+              style={inputStyle}
             />
           </div>
         </section>
 
         {/* Contact info for verification */}
-        <section style={{ background: "var(--muted)", padding: "24px", borderRadius: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
+        <section style={sectionStyle}>
           <h2 style={{ fontSize: "18px", fontWeight: 700 }}>Organizer Contact (For Verification)</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
             <div>
@@ -331,7 +354,7 @@ export default function SubmitPage() {
                 placeholder="organizer@college.edu"
                 value={form.contact_email}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
             <div>
@@ -343,7 +366,7 @@ export default function SubmitPage() {
                 placeholder="@username"
                 value={form.contact_telegram}
                 onChange={handleChange}
-                style={{ width: "100%", padding: "10px 14px", borderRadius: "10px", background: "var(--background)", border: "1px solid var(--border)" }}
+                style={inputStyle}
               />
             </div>
           </div>

@@ -17,6 +17,14 @@ export function Footer() {
             </Link>
             <Link href="/submit">Submit an event</Link>
             <Link href="/alerts">Stay in the loop</Link>
+            <a
+              href="https://t.me/SideQuestAlertsBot"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "inline-flex", alignItems: "center", gap: "5px", color: "var(--brand)" }}
+            >
+              Telegram Bot <ArrowUpRight size={13} />
+            </a>
           </nav>
         </div>
         <div className="sq-footer-bottom">

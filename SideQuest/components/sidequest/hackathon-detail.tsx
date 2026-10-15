@@ -23,6 +23,7 @@ import {
   Sparkles,
   ShieldCheck,
   Award,
+  Send,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -335,6 +336,26 @@ export function HackathonDetail({
                 <strong>Executive Summary:</strong> {event.summary}
               </div>
             )}
+
+            {/* Telegram Quest Reminder */}
+            <div className="sq-telegram-quest-banner">
+              <div className="sq-telegram-quest-icon">
+                <Send size={20} />
+              </div>
+              <div className="sq-telegram-quest-text">
+                <strong>Never miss registration closing for {event.title}</strong>
+                <p>Get instant 24-hour and 3-hour deadline notifications delivered straight to your Telegram chat.</p>
+              </div>
+              <a
+                href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sq-telegram-quest-btn"
+                title="Open in Telegram Bot"
+              >
+                <Send size={13} /> Remind on Telegram <ArrowUpRight size={13} />
+              </a>
+            </div>
 
             <h2>About the Hackathon</h2>
             <div className="sq-detail-markdown">
@@ -675,6 +696,28 @@ export function HackathonDetail({
             </a>
           </Button>
         )}
+
+        <Button
+          asChild
+          variant="outline"
+          style={{
+            borderColor: "rgba(34, 158, 217, 0.4)",
+            color: "#0284c7",
+            fontWeight: 700,
+            background: "rgba(34, 158, 217, 0.05)",
+          }}
+        >
+          <a
+            href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Get 24h & 3h deadline alert on Telegram"
+            aria-label={`Get Telegram alert for ${event.title}`}
+          >
+            <Send size={15} style={{ color: "#229ED9" }} />
+            <span>Telegram Alert</span>
+          </a>
+        </Button>
 
         <Button asChild variant="outline">
           <a
