@@ -11,9 +11,26 @@ export interface HackathonFilterOptions {
   prize_min?: number | null;
   team_max?: number | null;
   include_closed?: boolean;
-  sort?: "closing_soon" | "newest" | "prize_high" | "deadline" | null;
+  sort?: "closing_soon" | "newest" | "prize_high" | "deadline" | "match" | null;
   page?: number;
   limit?: number;
+
+  // V2 Filters
+  price?: "all" | "free" | "paid" | null;
+  fee_type?: "free" | "paid" | "unknown" | "all" | null;
+  scope?: "global" | "national" | "state" | "city" | "college" | "nearby" | null;
+  organizer_types?: (
+    | "government"
+    | "company"
+    | "college"
+    | "community"
+    | "nonprofit"
+    | "other"
+  )[] | null;
+  lat?: number | null;
+  lng?: number | null;
+  radius_km?: number | null;
+  user_state?: string | null;
 }
 
 export interface HackathonListResult {
@@ -21,6 +38,48 @@ export interface HackathonListResult {
   total: number;
   page: number;
   totalPages: number;
+}
+
+let cachedDataset: Hackathon[] | null = null;
+
+export function getLocalDataset(): Hackathon[] {
+  if (cachedDataset) return cachedDataset;
+
+  if (typeof window === "undefined") {
+    try {
+      const nodeRequire = (globalThis as any).require;
+      if (nodeRequire) {
+        const fs = nodeRequire("fs");
+        const path = nodeRequire("path");
+        const dataPath = path.join(process.cwd(), "data/hackathons.json");
+        if (fs.existsSync(dataPath)) {
+          const content = fs.readFileSync(dataPath, "utf-8");
+          const parsed = JSON.parse(content);
+          const list: Hackathon[] = Array.isArray(parsed)
+            ? parsed
+            : Array.isArray(parsed?.hackathons)
+            ? parsed.hackathons
+            : [];
+          if (list.length > 0) {
+            const existingIds = new Set(list.map((h: Hackathon) => h.id));
+            const combined = [...list];
+            for (const seed of SEED_HACKATHONS) {
+              if (!existingIds.has(seed.id)) {
+                combined.push(seed);
+              }
+            }
+            cachedDataset = combined;
+            return combined;
+          }
+        }
+      }
+    } catch (e) {
+      // browser / client fallback
+    }
+  }
+
+  cachedDataset = SEED_HACKATHONS;
+  return SEED_HACKATHONS;
 }
 
 /**
@@ -110,10 +169,12 @@ export async function getHackathons(
 
   // Local In-memory Query Engine
   const now = new Date();
-  let results = SEED_HACKATHONS.map((h) => ({
-    ...h,
-    status: computeHackathonStatus(h.reg_start, h.reg_deadline, now),
-  }));
+  let results = getLocalDataset()
+    .filter((h) => !h.hidden)
+    .map((h) => ({
+      ...h,
+      status: computeHackathonStatus(h.reg_start, h.reg_deadline, now),
+    }));
 
   // Filter: Keyword Search (title, organizer, summary, description)
   if (filters.q && filters.q.trim().length > 0) {
@@ -162,7 +223,66 @@ export async function getHackathons(
 
   // Filter: Team Max
   if (filters.team_max) {
-    results = results.filter((h) => h.team_max <= filters.team_max!);
+    results = results.filter((h) => (h.team_max ?? 4) <= filters.team_max!);
+  }
+
+  // Filter: Fee Type / Price (v2)
+  if (filters.fee_type === "free" || filters.price === "free") {
+    results = results.filter((h) => h.fee_type === "free");
+  } else if (filters.fee_type === "paid" || filters.price === "paid") {
+    results = results.filter((h) => h.fee_type === "paid");
+  }
+
+  // Filter: Scope (v2)
+  if (filters.scope === "global") {
+    results = results.filter((h) => h.scope === "global");
+  } else if (filters.scope === "national") {
+    results = results.filter(
+      (h) =>
+        h.scope === "national" ||
+        (h.scope === "global" && (!h.country || h.country.toLowerCase() === "india"))
+    );
+  } else if (filters.scope === "state") {
+    if (filters.user_state) {
+      results = results.filter(
+        (h) =>
+          h.scope === "state" &&
+          Boolean(h.state && h.state.toLowerCase() === filters.user_state!.toLowerCase())
+      );
+    } else {
+      results = results.filter((h) => h.scope === "state");
+    }
+  } else if (filters.scope === "nearby") {
+    // Nearby: offline/hybrid only, within radius
+    const radius = filters.radius_km || 100;
+    results = results.filter((h) => {
+      if (h.mode === "online") return false;
+      if (filters.lat !== undefined && filters.lat !== null && filters.lng !== undefined && filters.lng !== null && h.lat && h.lng) {
+        // Simple haversine approximation for query engine
+        const R = 6371;
+        const dLat = (h.lat - filters.lat) * (Math.PI / 180);
+        const dLon = (h.lng - filters.lng) * (Math.PI / 180);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(filters.lat * (Math.PI / 180)) *
+            Math.cos(h.lat * (Math.PI / 180)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const d = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return d <= radius;
+      }
+      if (filters.city && h.city) {
+        return h.city.toLowerCase().includes(filters.city.toLowerCase());
+      }
+      return false;
+    });
+  }
+
+  // Filter: Organizer Type (v2)
+  if (filters.organizer_types && filters.organizer_types.length > 0) {
+    results = results.filter((h) =>
+      filters.organizer_types!.includes(h.organizer_type || "company")
+    );
   }
 
   // Sorting
@@ -171,14 +291,19 @@ export async function getHackathons(
   } else if (filters.sort === "newest") {
     results.sort(
       (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
     );
+  } else if (filters.sort === "match") {
+    // Best match excludes unverified rows
+    results = results.filter((h) => h.data_confidence !== "unverified");
+    results.sort((a, b) => (b.prize_amount_inr || 0) - (a.prize_amount_inr || 0));
   } else {
     // Default: closing_soon / ascending deadline
-    results.sort(
-      (a, b) =>
-        new Date(a.reg_deadline).getTime() - new Date(b.reg_deadline).getTime()
-    );
+    results.sort((a, b) => {
+      const aTime = a.reg_deadline ? new Date(a.reg_deadline).getTime() : Infinity;
+      const bTime = b.reg_deadline ? new Date(b.reg_deadline).getTime() : Infinity;
+      return aTime - bTime;
+    });
   }
 
   const total = results.length;
@@ -199,7 +324,7 @@ export async function getHackathons(
 export async function getHackathonById(
   id: string
 ): Promise<(Hackathon & { status: HackathonStatus }) | null> {
-  const item = SEED_HACKATHONS.find((h) => h.id === id);
+  const item = getLocalDataset().find((h) => h.id === id);
   if (!item) return null;
 
   return {

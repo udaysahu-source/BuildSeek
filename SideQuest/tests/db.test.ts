@@ -33,7 +33,14 @@ describe("Hackathon Query Engine (Phase 2)", () => {
   it("searches keywords across title, organizer, and tags", async () => {
     const aiSearch = await getHackathons({ q: "agents" });
     expect(aiSearch.hackathons.length).toBeGreaterThan(0);
-    expect(aiSearch.hackathons[0].title.toLowerCase()).toContain("agents");
+    expect(
+      aiSearch.hackathons.every(
+        (h) =>
+          h.title.toLowerCase().includes("agents") ||
+          h.organizer.toLowerCase().includes("agents") ||
+          h.tags.some((t) => t.toLowerCase().includes("agents"))
+      )
+    ).toBe(true);
   });
 
   it("sorts by prize descending", async () => {
@@ -46,9 +53,9 @@ describe("Hackathon Query Engine (Phase 2)", () => {
   });
 
   it("retrieves a single hackathon by ID", async () => {
-    const item = await getHackathonById("a1000000-0000-0000-0000-000000000001");
+    const item = await getHackathonById("c1000000-0000-0000-0000-000000000001");
     expect(item).not.toBeNull();
-    expect(item?.title).toContain("Bengaluru AI Agents Buildathon");
+    expect(item?.title).toContain("OpenCV AI Competition 2026");
     expect(item?.status).toBeDefined();
   });
 });

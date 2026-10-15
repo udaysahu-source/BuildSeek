@@ -11,6 +11,29 @@ export const HackathonStatusSchema = z.enum([
 ]);
 export type HackathonStatus = z.infer<typeof HackathonStatusSchema>;
 
+export const FeeTypeSchema = z.enum(["free", "paid", "unknown"]);
+export type FeeType = z.infer<typeof FeeTypeSchema>;
+
+export const ScopeSchema = z.enum(["global", "national", "state", "city", "college"]);
+export type Scope = z.infer<typeof ScopeSchema>;
+
+export const OrganizerTypeSchema = z.enum([
+  "government",
+  "company",
+  "college",
+  "community",
+  "nonprofit",
+  "other",
+]);
+export type OrganizerType = z.infer<typeof OrganizerTypeSchema>;
+
+export const DataConfidenceSchema = z.enum([
+  "verified_primary",
+  "platform_listed",
+  "unverified",
+]);
+export type DataConfidence = z.infer<typeof DataConfidenceSchema>;
+
 export const EligibilitySchema = z.object({
   students_only: z.boolean().default(true),
   min_year: z.number().optional(),
@@ -25,29 +48,50 @@ export const HackathonSchema = z.object({
   source_id: z.string(),
   title: z.string().min(1),
   organizer: z.string().min(1),
+  organizer_type: OrganizerTypeSchema.optional(),
+  scope: ScopeSchema.optional(),
+  fee_type: FeeTypeSchema.optional(),
+  fee_amount_inr: z.number().int().nonnegative().optional().nullable(),
   description: z.string().optional().nullable(),
   summary: z.string().optional().nullable(),
   mode: HackathonModeSchema,
+  country: z.string().optional().nullable(),
   city: z.string().optional().nullable(),
   state: z.string().optional().nullable(),
-  start_date: z.string().datetime(),
-  end_date: z.string().datetime(),
-  reg_start: z.string().datetime(),
-  reg_deadline: z.string().datetime(),
+  venue: z.string().optional().nullable(),
+  lat: z.number().optional().nullable(),
+  lng: z.number().optional().nullable(),
+  start_date: z.string().optional().nullable(),
+  end_date: z.string().optional().nullable(),
+  reg_start: z.string().optional().nullable(),
+  reg_deadline: z.string().optional().nullable(),
+  deadline_note: z.string().optional().nullable(),
   prize_text: z.string().optional().nullable(),
+  prize_amount: z.number().optional().nullable(),
+  prize_currency: z.string().optional().nullable(),
   prize_amount_inr: z.number().int().nonnegative().optional().nullable(),
   team_min: z.number().int().min(1).default(1),
-  team_max: z.number().int().min(1).default(4),
-  eligibility: EligibilitySchema.default({ students_only: true }),
+  team_max: z.number().int().min(1).nullable().optional(),
+  team_note: z.string().optional().nullable(),
+  eligibility: EligibilitySchema.optional().nullable(),
+  eligibility_text: z.string().optional().nullable(),
   tags: z.array(z.string()).default([]),
   source_url: z.string().url(),
+  official_page: z.string().url().optional().nullable(),
+  apply_url: z.string().url().optional().nullable(),
   image_url: z.string().url().optional().nullable(),
   canonical_id: z.string().uuid().optional().nullable(),
   verified: z.boolean().default(false),
+  data_confidence: DataConfidenceSchema.optional(),
+  last_verified_at: z.string().optional().nullable(),
+  needs_review: z.boolean().optional(),
   is_user_submitted: z.boolean().default(false),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-  last_seen_at: z.string().datetime(),
+  deadline_precision: z.enum(["date", "exact"]).optional(),
+  scope_assumed: z.boolean().optional(),
+  hidden: z.boolean().optional(),
+  created_at: z.string().optional().default(() => new Date().toISOString()),
+  updated_at: z.string().optional().default(() => new Date().toISOString()),
+  last_seen_at: z.string().optional().default(() => new Date().toISOString()),
 });
 export type Hackathon = z.infer<typeof HackathonSchema>;
 

@@ -35,7 +35,7 @@ export function calculateMatchScore(
 
   // 2. Eligibility Fit (0 or 1.0)
   let eligibilityFit = 1.0;
-  if (hackathon.eligibility.min_year && profile.year) {
+  if (hackathon.eligibility?.min_year && profile.year) {
     if (profile.year < hackathon.eligibility.min_year) {
       eligibilityFit = 0.3;
     }
@@ -52,7 +52,9 @@ export function calculateMatchScore(
 
   // 3. Deadline Urgency (0 to 1.0)
   const now = Date.now();
-  const deadline = new Date(hackathon.reg_deadline).getTime();
+  const deadline = hackathon.reg_deadline
+    ? new Date(hackathon.reg_deadline).getTime()
+    : now + 14 * 24 * 3600 * 1000;
   const msRemaining = deadline - now;
   let deadlineUrgency = 0.5;
 

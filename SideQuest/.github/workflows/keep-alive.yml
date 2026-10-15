@@ -1,0 +1,32 @@
+name: Keep-Alive Server & Database Ping
+
+on:
+  schedule:
+    # Run every 3 days at 06:00 UTC (well within the 7-14 day Supabase pause limit)
+    - cron: '0 6 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Deployed Web Application
+        if: ${{ env.APP_URL != '' }}
+        env:
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
+        run: |
+          echo "Pinging deployed web application: ${APP_URL}/api/health"
+          curl -s -f -m 15 "${APP_URL}/api/health" || echo "Web application ping returned non-200 or timed out."
+
+      - name: Ping Supabase Database Direct REST API
+        if: ${{ env.SUPABASE_URL != '' && env.SUPABASE_KEY != '' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL || vars.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase database to reset dormancy timer..."
+          curl -s -f -m 15 -H "apikey: ${SUPABASE_KEY}" -H "Authorization: Bearer ${SUPABASE_KEY}" \
+            "${SUPABASE_URL}/rest/v1/hackathons?select=id&limit=1" || echo "Supabase ping returned non-200."
+          echo "Supabase keep-alive ping complete."

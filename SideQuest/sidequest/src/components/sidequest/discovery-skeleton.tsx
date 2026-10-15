@@ -1,1 +1,0 @@
-export function DiscoverySkeleton() { return <main className="sq-discover sq-container" aria-busy="true" aria-label="Loading hackathons"><div className="sq-loading-line"/><div className="sq-event-grid">{[1,2,3,4,5,6].map(n=><div className="sq-event-skeleton" key={n}><div/><div/><div/></div>)}</div></main>; }

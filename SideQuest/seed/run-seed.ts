@@ -9,8 +9,8 @@ function escapeSql(str: string | null | undefined): string {
 
 function generateSeedSql(): string {
   const statements: string[] = [
-    "-- SideQuest Sample Seed Data (20 fictional hackathons)",
-    "-- Labelled as [SAMPLE] covering all statuses and modes",
+    "-- SideQuest Genuine Seed Data",
+    "-- Verified real hackathons across platforms with genuine dates",
     "",
   ];
 

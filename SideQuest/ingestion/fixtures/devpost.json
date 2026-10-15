@@ -1,0 +1,45 @@
+[
+  {
+    "id": 30992,
+    "title": "Build, Ship, Shape: Amazon Developer Hackathon",
+    "displayed_location": {
+      "icon": "globe",
+      "location": "Online"
+    },
+    "open_state": "open",
+    "thumbnail_url": "https://d112y698adiu2z.cloudfront.net/photos/production/challenge_thumbnails/005/173/047/datas/medium_square.png",
+    "url": "https://amazonappdev2026.devpost.com/",
+    "submission_period_dates": "Aug 31 - Oct 23, 2026",
+    "themes": [
+      { "id": 6, "name": "Machine Learning/AI" },
+      { "id": 22, "name": "Open Ended" }
+    ],
+    "prize_amount": "$<span data-currency-value>138,000</span>",
+    "organization_name": "Amazon",
+    "start_a_submission_url": "https://amazonappdev2026.devpost.com/challenges/start_a_submission"
+  },
+  {
+    "id": 30993,
+    "title": "Meta VR Start Developer Competition 2026",
+    "displayed_location": {
+      "icon": "globe",
+      "location": "Online"
+    },
+    "open_state": "open",
+    "thumbnail_url": null,
+    "url": "https://start-developer-competition-26.devpost.com/",
+    "submission_period_dates": "Sep 24 - Nov 18, 2026",
+    "themes": [
+      { "id": 7, "name": "AR/VR" }
+    ],
+    "prize_amount": "$1,000,000",
+    "organization_name": "Meta",
+    "start_a_submission_url": "https://start-developer-competition-26.devpost.com/"
+  },
+  {
+    "id": 30994,
+    "title": "",
+    "url": "",
+    "submission_period_dates": null
+  }
+]

@@ -3,7 +3,7 @@ import { Mascot } from "./mascot";
 
 export function PhonePreview() {
   return (
-    <div className="sq-phone-scene" aria-label="Preview featuring fictional sample hackathons">
+    <div className="sq-phone-scene" aria-label="Preview featuring verified hackathons with live countdowns">
       <span className="sq-orbit sq-orbit-one" />
       <span className="sq-orbit sq-orbit-two" />
       <div className="sq-float-chip sq-float-top">
@@ -28,18 +28,24 @@ export function PhonePreview() {
             <span>Online</span>
           </div>
           <SampleCard
-            title="Buildverse 2026"
-            organizer="Nexus Institute of Technology"
-            prize="₹2,00,000"
+            title="OpenCV AI Competition 2026"
+            organizer="OpenCV, sponsored by AWS"
+            prize="$20,250"
+            mode="Online"
+            location="Global"
+            tag="Computer Vision"
             kind="build"
           />
           <SampleCard
-            title="Hack the Horizon"
-            organizer="Horizon Student Collective"
-            prize="₹1,50,000"
+            title="ETHIndia 2026"
+            organizer="Devfolio & Ethereum Community"
+            prize="₹85,00,000"
+            mode="Offline"
+            location="Bengaluru"
+            tag="Web3"
             kind="horizon"
           />
-          <div className="sq-phone-label">Fictional events · Sample data</div>
+          <div className="sq-phone-label">Verified events · Live deadlines</div>
         </div>
         <div className="sq-phone-home" />
       </div>
@@ -63,11 +69,17 @@ function SampleCard({
   title,
   organizer,
   prize,
+  mode,
+  location,
+  tag,
   kind,
 }: {
   title: string;
   organizer: string;
   prize: string;
+  mode: string;
+  location: string;
+  tag: string;
   kind: "build" | "horizon";
 }) {
   return (
@@ -85,10 +97,10 @@ function SampleCard({
       <p>{organizer}</p>
       <div className="sq-sample-meta">
         <span>
-          <Globe2 size={10} /> {kind === "build" ? "Online" : "Hybrid"}
+          <Globe2 size={10} /> {mode}
         </span>
         <span>
-          <MapPin size={10} /> {kind === "build" ? "Pan India" : "Bengaluru"}
+          <MapPin size={10} /> {location}
         </span>
       </div>
       <div className="sq-sample-facts">
@@ -96,12 +108,12 @@ function SampleCard({
           <Trophy size={13} /> {prize}
         </span>
         <span>
-          <Users size={13} /> 2–4 members
+          <Users size={13} /> 1–5 members
         </span>
       </div>
       <div className="sq-sample-bottom">
-        <span>{kind === "build" ? "AI / ML" : "Open innovation"}</span>
-        <span>Students</span>
+        <span>{tag}</span>
+        <span>Open eligibility</span>
         <span className="sq-sample-arrow">
           <ArrowUpRight size={15} />
         </span>

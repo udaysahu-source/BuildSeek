@@ -29,7 +29,7 @@ function DiscoverView() {
   const [rawEvents, setRawEvents] = useState<HackathonUI[]>([]);
   const [loading, setLoading] = useState(true);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const now = useCountdownClock(Date.now());
+  const now = useCountdownClock();
   const { saved } = useBookmarks();
   const { user } = useAuth();
 
@@ -46,7 +46,44 @@ function DiscoverView() {
     const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
     const event = searchParams.get("event") || undefined;
 
-    return { q, mode, status, city, prize, tags, students, sort, page, event };
+    // V2 Filters
+    const price = (searchParams.get("price") as any) || undefined;
+    const scope = (searchParams.get("scope") as any) || undefined;
+    const user_state = searchParams.get("user_state") || undefined;
+    const radius_km = searchParams.get("radius_km")
+      ? Number(searchParams.get("radius_km"))
+      : undefined;
+    const user_lat = searchParams.get("user_lat")
+      ? Number(searchParams.get("user_lat"))
+      : undefined;
+    const user_lng = searchParams.get("user_lng")
+      ? Number(searchParams.get("user_lng"))
+      : undefined;
+    const organizersParam =
+      searchParams.get("organizers") || searchParams.get("organizer_types");
+    const organizer_types = organizersParam
+      ? (organizersParam.split(",").filter(Boolean) as any)
+      : undefined;
+
+    return {
+      q,
+      mode,
+      status,
+      city,
+      prize,
+      tags,
+      students,
+      sort,
+      page,
+      event,
+      price,
+      scope,
+      user_state,
+      radius_km,
+      user_lat,
+      user_lng,
+      organizer_types,
+    };
   }, [searchParams]);
 
   // Load hackathons
@@ -89,13 +126,19 @@ function DiscoverView() {
     }
 
     Object.entries(merged).forEach(([k, v]) => {
+      const paramKey = k === "organizer_types" ? "organizers" : k;
       if (v === undefined || v === null || v === "") {
-        nextParams.delete(k);
+        nextParams.delete(paramKey);
+        if (k === "organizer_types") nextParams.delete("organizer_types");
       } else if (Array.isArray(v)) {
-        if (v.length === 0) nextParams.delete(k);
-        else nextParams.set(k, v.join(","));
+        if (v.length === 0) {
+          nextParams.delete(paramKey);
+          if (k === "organizer_types") nextParams.delete("organizer_types");
+        } else {
+          nextParams.set(paramKey, v.join(","));
+        }
       } else {
-        nextParams.set(k, String(v));
+        nextParams.set(paramKey, String(v));
       }
     });
 
@@ -104,7 +147,23 @@ function DiscoverView() {
     });
   };
 
+  const [searchTerm, setSearchTerm] = useState(filters.q ?? "");
+
+  useEffect(() => {
+    setSearchTerm(filters.q ?? "");
+  }, [filters.q]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if ((filters.q ?? "") !== searchTerm) {
+        update({ q: searchTerm ? searchTerm : undefined });
+      }
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
   const reset = () => {
+    setSearchTerm("");
     const nextParams = new URLSearchParams();
     if (filters.sort) nextParams.set("sort", filters.sort);
     startTransition(() => {
@@ -114,10 +173,43 @@ function DiscoverView() {
 
   const chips = [
     ...(filters.q ? [{ label: `“${filters.q}”`, clear: () => update({ q: undefined }) }] : []),
+    ...(filters.price && filters.price !== "all"
+      ? [{ label: `Fee: ${filters.price}`, clear: () => update({ price: undefined }) }]
+      : []),
+    ...(filters.scope
+      ? [
+          {
+            label: `Scope: ${filters.scope}${
+              filters.scope === "nearby" ? ` (${filters.radius_km || 100}km)` : ""
+            }`,
+            clear: () =>
+              update({
+                scope: undefined,
+                radius_km: undefined,
+                user_lat: undefined,
+                user_lng: undefined,
+              }),
+          },
+        ]
+      : []),
+    ...(filters.user_state
+      ? [{ label: `State: ${filters.user_state}`, clear: () => update({ user_state: undefined }) }]
+      : []),
+    ...(filters.organizer_types ?? []).map((org) => ({
+      label: `Org: ${org}`,
+      clear: () =>
+        update({
+          organizer_types: filters.organizer_types?.filter((o) => o !== org),
+        }),
+    })),
     ...(filters.mode ? [{ label: filters.mode, clear: () => update({ mode: undefined }) }] : []),
-    ...(filters.status ? [{ label: filters.status.replace("-", " "), clear: () => update({ status: undefined }) }] : []),
+    ...(filters.status
+      ? [{ label: filters.status.replace("-", " "), clear: () => update({ status: undefined }) }]
+      : []),
     ...(filters.city ? [{ label: filters.city, clear: () => update({ city: undefined }) }] : []),
-    ...(filters.prize ? [{ label: `₹${filters.prize.toLocaleString("en-IN")}+`, clear: () => update({ prize: undefined }) }] : []),
+    ...(filters.prize
+      ? [{ label: `₹${filters.prize.toLocaleString("en-IN")}+`, clear: () => update({ prize: undefined }) }]
+      : []),
     ...(filters.tags ?? []).map((tag) => ({
       label: tag,
       clear: () => update({ tags: filters.tags?.filter((t) => t !== tag) }),
@@ -157,15 +249,18 @@ function DiscoverView() {
           <input
             aria-label="Search hackathons"
             placeholder="Search hackathons, themes, colleges…"
-            value={filters.q ?? ""}
-            onChange={(e) => update({ q: e.target.value || undefined })}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          {filters.q && (
+          {searchTerm && (
             <Button
               variant="ghost"
               size="icon"
               aria-label="Clear search"
-              onClick={() => update({ q: undefined })}
+              onClick={() => {
+                setSearchTerm("");
+                update({ q: undefined });
+              }}
             >
               <X />
             </Button>
@@ -283,9 +378,11 @@ function DiscoverView() {
           ) : (
             <div className="sq-discovery-empty">
               <Mascot />
-              <h2>No quests on this trail.</h2>
-              <p>Try a different theme or city. Your next big idea is still out there.</p>
-              <Button onClick={reset}>Reset filters</Button>
+              <h2>No quests found in this realm.</h2>
+              <p>The scouts couldn’t find any hackathons matching your search runes. Try widening your radius or clearing filters!</p>
+              <Button onClick={reset} className="sq-empty-reset-btn">
+                Reset All Runes & Filters
+              </Button>
             </div>
           )}
         </section>

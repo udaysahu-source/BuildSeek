@@ -1,10 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { RawItem, SourceAdapter } from "./types";
+import { RawItem, SourceAdapter, detectOrganizerType } from "./types";
 import { Hackathon } from "@/lib/types";
 
 export class UnstopAdapter implements SourceAdapter {
   name = "unstop";
+
+  isEnabled(): boolean {
+    return process.env.ENABLE_UNSTOP !== "0";
+  }
 
   async fetchListings(useFixture: boolean = false): Promise<RawItem[]> {
     if (useFixture || process.env.NODE_ENV === "test") {
@@ -19,12 +23,11 @@ export class UnstopAdapter implements SourceAdapter {
     }
 
     try {
-      // Unstop public opportunities API
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
+      const timeout = setTimeout(() => controller.abort(), 10000);
 
       const res = await fetch(
-        "https://unstop.com/api/public/opportunity/search-result?opportunity=hackathons&per_page=20",
+        "https://unstop.com/api/public/opportunity/search-result?opportunity=hackathons&per_page=50",
         {
           headers: {
             "User-Agent":
@@ -43,7 +46,7 @@ export class UnstopAdapter implements SourceAdapter {
       const json = await res.json();
       return json?.data?.data || [];
     } catch (err) {
-      console.warn("Unstop live fetch failed, using fixture fallback:", err);
+      console.warn("Unstop live fetch failed, using fixture fallback if available:", err);
       const fixturePath = path.join(
         process.cwd(),
         "ingestion/fixtures/unstop.json"
@@ -57,10 +60,12 @@ export class UnstopAdapter implements SourceAdapter {
 
   normalize(raw: RawItem): Hackathon | null {
     const title = (raw.title || "").trim();
-    const sourceUrl = (raw.public_url || raw.url || "").trim();
+    let sourceUrl = (raw.public_url || raw.url || "").trim();
+    if (sourceUrl && !sourceUrl.startsWith("http")) {
+      sourceUrl = `https://unstop.com/${sourceUrl.replace(/^\/+/, "")}`;
+    }
     const sourceId = String(raw.id || raw.source_id || "").trim();
 
-    // Required field validation (FR-2 / workflow)
     if (!title || !sourceUrl || !sourceId) {
       return null;
     }
@@ -79,9 +84,9 @@ export class UnstopAdapter implements SourceAdapter {
     }
 
     const mode =
-      raw.region_type === "online" || raw.mode === "online"
+      raw.region_type === "online" || raw.mode === "online" || raw.region === "online"
         ? "online"
-        : raw.region_type === "hybrid" || raw.mode === "hybrid"
+        : raw.region_type === "hybrid" || raw.mode === "hybrid" || raw.region === "hybrid"
         ? "hybrid"
         : "offline";
 
@@ -92,11 +97,25 @@ export class UnstopAdapter implements SourceAdapter {
         ? parseInt(String(raw.prizes).replace(/[^0-9]/g, ""), 10) || 0
         : 0;
 
+    const organizer = (raw.organisation?.name || raw.organisation || raw.organizer || "Unstop Organizers").trim();
+    const organizerType = detectOrganizerType(organizer);
+
+    // Fee calculation
+    let feeType: "free" | "paid" | "unknown" = "unknown";
+    let feeAmountInr: number | null = null;
+    if (raw.is_free === true || raw.fee === 0 || raw.regn_fee === 0) {
+      feeType = "free";
+      feeAmountInr = 0;
+    } else if (raw.is_free === false || (raw.regn_fee && raw.regn_fee > 0)) {
+      feeType = "paid";
+      feeAmountInr = Number(raw.regn_fee) || null;
+    }
+
     const tags = Array.isArray(raw.tags)
       ? raw.tags.map((t: any) =>
           typeof t === "string" ? t.toLowerCase() : String(t.name || "").toLowerCase()
         ).filter(Boolean)
-      : ["hackathon"];
+      : ["hackathon", "india"];
 
     const nowIso = new Date().toISOString();
 
@@ -105,26 +124,45 @@ export class UnstopAdapter implements SourceAdapter {
       source: this.name,
       source_id: sourceId,
       title,
-      organizer: (raw.organisation || raw.organizer || "Unstop Organizers").trim(),
-      description: raw.details || raw.description || null,
-      summary: raw.summary || (raw.details ? raw.details.slice(0, 160) : null),
+      organizer,
+      organizer_type: organizerType,
+      scope: "national",
+      scope_assumed: true, // Rows from Unstop have scope_assumed: true
       mode,
+      country: "India",
       city: raw.city || null,
       state: raw.state || null,
+      venue: raw.venue || null,
+      lat: null,
+      lng: null,
       start_date: new Date(startDate).toISOString(),
       end_date: new Date(endDate).toISOString(),
       reg_start: new Date(regStart).toISOString(),
       reg_deadline: new Date(regDeadline).toISOString(),
+      deadline_note: "Per Unstop listing: check page for submission round details",
+      deadline_precision: "exact",
+      fee_type: feeType,
+      fee_amount_inr: feeAmountInr,
       prize_text: raw.prizes || (prizeAmount > 0 ? `₹${prizeAmount.toLocaleString("en-IN")}` : null),
-      prize_amount_inr: prizeAmount,
+      prize_amount: prizeAmount > 0 ? prizeAmount : null,
+      prize_currency: "INR",
+      prize_amount_inr: prizeAmount > 0 ? prizeAmount : null,
       team_min: raw.team_min ? Number(raw.team_min) : 1,
       team_max: raw.team_max ? Number(raw.team_max) : 4,
+      team_note: null,
       eligibility: { students_only: true },
+      eligibility_text: "College and university students in India (check Unstop eligibility tabs)",
       tags,
       source_url: sourceUrl,
-      image_url: raw.banner_image || null,
+      official_page: null,
+      apply_url: sourceUrl,
+      image_url: raw.banner_image || raw.logo_url || null,
       canonical_id: null,
       verified: true,
+      data_confidence: "platform_listed",
+      last_verified_at: nowIso.split("T")[0],
+      needs_review: false,
+      hidden: false,
       is_user_submitted: false,
       created_at: nowIso,
       updated_at: nowIso,

@@ -12,7 +12,7 @@ describe("generateIcsFeed", () => {
     expect(ics).toContain("PRODID:-//SideQuest//Hackathon Radar v1.0//EN");
     expect(ics).toContain("BEGIN:VEVENT");
     expect(ics).toContain(`UID:reg-deadline-${sample[0].id}@sidequest.app`);
-    expect(ics).toContain(`SUMMARY:⏰ [DEADLINE] ${sample[0].title}`);
+    expect(ics).toContain(`SUMMARY:⏰ [DEADLINE] ${sample[0].title.replace(/,/g, "\\,")}`);
     expect(ics).toContain("TRIGGER:-P1D");
     expect(ics).toContain("END:VCALENDAR");
   });

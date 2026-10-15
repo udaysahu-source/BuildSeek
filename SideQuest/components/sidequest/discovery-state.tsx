@@ -160,12 +160,12 @@ export function useBookmarks() {
   return useContext(BookmarkContext);
 }
 
-export function useCountdownClock(initial: number) {
-  const [now, setNow] = useState(initial);
+export function useCountdownClock(initial?: number) {
+  const [now, setNow] = useState<number>(() => initial ?? Date.now());
   useEffect(() => {
     setNow(Date.now());
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
-  }, [initial]);
+  }, []);
   return now;
 }

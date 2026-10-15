@@ -1,22 +1,50 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Bookmark, Clock3, Globe2, MapPin, Trophy, Users, Zap } from "lucide-react";
+import {
+  ArrowUpRight,
+  Bookmark,
+  Clock3,
+  Globe2,
+  MapPin,
+  Trophy,
+  Users,
+  Zap,
+  AlertCircle,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { countdown, formatPrize, getStatus, statusLabel, type HackathonUI } from "@/lib/hackathons";
+import {
+  countdown,
+  formatPrize,
+  formatFee,
+  getStatus,
+  statusLabel,
+  type HackathonUI,
+} from "@/lib/hackathons";
 import { useBookmarks } from "./discovery-state";
 
-export function CountdownChip({ event, now }: { event: HackathonUI; now: number }) {
+export function CountdownChip({
+  event,
+  now,
+}: {
+  event: HackathonUI;
+  now: number;
+}) {
+  const isNeedsReview = Boolean(event.needs_review || !event.reg_deadline);
   const time = countdown(event, now);
-  const today = statusLabel(event, now) === "Closes today";
+  const today = !isNeedsReview && statusLabel(event, now) === "Closes today";
 
   return (
-    <div className={`sq-countdown-chip ${today ? "today" : time.status}`}>
-      <Clock3 size={13} />
+    <div className={`sq-countdown-chip ${isNeedsReview ? "needs-review" : today ? "today" : time.status}`}>
+      {isNeedsReview ? <AlertCircle size={13} /> : <Clock3 size={13} />}
       <span>{statusLabel(event, now)}</span>
-      {time.status !== "closed" && (
+      {!isNeedsReview && time.status !== "closed" && time.hasDeadline && (
         <strong>
-          {time.days}d {String(time.hours).padStart(2, "0")}h {String(time.minutes).padStart(2, "0")}m {String(time.seconds).padStart(2, "0")}s
+          {time.days}d {String(time.hours).padStart(2, "0")}h{" "}
+          {String(time.minutes).padStart(2, "0")}m{" "}
+          {String(time.seconds).padStart(2, "0")}s
         </strong>
       )}
     </div>
@@ -26,6 +54,34 @@ export function CountdownChip({ event, now }: { event: HackathonUI; now: number 
 export function BookmarkButton({ event }: { event: HackathonUI }) {
   const { saved, toggle, pending, loading } = useBookmarks();
   const active = saved.includes(event.id);
+  const [justToggled, setJustToggled] = useState(false);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Haptic feedback for touch devices
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      try {
+        navigator.vibrate(active ? 15 : [20, 35, 20]);
+      } catch (err) {}
+    }
+
+    setJustToggled(true);
+    setTimeout(() => setJustToggled(false), 500);
+
+    toggle(event.id);
+
+    if (!active) {
+      toast.success("Saved to your Quest Log! (+50 XP)", {
+        description: event.title,
+      });
+    } else {
+      toast.info("Removed from Quest Log", {
+        description: event.title,
+      });
+    }
+  };
 
   return (
     <Button
@@ -35,12 +91,8 @@ export function BookmarkButton({ event }: { event: HackathonUI }) {
       aria-label={`${active ? "Unsave" : "Save"} ${event.title}`}
       aria-pressed={active}
       title={active ? "Remove from Quest Log" : "Save to Quest Log"}
-      className={`sq-bookmark ${active ? "saved" : ""}`}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggle(event.id);
-      }}
+      className={`sq-bookmark ${active ? "saved" : ""} ${justToggled ? "pop" : ""}`}
+      onClick={handleToggle}
     >
       <Bookmark fill={active ? "currentColor" : "none"} />
     </Button>
@@ -59,19 +111,59 @@ export function HackathonCard({
   const status = getStatus(event, now);
 
   const handleClick = (e: React.MouseEvent) => {
-    if (onOpen && !e.metaKey && !e.ctrlKey && !e.shiftKey && typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
+    if (
+      onOpen &&
+      !e.metaKey &&
+      !e.ctrlKey &&
+      !e.shiftKey &&
+      typeof window !== "undefined" &&
+      window.matchMedia("(min-width: 1024px)").matches
+    ) {
       e.preventDefault();
       onOpen(event.id);
     }
   };
 
+  const orgLabel =
+    event.organizer_type.charAt(0).toUpperCase() + event.organizer_type.slice(1);
+
   return (
     <article className={`sq-event-card status-${status}`}>
-      <div className="sq-card-top">
+      <div className="sq-card-top" style={{ flexWrap: "wrap", gap: 6 }}>
         <span className="sq-card-event-icon">
           <Zap size={23} fill="currentColor" />
         </span>
-        {event.is_sample !== false && <span className="sq-card-sample">Sample event</span>}
+
+        {/* Organizer Type Badge */}
+        <span
+          className={`sq-card-org-badge org-${event.organizer_type}`}
+          title={`Organized by ${orgLabel}`}
+        >
+          {orgLabel}
+        </span>
+
+        {/* Fee chip when known */}
+        {event.fee_type !== "unknown" ? (
+          <span className={`sq-card-fee fee-${event.fee_type}`}>
+            {formatFee(event)}
+          </span>
+        ) : (
+          <span className="sq-card-fee fee-unknown">Fee not stated</span>
+        )}
+
+        {/* Unverified "Check source" badge */}
+        {event.data_confidence === "unverified" && (
+          <span
+            className="sq-card-unverified"
+            title="Data from secondary source; confirm in official portal"
+          >
+            <AlertCircle size={10} style={{ display: "inline", marginRight: 3 }} />
+            Check source
+          </span>
+        )}
+
+        {event.is_sample && <span className="sq-card-sample">Sample</span>}
+
         <BookmarkButton event={event} />
       </div>
 
@@ -82,10 +174,18 @@ export function HackathonCard({
           <Globe2 size={12} />
           {event.mode}
         </span>
-        <span>
-          <MapPin size={12} />
-          {event.city}
-        </span>
+        {event.city && (
+          <span>
+            <MapPin size={12} />
+            {event.city}
+          </span>
+        )}
+        {event.scope && event.scope !== "global" && (
+          <span style={{ textTransform: "capitalize" }}>
+            {event.scope}
+            {event.scope_assumed ? " (assumed)" : ""}
+          </span>
+        )}
       </div>
 
       <h2>
@@ -100,7 +200,11 @@ export function HackathonCard({
           <Trophy size={17} />
           <span>
             <small>Prize pool</small>
-            <strong>{formatPrize(event.prize_amount_inr)}</strong>
+            <strong>
+              {event.prize_amount_inr
+                ? formatPrize(event.prize_amount_inr)
+                : event.prize_text || "Not stated"}
+            </strong>
           </span>
         </div>
         <div>
@@ -108,7 +212,13 @@ export function HackathonCard({
           <span>
             <small>Team size</small>
             <strong>
-              {event.team_min}–{event.team_max} members
+              {event.team_min && event.team_max
+                ? event.team_min === event.team_max
+                  ? `${event.team_min} members`
+                  : `${event.team_min}–${event.team_max} members`
+                : event.team_min
+                ? `${event.team_min}+ members`
+                : "Not stated"}
             </strong>
           </span>
         </div>
@@ -123,7 +233,11 @@ export function HackathonCard({
       <div className="sq-card-footer">
         <span>{event.source}</span>
         <Button asChild size="icon">
-          <Link href={`/h/${event.id}`} aria-label={`View ${event.title}`} onClick={handleClick}>
+          <Link
+            href={`/h/${event.id}`}
+            aria-label={`View ${event.title}`}
+            onClick={handleClick}
+          >
             <ArrowUpRight />
           </Link>
         </Button>

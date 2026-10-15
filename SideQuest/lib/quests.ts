@@ -15,7 +15,11 @@ export function questGroups(
 ) {
   const selected = events
     .filter((event) => saved.includes(event.id) && questTab(event, now) === tab)
-    .sort((a, b) => Date.parse(a.reg_deadline) - Date.parse(b.reg_deadline));
+    .sort((a, b) => {
+      const aTime = a.reg_deadline ? Date.parse(a.reg_deadline) : Infinity;
+      const bTime = b.reg_deadline ? Date.parse(b.reg_deadline) : Infinity;
+      return aTime - bTime;
+    });
 
   return tab === "active"
     ? [

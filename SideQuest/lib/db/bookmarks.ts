@@ -5,8 +5,8 @@ import { isSupabaseConfigured, getSupabaseClient } from "@/lib/supabase";
 
 // Local in-memory store for guest/fallback bookmarks
 const inMemoryBookmarks = new Set<string>([
-  // Seed sample-1 as initial bookmarked item
-  "a1000000-0000-0000-0000-000000000001",
+  // Initial bookmarked item: OpenCV AI Competition 2026
+  "c1000000-0000-0000-0000-000000000001",
 ]);
 
 export async function getUserBookmarkedHackathons(

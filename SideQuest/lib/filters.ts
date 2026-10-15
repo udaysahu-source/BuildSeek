@@ -26,6 +26,15 @@ export function parseSearchParamsToFilters(
   const sort = (getSingle("sort") as HackathonFilterOptions["sort"]) || "closing_soon";
   const page = getSingle("page") ? parseInt(getSingle("page")!, 10) : 1;
 
+  const price = (getSingle("price") as HackathonFilterOptions["price"]) || null;
+  const scope = (getSingle("scope") as HackathonFilterOptions["scope"]) || null;
+  const orgParam = getSingle("organizers") || getSingle("organizer_types");
+  const organizer_types = orgParam
+    ? (orgParam.split(",").filter(Boolean) as HackathonFilterOptions["organizer_types"])
+    : null;
+  const radius_km = getSingle("radius_km") ? parseInt(getSingle("radius_km")!, 10) : null;
+  const user_state = getSingle("user_state") || null;
+
   return {
     q,
     mode,
@@ -38,6 +47,11 @@ export function parseSearchParamsToFilters(
     sort,
     page,
     limit: 20,
+    price,
+    scope,
+    organizer_types,
+    radius_km,
+    user_state,
   };
 }
 
@@ -54,6 +68,13 @@ export function filtersToQueryString(
   if (filters.prize_min) params.set("prize_min", filters.prize_min.toString());
   if (filters.team_max) params.set("team_max", filters.team_max.toString());
   if (filters.include_closed) params.set("include_closed", "true");
+  if (filters.price && filters.price !== "all") params.set("price", filters.price);
+  if (filters.scope) params.set("scope", filters.scope);
+  if (filters.organizer_types && filters.organizer_types.length > 0) {
+    params.set("organizers", filters.organizer_types.join(","));
+  }
+  if (filters.radius_km) params.set("radius_km", filters.radius_km.toString());
+  if (filters.user_state) params.set("user_state", filters.user_state);
   if (filters.sort && filters.sort !== "closing_soon") params.set("sort", filters.sort);
   if (filters.page && filters.page > 1) params.set("page", filters.page.toString());
 

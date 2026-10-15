@@ -21,8 +21,10 @@
 .env*.local
 .env
 
-# Vercel
+# Vercel & Cloudflare
 .vercel
+.open-next/
+.wrangler/
 
 # TypeScript
 *.tsbuildinfo

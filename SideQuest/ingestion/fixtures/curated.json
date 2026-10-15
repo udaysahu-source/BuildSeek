@@ -1,0 +1,18 @@
+{
+  "hackathons": [
+    {
+      "source_id": "smart-india-hackathon-2026",
+      "title": "Smart India Hackathon 2026",
+      "organizer": "Ministry of Education Innovation Cell (MIC) and AICTE",
+      "organizer_type": "government",
+      "scope": "national",
+      "mode": "hybrid",
+      "country": "India",
+      "reg_deadline": "2026-12-31T23:59:59Z",
+      "fee_type": "free",
+      "source_url": "https://www.sih.gov.in/",
+      "data_confidence": "verified_primary",
+      "tags": ["government", "student", "nationwide"]
+    }
+  ]
+}

@@ -8,20 +8,31 @@ import { HackathonStatus } from "./types";
  * - closed: now >= reg_deadline
  */
 export function computeHackathonStatus(
-  regStart: string | Date,
-  regDeadline: string | Date,
+  regStart?: string | Date | null,
+  regDeadline?: string | Date | null,
   referenceNow: Date = new Date()
 ): HackathonStatus {
-  const start = new Date(regStart).getTime();
-  const deadline = new Date(regDeadline).getTime();
   const now = referenceNow.getTime();
 
-  if (now < start) {
-    return "upcoming";
+  if (!regDeadline) {
+    if (regStart && new Date(regStart).getTime() > now) {
+      return "upcoming";
+    }
+    return "open";
   }
+
+  const deadline = new Date(regDeadline).getTime();
+  if (isNaN(deadline)) return "open";
 
   if (now >= deadline) {
     return "closed";
+  }
+
+  if (regStart) {
+    const start = new Date(regStart).getTime();
+    if (!isNaN(start) && now < start) {
+      return "upcoming";
+    }
   }
 
   const msRemaining = deadline - now;
@@ -38,10 +49,18 @@ export function computeHackathonStatus(
  * Generates human readable countdown label for cards and detail headers.
  */
 export function formatDeadlineCountdown(
-  regDeadline: string | Date,
+  regDeadline?: string | Date | null,
   referenceNow: Date = new Date()
 ): { label: string; isClosingSoon: boolean; isClosed: boolean } {
+  if (!regDeadline) {
+    return { label: "Deadline not stated", isClosingSoon: false, isClosed: false };
+  }
+
   const deadline = new Date(regDeadline).getTime();
+  if (isNaN(deadline)) {
+    return { label: "Deadline not stated", isClosingSoon: false, isClosed: false };
+  }
+
   const now = referenceNow.getTime();
   const msRemaining = deadline - now;
 

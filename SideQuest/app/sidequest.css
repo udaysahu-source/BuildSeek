@@ -116,6 +116,18 @@ a:focus-visible,button:focus-visible { outline: 3px solid var(--ink); outline-of
 .sq-filter-panel fieldset { padding:0;margin:0 0 22px;border:0; }.sq-filter-panel legend,.sq-filter-label { display:block;font-size:12px;font-weight:600; }.sq-filter-panel legend { margin-bottom:11px; }.sq-filter-options { display:flex;gap:5px;flex-wrap:wrap; }.sq-filter-options button { text-transform:capitalize;font-size:10px;padding:0 12px; }.sq-filter-selected { background:var(--brand)!important;border-color:var(--ink)!important; }.sq-filter-label { margin-bottom:21px; }.sq-filter-label select { display:block;margin-top:10px;width:100%;background:var(--white);border:1px solid var(--border);border-radius:13px;min-height:46px;padding:0 11px;color:var(--ink);font-size:11px; }.sq-prize-label>strong { float:right;font-size:11px; }.sq-prize-label input { width:100%;accent-color:var(--ink);height:44px;cursor:pointer; }.sq-range-labels { display:flex;justify-content:space-between;font-size:9px;color:var(--muted-foreground);font-weight:400; }.sq-theme-options { display:flex;flex-direction:column; }.sq-theme-options label { display:flex;align-items:center;gap:9px;font-size:11px;min-height:44px;cursor:pointer; }.sq-filter-panel input[type=checkbox] { width:17px;height:17px;accent-color:var(--ink);cursor:pointer; }.sq-students-check { display:flex;align-items:center;gap:10px;font-size:12px;padding:17px 0;border-top:1px solid var(--border);cursor:pointer;min-height:44px; }.sq-students-check small { display:block;color:var(--muted-foreground);font-size:9px;margin-top:4px; }
 .sq-results-toolbar { min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px; }.sq-results-toolbar p { font-size:12px;color:var(--muted-foreground); }.sq-results-toolbar p strong { color:var(--ink); }.sq-results-toolbar label { display:flex;align-items:center;gap:8px;font-size:10px;white-space:nowrap; }.sq-results-toolbar select { color:var(--ink);background:var(--white);border:1px solid var(--border);border-radius:50px;height:44px;padding:0 12px;font-size:11px; }
 .sq-event-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px; }.sq-event-card { background:var(--white);border:1px solid var(--border);border-radius:30px;padding:21px;min-width:0;display:flex;flex-direction:column; }.sq-card-top { display:flex;align-items:center;gap:9px;margin-bottom:15px; }.sq-card-event-icon { display:grid;place-items:center;background:var(--periwinkle);width:43px;height:43px;border-radius:14px; }.sq-event-card:nth-child(3n+2) .sq-card-event-icon { background:var(--mint); }.sq-event-card:nth-child(3n) .sq-card-event-icon { background:var(--brand); }.sq-card-sample { font-size:9px;font-weight:500;color:var(--muted-foreground); }.sq-bookmark { margin-left:auto;flex-shrink:0; }.sq-bookmark.saved { color:var(--ink);background:var(--brand); }
+.sq-card-org-badge { font-size:9px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:12px; border:1px solid var(--border); letter-spacing:0.5px; display:inline-flex; align-items:center; }
+.sq-card-org-badge.org-government { background:#FFE082; color:#5D4037; border-color:#FFB300; }
+.sq-card-org-badge.org-company { background:var(--background); color:var(--ink); }
+.sq-card-org-badge.org-college { background:var(--periwinkle); color:var(--ink); }
+.sq-card-org-badge.org-community { background:var(--mint); color:var(--ink); }
+.sq-card-org-badge.org-nonprofit { background:oklch(.93 .08 190); color:var(--ink); }
+.sq-card-unverified { font-size:8.5px; font-weight:700; background:#FFF3E0; color:#E65100; border:1px dashed #FF9800; padding:3px 7px; border-radius:8px; text-transform:uppercase; letter-spacing:0.4px; display:inline-flex; align-items:center; }
+.sq-card-fee { font-size:9px; font-weight:700; border-radius:12px; padding:3px 8px; border:1px solid var(--border); display:inline-flex; align-items:center; }
+.sq-card-fee.fee-free { background:var(--brand); color:var(--ink); }
+.sq-card-fee.fee-paid { background:var(--periwinkle); color:var(--ink); }
+.sq-card-fee.fee-unknown { background:var(--background); color:var(--muted-foreground); font-weight:500; }
+.sq-deadline-note-box { font-size:11px; line-height:1.6; background:var(--mint); border-radius:14px; padding:10px 14px; margin-top:10px; color:var(--ink); }
 .sq-countdown-chip { display:flex;align-items:center;gap:6px;background:var(--status-open);color:var(--open);border-radius:12px;padding:10px 11px;flex-wrap:wrap;font-size:9px;font-weight:600;min-height:38px; }.sq-countdown-chip strong { margin-left:auto;font-size:9px;font-variant-numeric:tabular-nums;white-space:nowrap; }.sq-countdown-chip.closing-soon { background:var(--status-closing);color:var(--ink); }.sq-countdown-chip.upcoming { background:var(--status-upcoming);color:var(--ink); }.sq-countdown-chip.closed { background:var(--status-closed);color:var(--muted-foreground); }.sq-countdown-chip.today { background:var(--red);color:var(--white); }
 .sq-card-location { display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 11px; }.sq-card-location>span { display:flex;align-items:center;gap:5px;font-size:9px;text-transform:capitalize;background:var(--background);border-radius:20px;padding:5px 9px; }.sq-event-card h2 { font-size:23px;line-height:1.2;margin:3px 0 8px;overflow-wrap:anywhere; }.sq-event-card h2 a { display:block; }.sq-card-organizer { font-size:10px;color:var(--muted-foreground);margin:0;min-height:27px; }.sq-card-facts { display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:18px 0; }.sq-card-facts>div { display:flex;align-items:center;gap:8px; }.sq-card-facts small { display:block;font-size:8px;color:var(--muted-foreground);margin-bottom:4px; }.sq-card-facts strong { font-size:11px;display:block; }.sq-card-tags { display:flex;flex-wrap:wrap;gap:5px; }.sq-card-tags span { font-size:9px;padding:6px 9px;border-radius:8px;background:var(--mint); }.sq-card-footer { display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px; }.sq-card-footer>span { font-size:9px;color:var(--muted-foreground); }.sq-pagination { display:flex;justify-content:center;gap:8px;margin-top:30px; }
 .sq-discovery-empty { padding:35px 15px;text-align:center; }.sq-discovery-empty>svg { width:170px;height:170px;margin:0 auto; }.sq-discovery-empty h2,.sq-discovery-empty h1 { font-size:28px;margin:15px 0; }.sq-discovery-empty p { font-size:12px;line-height:1.8;margin-bottom:22px;color:var(--muted-foreground); }
@@ -184,4 +196,167 @@ a:focus-visible,button:focus-visible { outline: 3px solid var(--ink); outline-of
 @media(max-width:1023px) {.sq-auth-brand {padding:45px 30px;}.sq-auth-brand h1 {font-size:48px;}.sq-auth-form {padding:38px 30px;}.sq-auth-inner h2 {font-size:30px;}}
 @media(max-width:767px) {
  .sq-auth {display:block;padding-top:24px;min-height:0;}.sq-auth-brand {border-radius:0;padding:28px 25px 45px;position:relative;min-height:232px;overflow:hidden;}.sq-auth-brand h1 {font-size:37px;margin:15px 0 10px;}.sq-auth-brand>.sq-eyebrow {font-size:8px;}.sq-auth-brand p {font-size:11px;max-width:220px;}.sq-auth-mascot {position:absolute;width:133px;height:133px;right:3px;bottom:28px;margin:0;}.sq-auth-brand-note {display:none;}.sq-auth-form {position:relative;margin-top:-25px;background:var(--background);border-radius:30px 30px 0 0;padding:30px 25px 42px;}.sq-auth-inner h2 {font-size:30px;}.sq-auth-inner>.sq-eyebrow {font-size:9px;}.sq-auth-tabs {margin-bottom:19px;}.sq-auth-input input {font-size:14px;}.sq-account-page {padding-top:24px;padding-bottom:95px;}.sq-quest-heading h1,.sq-recovery h1 {font-size:34px;}.sq-quest-heading>svg {width:76px;height:76px;}.sq-quest-heading .sq-eyebrow {font-size:9px;}.sq-quest-heading p {font-size:11px;}.sq-quest-tabs {width:100%;gap:3px;}.sq-quest-tabs button {flex:1;min-width:0;padding:0 11px;font-size:11px;}.sq-quest-tabs button span {font-size:10px;}.sq-quest-group>h2 {font-size:23px;}.sq-account-page .sq-discovery-empty {padding-left:0;padding-right:0;}.sq-recovery {margin-top:14px;}
+}
+
+/* ==========================================================================
+   WORKFLOWS: Adapt, Animate, Optimize & Delight Enhancements
+   ========================================================================== */
+
+:root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Optimize: Rendering containment for fast 60fps list scrolling */
+.sq-event-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 340px;
+  will-change: transform, box-shadow;
+  transition: transform 0.22s var(--ease-out-quart),
+              box-shadow 0.22s var(--ease-out-quart),
+              border-color 0.2s var(--ease-out-quart);
+}
+
+/* 2. Animate: Entrance choreography & hover lifts */
+@keyframes sq-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media(prefers-reduced-motion: no-preference) {
+  .sq-event-card {
+    animation: sq-card-enter 0.32s var(--ease-out-quart) backwards;
+  }
+  .sq-event-card:nth-child(1) { animation-delay: 0.03s; }
+  .sq-event-card:nth-child(2) { animation-delay: 0.06s; }
+  .sq-event-card:nth-child(3) { animation-delay: 0.09s; }
+  .sq-event-card:nth-child(4) { animation-delay: 0.12s; }
+  .sq-event-card:nth-child(5) { animation-delay: 0.15s; }
+  .sq-event-card:nth-child(6) { animation-delay: 0.18s; }
+}
+
+.sq-event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px oklch(.195 .067 275 / .12);
+  border-color: oklch(.195 .067 275 / .24);
+}
+
+/* 3. Delight: Bookmark button pop & glow */
+@keyframes sq-pop {
+  0% { transform: scale(0.85); }
+  45% { transform: scale(1.24); }
+  100% { transform: scale(1); }
+}
+
+.sq-bookmark {
+  transition: transform 0.18s var(--ease-out-quart), background 0.18s ease;
+}
+.sq-bookmark:active {
+  transform: scale(0.9);
+}
+.sq-bookmark.pop {
+  animation: sq-pop 0.36s var(--ease-out-quint);
+}
+
+/* 4. Delight: Interactive Mascot with Speech Bubble */
+.sq-mascot-interactive {
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out-quart);
+}
+.sq-mascot-interactive:hover {
+  transform: scale(1.05);
+}
+.sq-mascot-interactive:focus-visible {
+  outline: 2px dashed var(--ink);
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+@keyframes sq-mascot-hop {
+  0%, 100% { transform: scale(1) translateY(0); }
+  35% { transform: scale(1.08, 0.92) translateY(-14px); }
+  65% { transform: scale(0.96, 1.04) translateY(2px); }
+}
+.sq-mascot-bounce {
+  animation: sq-mascot-hop 0.5s var(--ease-out-quart);
+}
+
+@keyframes sq-bubble-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px) scale(1);
+  }
+}
+
+.sq-mascot-speech-bubble {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: var(--ink);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px oklch(.195 .067 275 / .24);
+  z-index: 20;
+  animation: sq-bubble-pop 0.25s var(--ease-out-expo);
+  pointer-events: none;
+}
+.sq-mascot-speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--ink) transparent transparent transparent;
+}
+
+/* 5. Animate & Adapt: Urgent countdown pulse */
+@keyframes sq-urgent-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 oklch(.55 .19 20 / .35);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 5px oklch(.55 .19 20 / 0);
+  }
+}
+@media(prefers-reduced-motion: no-preference) {
+  .sq-countdown-chip.today {
+    animation: sq-urgent-pulse 2.2s infinite var(--ease-out-quart);
+  }
+}
+
+/* 6. Adapt: Minimum 44x44px touch targets across interactive controls */
+.sq-filter-options button,
+.sq-active-filters button,
+.sq-pagination button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sq-empty-reset-btn {
+  min-height: 48px;
+  padding: 0 24px;
+  font-weight: 700;
+  border-radius: 50px;
 }
