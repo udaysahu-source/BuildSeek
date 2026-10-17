@@ -19,8 +19,7 @@ import {
   type DiscoveryFilters,
   type HackathonUI,
 } from "@/lib/hackathons";
-import { getHackathons } from "@/lib/db/hackathons";
-import { SEED_HACKATHONS } from "@/seed/hackathons";
+import { getHackathons, getLocalDataset } from "@/lib/db/hackathons";
 
 function DiscoverView() {
   const router = useRouter();
@@ -28,7 +27,7 @@ function DiscoverView() {
   const [isPending, startTransition] = useTransition();
 
   const [rawEvents, setRawEvents] = useState<HackathonUI[]>(() =>
-    SEED_HACKATHONS.map(normalizeHackathon)
+    getLocalDataset().map(normalizeHackathon)
   );
   const [loading, setLoading] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -92,10 +91,17 @@ function DiscoverView() {
   // Load hackathons
   useEffect(() => {
     let mounted = true;
-    getHackathons({ limit: 100 })
+    getHackathons({ limit: 100, include_closed: true })
       .then((res) => {
         if (!mounted) return;
         const normalized = res.hackathons.map(normalizeHackathon);
+        const existingIds = new Set(normalized.map((h) => h.id));
+        const local = getLocalDataset().map(normalizeHackathon);
+        for (const item of local) {
+          if (!existingIds.has(item.id)) {
+            normalized.push(item);
+          }
+        }
         setRawEvents(normalized);
         setLoading(false);
       })

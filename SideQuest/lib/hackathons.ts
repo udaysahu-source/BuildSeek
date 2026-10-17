@@ -288,22 +288,26 @@ export function filterHackathons(
   const organizerTypes = filters.organizer_types ?? [];
 
   const results = events.filter((e) => {
-    // 1. Text search
+    // 1. Text search: multi-term tokenized search across all fields
+    const searchTerms = q.split(/\s+/).filter(Boolean);
+    const haystack = [
+      e.title,
+      e.organizer,
+      e.city || "",
+      e.state || "",
+      e.country || "",
+      e.eligibility || "",
+      e.eligibility_text || "",
+      e.summary || "",
+      e.description || "",
+      ...e.tags,
+    ]
+      .join(" ")
+      .toLowerCase();
+
     const matchesQ =
-      !q ||
-      [
-        e.title,
-        e.organizer,
-        e.city || "",
-        e.state || "",
-        e.country || "",
-        e.eligibility || "",
-        e.eligibility_text || "",
-        ...e.tags,
-      ]
-        .join(" ")
-        .toLowerCase()
-        .includes(q);
+      searchTerms.length === 0 ||
+      searchTerms.every((term) => haystack.includes(term));
 
     // 2. Mode
     const matchesMode = !filters.mode || e.mode === filters.mode;
