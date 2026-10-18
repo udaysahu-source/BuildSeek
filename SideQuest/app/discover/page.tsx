@@ -11,6 +11,7 @@ import { DiscoveryFiltersPanel } from "@/components/sidequest/discovery-filters"
 import { DiscoverySkeleton } from "@/components/sidequest/discovery-skeleton";
 import { QuestDialog } from "@/components/sidequest/quest-dialog";
 import { NoSearchResultsState, EmptyState } from "@/components/ui/states";
+import { OnboardingCard } from "@/components/sidequest/onboarding-card";
 import { useCountdownClock, useBookmarks } from "@/components/sidequest/discovery-state";
 import { useAuth } from "@/components/sidequest/auth-state";
 import {
@@ -242,6 +243,12 @@ function DiscoverView() {
         </div>
         <Mascot className="sq-discover-mascot" />
       </header>
+
+      <OnboardingCard
+        savedCount={saved.length}
+        hasActiveFilters={chips.length > 0}
+        onFilterPreset={(tag) => update({ tags: [tag] })}
+      />
 
       <div className="sq-discovery-notice">
         <span>

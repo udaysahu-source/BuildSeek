@@ -20,8 +20,11 @@ const inter = Inter({
   display: "swap",
 });
 
+const rawUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sidequest.camp";
+const safeAppUrl = rawUrl.startsWith("http://") || rawUrl.startsWith("https://") ? rawUrl : `https://${rawUrl}`;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sidequest.camp"),
+  metadataBase: new URL(safeAppUrl),
   title: "Every hackathon. One place. — SideQuest",
   description:
     "Find your next hackathon with SideQuest. One place for Indian student hackathons, deadlines, saved events, and reminders.",

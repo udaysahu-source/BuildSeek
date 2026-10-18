@@ -38,9 +38,15 @@ export function CountdownChip({
   const isNeedsReview = Boolean(event.needs_review || !event.reg_deadline);
   const time = countdown(event, now);
   const today = !isNeedsReview && statusLabel(event, now) === "Closes today";
+  const isUrgent = !isNeedsReview && (today || time.status === "closing-soon");
 
   return (
-    <div className={`sq-countdown-chip ${isNeedsReview ? "needs-review" : today ? "today" : time.status}`}>
+    <div
+      className={`sq-countdown-chip ${isNeedsReview ? "needs-review" : today ? "today" : time.status} ${
+        isUrgent ? "sq-urgent-radar" : ""
+      }`}
+    >
+      {isUrgent && <span className="sq-radar-pulse-dot" aria-hidden="true" />}
       {isNeedsReview ? <AlertCircle size={13} /> : <Clock3 size={13} />}
       <span>{statusLabel(event, now)}</span>
       {!isNeedsReview && time.status !== "closed" && time.hasDeadline && (
