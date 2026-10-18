@@ -5,6 +5,7 @@ import { Footer } from "@/components/sidequest/footer";
 import { AuthProvider } from "@/components/sidequest/auth-state";
 import { BookmarksProvider } from "@/components/sidequest/discovery-state";
 import { Toaster } from "@/components/ui/sonner";
+import { GlobalUIStateProvider } from "@/components/ui/states";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -20,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sidequest.camp"),
   title: "Every hackathon. One place. — SideQuest",
   description:
     "Find your next hackathon with SideQuest. One place for Indian student hackathons, deadlines, saved events, and reminders.",
@@ -28,13 +29,61 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
+    title: "SideQuest — Every hackathon. One place.",
+    description: "Every hackathon from across platforms and colleges in one place with deadline radar.",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://sidequest.camp",
     siteName: "SideQuest",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
+    title: "SideQuest — Every hackathon. One place.",
+    description: "Every hackathon from across platforms and colleges in one place with deadline radar.",
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://sidequest.camp/#webapp",
+      "name": "SideQuest",
+      "url": "https://sidequest.camp",
+      "applicationCategory": "DeveloperApplication, EducationalApplication",
+      "operatingSystem": "All",
+      "description": "Every Indian student hackathon in one place with deadline radar and Telegram alerts.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://sidequest.camp/#organization",
+      "name": "SideQuest",
+      "url": "https://sidequest.camp",
+      "logo": "https://sidequest.camp/og-image.png",
+      "sameAs": ["https://t.me/SideQuestAlertsBot"],
+    },
+  ],
 };
 
 export const viewport: Viewport = {
@@ -50,15 +99,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${bricolage.variable} ${inter.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>
-        <AuthProvider>
-          <BookmarksProvider>
-            <Navigation />
-            <div className="sq-page-content">{children}</div>
-            <Footer />
-            <Toaster />
-          </BookmarksProvider>
-        </AuthProvider>
+        <GlobalUIStateProvider>
+          <AuthProvider>
+            <BookmarksProvider>
+              <Navigation />
+              <div className="sq-page-content">{children}</div>
+              <Footer />
+              <Toaster />
+            </BookmarksProvider>
+          </AuthProvider>
+        </GlobalUIStateProvider>
       </body>
     </html>
   );

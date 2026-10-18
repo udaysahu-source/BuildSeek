@@ -16,6 +16,8 @@ export default function ProfilePage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [tokenCopied, setTokenCopied] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const calendarUrl =
     typeof window !== "undefined"
@@ -34,6 +36,24 @@ export default function ProfilePage() {
       setError("Could not sign out. Please try again.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function handleDeleteAccount() {
+    setDeleting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/user/account", { method: "DELETE" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || "Failed to delete account");
+      }
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut().catch(() => {});
+      router.replace("/?account_deleted=true");
+    } catch (err: any) {
+      setError(err?.message || "Could not delete account. Please try again.");
+      setDeleting(false);
     }
   }
 
@@ -86,6 +106,58 @@ export default function ProfilePage() {
                   {tokenCopied ? "Link Copied!" : "Copy iCal Subscription Link"}
                 </Button>
               </div>
+            </div>
+
+            {/* Privacy & Cascading Account Deletion (DPDP Act & GDPR compliant) */}
+            <div className="mt-8 pt-6 border-t border-border w-full text-left">
+              <span className="sq-eyebrow" style={{ color: "var(--urgent, #C62F3A)" }}>Data Privacy & Erasure</span>
+              <p className="text-sm text-muted-foreground mt-1 mb-3">
+                Permanently erase your account, personal data, saved quests, alert rules, and active sessions in accordance with the DPDP Act and GDPR. This action is irreversible.
+              </p>
+              {!showDeleteConfirm ? (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  style={{ borderColor: "rgba(198, 47, 58, 0.4)", color: "#C62F3A" }}
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  Delete Account & All Data
+                </Button>
+              ) : (
+                <div
+                  style={{
+                    background: "rgba(198, 47, 58, 0.08)",
+                    border: "1.5px solid #C62F3A",
+                    borderRadius: "16px",
+                    padding: "16px",
+                  }}
+                >
+                  <p style={{ fontSize: "14px", fontWeight: 700, color: "#C62F3A", marginBottom: "8px" }}>
+                    Are you absolutely sure?
+                  </p>
+                  <p style={{ fontSize: "13px", color: "var(--ink)", marginBottom: "12px" }}>
+                    All your saved quests, alerts, and account history will be permanently deleted from our servers immediately.
+                  </p>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <Button
+                      size="sm"
+                      disabled={deleting}
+                      style={{ background: "#C62F3A", color: "#fff", fontWeight: 700 }}
+                      onClick={handleDeleteAccount}
+                    >
+                      {deleting ? "Deleting everything…" : "Yes, Permanently Delete My Data"}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={deleting}
+                      onClick={() => setShowDeleteConfirm(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {error && (

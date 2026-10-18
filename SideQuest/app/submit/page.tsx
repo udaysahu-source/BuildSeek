@@ -5,21 +5,23 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ArrowUpRight,
-  CheckCircle2,
   Globe2,
   MapPin,
   Sparkles,
   Trophy,
   Users,
   Zap,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/sidequest/mascot";
+import { FormField, SuccessState } from "@/components/ui/states";
 
 export default function SubmitPage() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     title: "",
     organizer: "",
@@ -40,18 +42,49 @@ export default function SubmitPage() {
     contact_telegram: "",
   });
 
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!form.title.trim() || form.title.trim().length < 3) {
+      errs.title = "Title must be at least 3 characters";
+    }
+    if (!form.organizer.trim() || form.organizer.trim().length < 2) {
+      errs.organizer = "Organizer name is required";
+    }
+    if (!form.apply_url.trim()) {
+      errs.apply_url = "Apply / registration URL is required";
+    } else {
+      try {
+        new URL(form.apply_url);
+      } catch {
+        errs.apply_url = "Please enter a valid URL (starting with http:// or https://)";
+      }
+    }
+    if (form.contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.contact_email)) {
+      errs.contact_email = "Please enter a valid contact email address";
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.title || !form.organizer || !form.apply_url) {
-      toast.error("Please fill in all required fields (Title, Organizer, Apply URL)");
+    if (!validate()) {
+      toast.error("Please correct the form errors before submitting");
       return;
     }
 
@@ -74,7 +107,8 @@ export default function SubmitPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to submit event");
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Failed to submit event");
       }
 
       setSubmitted(true);
@@ -111,22 +145,14 @@ export default function SubmitPage() {
 
   if (submitted) {
     return (
-      <main className="sq-container" style={{ padding: "60px 16px", maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-flex", padding: "16px", background: "rgba(182, 245, 0, 0.15)", borderRadius: "50%", marginBottom: "20px" }}>
-          <CheckCircle2 size={48} className="text-lime-500" />
-        </div>
-        <h1 style={{ fontSize: "32px", fontWeight: 800, marginBottom: "12px" }}>
-          Quest Board Submission Received!
-        </h1>
-        <p style={{ color: "var(--muted-foreground)", fontSize: "16px", lineHeight: 1.6, marginBottom: "28px" }}>
-          Thank you for bringing <strong>{form.title}</strong> to India&apos;s builder community. Our scouts review every submission within 24 hours to ensure verified links and accurate deadlines.
-        </p>
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-          <Button asChild>
-            <Link href="/discover">
-              Browse Live Quests <ArrowUpRight size={16} />
-            </Link>
-          </Button>
+      <main className="sq-container" style={{ padding: "60px 16px", maxWidth: "600px", margin: "0 auto" }}>
+        <SuccessState
+          title="Quest Board Submission Received!"
+          message={`Thank you for bringing "${form.title}" to India's builder community. Our scouts review every submission within 24 hours to ensure verified links and accurate deadlines.`}
+          actionText="Browse Live Quests"
+          actionHref="/discover"
+        />
+        <div style={{ textAlign: "center", marginTop: "16px" }}>
           <Button variant="outline" onClick={() => setSubmitted(false)}>
             Submit Another Hackathon
           </Button>
@@ -156,34 +182,34 @@ export default function SubmitPage() {
             <Zap size={18} fill="currentColor" /> Event Basics
           </h2>
 
-          <div>
-            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-              Hackathon Name *
-            </label>
+          <FormField label="Hackathon Name" name="title" required error={errors.title}>
             <input
               name="title"
               required
               placeholder="e.g. HackSphere 2026, BitBuild v2"
               value={form.title}
               onChange={handleChange}
-              style={inputStyle}
+              style={{
+                ...inputStyle,
+                borderColor: errors.title ? "#C62F3A" : "#cbd5e1",
+              }}
             />
-          </div>
+          </FormField>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-            <div>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-                Organizing Body / College *
-              </label>
+            <FormField label="Organizing Body / College" name="organizer" required error={errors.organizer}>
               <input
                 name="organizer"
                 required
                 placeholder="e.g. IIT Bombay / IEEE Student Branch"
                 value={form.organizer}
                 onChange={handleChange}
-                style={inputStyle}
+                style={{
+                  ...inputStyle,
+                  borderColor: errors.organizer ? "#C62F3A" : "#cbd5e1",
+                }}
               />
-            </div>
+            </FormField>
             <div>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
                 Organizer Type
@@ -203,10 +229,7 @@ export default function SubmitPage() {
             </div>
           </div>
 
-          <div>
-            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-              Official Registration Link / Portal URL *
-            </label>
+          <FormField label="Official Registration Link / Portal URL" name="apply_url" required error={errors.apply_url}>
             <input
               name="apply_url"
               type="url"
@@ -214,9 +237,12 @@ export default function SubmitPage() {
               placeholder="https://unstop.com/..., https://devfolio.co/..., or your website"
               value={form.apply_url}
               onChange={handleChange}
-              style={inputStyle}
+              style={{
+                ...inputStyle,
+                borderColor: errors.apply_url ? "#C62F3A" : "#cbd5e1",
+              }}
             />
-          </div>
+          </FormField>
         </section>
 
         {/* Location & Format */}
@@ -343,20 +369,19 @@ export default function SubmitPage() {
         <section style={sectionStyle}>
           <h2 style={{ fontSize: "18px", fontWeight: 700 }}>Organizer Contact (For Verification)</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-            <div>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-                Contact Email *
-              </label>
+            <FormField label="Contact Email" name="contact_email" error={errors.contact_email}>
               <input
                 name="contact_email"
                 type="email"
-                required
                 placeholder="organizer@college.edu"
                 value={form.contact_email}
                 onChange={handleChange}
-                style={inputStyle}
+                style={{
+                  ...inputStyle,
+                  borderColor: errors.contact_email ? "#C62F3A" : "#cbd5e1",
+                }}
               />
-            </div>
+            </FormField>
             <div>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
                 Telegram Username (Optional)
@@ -372,8 +397,21 @@ export default function SubmitPage() {
           </div>
         </section>
 
-        <Button type="submit" size="lg" disabled={loading} style={{ height: "48px", fontSize: "16px", fontWeight: 700 }}>
-          {loading ? "Submitting quest…" : "Submit Hackathon for Verification"} <ArrowUpRight size={18} />
+        <Button
+          type="submit"
+          size="lg"
+          disabled={loading}
+          style={{ height: "48px", fontSize: "16px", fontWeight: 700 }}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin mr-2" size={18} /> Submitting quest…
+            </>
+          ) : (
+            <>
+              Submit Hackathon for Verification <ArrowUpRight size={18} />
+            </>
+          )}
         </Button>
       </form>
     </main>

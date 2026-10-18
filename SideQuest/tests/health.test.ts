@@ -3,7 +3,7 @@ import { GET } from "@/app/api/health/route";
 
 describe("Health API Route", () => {
   it("returns 200 with status ok and valid json", async () => {
-    const res = await GET();
+    const res = await GET(new Request("https://sidequest.camp/api/health") as any);
     expect(res.status).toBe(200);
 
     const json = await res.json();

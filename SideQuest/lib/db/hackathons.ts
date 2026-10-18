@@ -2,6 +2,8 @@ import { Hackathon, HackathonStatus } from "@/lib/types";
 import { computeHackathonStatus } from "@/lib/status";
 import { SEED_HACKATHONS } from "@/seed/hackathons";
 import hackathonsData from "@/data/hackathons.json";
+import { PUBLIC_HACKATHON_COLUMNS, scrubHackathon } from "@/lib/security/privacy";
+import { logger } from "@/lib/security/logger";
 
 export interface HackathonFilterOptions {
   q?: string | null;
@@ -53,10 +55,10 @@ export function getLocalDataset(): Hackathon[] {
     : [];
 
   if (jsonList.length > 0) {
-    const existingIds = new Set(jsonList.map((h: Hackathon) => h.id));
-    const combined = [...jsonList];
+    const seedMap = new Map(SEED_HACKATHONS.map((s) => [s.id, s]));
+    const combined = jsonList.map((h: Hackathon) => seedMap.get(h.id) || h);
     for (const seed of SEED_HACKATHONS) {
-      if (!existingIds.has(seed.id)) {
+      if (!jsonList.some((h) => h.id === seed.id)) {
         combined.push(seed);
       }
     }
@@ -91,7 +93,9 @@ export async function getHackathons(
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       );
 
-      let query = supabase.from("hackathons").select("*", { count: "exact" });
+      let query = supabase
+        .from("hackathons")
+        .select(PUBLIC_HACKATHON_COLUMNS, { count: "exact" });
 
       if (filters.q) {
         query = query.textSearch("fts", filters.q, {
@@ -135,10 +139,10 @@ export async function getHackathons(
       );
 
       if (!error && data) {
-        const enriched = data.map((h: Hackathon) => ({
-          ...h,
+        const enriched = (data as unknown as Hackathon[]).map((h: Hackathon) => ({
+          ...scrubHackathon(h),
           status: computeHackathonStatus(h.reg_start, h.reg_deadline),
-        }));
+        })) as (Hackathon & { status: HackathonStatus })[];
 
         const total = count || enriched.length;
         return {
@@ -149,7 +153,7 @@ export async function getHackathons(
         };
       }
     } catch (err) {
-      console.warn("Supabase query failed, falling back to local dataset:", err);
+      logger.warn("Supabase query failed, falling back to local dataset", err, undefined, "hackathons");
     }
   }
 

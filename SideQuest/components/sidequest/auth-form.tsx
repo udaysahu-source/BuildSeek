@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Eye, EyeOff, Mail, LockKeyhole } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Mail, LockKeyhole, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Mascot } from "./mascot";
 import { useAuth } from "./auth-state";
@@ -237,14 +237,23 @@ export function AuthForm({ next = "/quest-log" }: { next?: AuthDestination | str
             )}
 
             <Button type="submit" className="sq-auth-submit" disabled={busy}>
-              {busy
-                ? "One moment…"
-                : mode === "signup"
-                ? "Create account"
-                : mode === "forgot"
-                ? "Send reset link"
-                : "Log in"}
-              <ArrowRight size={18} />
+              {busy ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  <span>One moment…</span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {mode === "signup"
+                      ? "Create account"
+                      : mode === "forgot"
+                      ? "Send reset link"
+                      : "Log in"}
+                  </span>
+                  <ArrowRight size={18} />
+                </>
+              )}
             </Button>
           </form>
 

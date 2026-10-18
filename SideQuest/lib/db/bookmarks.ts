@@ -2,6 +2,8 @@ import { SEED_HACKATHONS } from "@/seed/hackathons";
 import { Hackathon, HackathonStatus } from "@/lib/types";
 import { computeHackathonStatus } from "@/lib/status";
 import { isSupabaseConfigured, getSupabaseClient } from "@/lib/supabase";
+import { PUBLIC_HACKATHON_COLUMNS, scrubHackathon } from "@/lib/security/privacy";
+import { logger } from "@/lib/security/logger";
 
 // Local in-memory store for guest/fallback bookmarks
 const inMemoryBookmarks = new Set<string>([
@@ -24,19 +26,19 @@ export async function getUserBookmarkedHackathons(
         const ids = bms.map((b) => b.hackathon_id);
         const { data: hackathons } = await supabase
           .from("hackathons")
-          .select("*")
+          .select(PUBLIC_HACKATHON_COLUMNS)
           .in("id", ids);
 
         if (hackathons) {
-          return hackathons.map((h: Hackathon) => ({
-            ...h,
+          return (hackathons as unknown as Hackathon[]).map((h: Hackathon) => ({
+            ...scrubHackathon(h),
             status: computeHackathonStatus(h.reg_start, h.reg_deadline),
             is_bookmarked: true,
-          }));
+          })) as (Hackathon & { status: HackathonStatus })[];
         }
       }
     } catch (err) {
-      console.warn("Supabase bookmarks fetch failed, using fallback:", err);
+      logger.warn("Supabase bookmarks fetch failed, using fallback", err, undefined, "bookmarks");
     }
   }
 
@@ -78,7 +80,7 @@ export async function toggleBookmark(
         return { bookmarked: true };
       }
     } catch (err) {
-      console.warn("Supabase toggle bookmark failed, using fallback:", err);
+      logger.warn("Supabase toggle bookmark failed, using fallback", err, undefined, "bookmarks");
     }
   }
 

@@ -17,6 +17,7 @@ export function Footer() {
             </Link>
             <Link href="/submit">Submit an event</Link>
             <Link href="/alerts">Stay in the loop</Link>
+            <Link href="/contact">Contact</Link>
             <a
               href="https://t.me/SideQuestAlertsBot"
               target="_blank"
@@ -28,8 +29,15 @@ export function Footer() {
           </nav>
         </div>
         <div className="sq-footer-bottom">
-          <span>© 2026 SideQuest. Built for the builders.</span>
-          <span className="inline-flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-4 text-xs">
+            <span>© 2026 SideQuest. Built for the builders.</span>
+            <span className="text-muted-foreground">•</span>
+            <Link href="/privacy" className="hover:underline">Privacy</Link>
+            <Link href="/terms" className="hover:underline">Terms</Link>
+            <Link href="/refunds" className="hover:underline">Refunds</Link>
+            <Link href="/contact" className="hover:underline">Contact</Link>
+          </div>
+          <span className="inline-flex items-center gap-1.5 text-xs">
             Made with <Heart size={13} className="inline fill-rose-500 text-rose-500" /> for India’s student community.
           </span>
         </div>

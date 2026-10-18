@@ -297,6 +297,120 @@ export default function HomePage() {
         </div>
         <Mascot className="sq-organizer-mascot" />
       </section>
+
+      {/* GEO & Search Engine Optimized FAQ Section */}
+      <section className="sq-container" style={{ padding: "64px 16px", maxWidth: "860px" }}>
+        <SectionHeading
+          eyebrow="Frequently Asked Questions"
+          title="Everything you need to know about SideQuest."
+          description="Clear answers for student hackers, campus leads, and tech organizers."
+        />
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "32px" }}>
+          {[
+            {
+              q: "What is SideQuest and how does it help Indian student builders?",
+              a: "SideQuest is an unified aggregator for Indian collegiate hackathons and builder competitions across Devfolio, Unstop, Devpost, Hack2skill, and premier campus festivals (IITs, NITs, BITS, IIITs). It equips builders with live deadline countdowns, skill-matching radar, calendar export, and direct Telegram reminders.",
+            },
+            {
+              q: "Is SideQuest free for students and participants?",
+              a: "Yes. SideQuest is 100% free for students and independent developers. You can discover hackathons, save events to your Quest Log, download iCal calendar feeds, and receive Telegram deadline pings with zero cost.",
+            },
+            {
+              q: "How does the Telegram Deadline Radar work?",
+              a: "By starting @SideQuestAlertsBot on Telegram, you receive timely high-priority notifications 24 hours and 3 hours before registration closes for your bookmarked quests—completely free of promotional noise or spam.",
+            },
+            {
+              q: "Can college organizers submit their hackathons to SideQuest?",
+              a: "Yes! Student clubs, IEEE student branches, and university tech societies can submit their events through our public submission portal at /submit. Events are verified and normalized into our live directory.",
+            },
+            {
+              q: "How does SideQuest protect user privacy and data security?",
+              a: "SideQuest complies with India's Digital Personal Data Protection (DPDP) Act 2023 and the GDPR. We enforce strict database Row-Level Security (RLS), avoid invasive behavioral cookies, and provide instant one-click cascading account erasure at /profile.",
+            },
+          ].map((item, idx) => (
+            <details
+              key={idx}
+              style={{
+                background: "var(--card)",
+                border: "2px solid var(--border)",
+                borderRadius: "16px",
+                padding: "20px 24px",
+              }}
+            >
+              <summary
+                style={{
+                  fontSize: "17px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  color: "var(--foreground)",
+                  listStyle: "none",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>{item.q}</span>
+                <span style={{ fontSize: "20px", color: "var(--brand)" }}>+</span>
+              </summary>
+              <p style={{ marginTop: "14px", fontSize: "15px", color: "var(--muted-foreground)", lineHeight: 1.65 }}>
+                {item.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "What is SideQuest and how does it help Indian student builders?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "SideQuest is an unified aggregator for Indian collegiate hackathons and builder competitions across Devfolio, Unstop, Devpost, Hack2skill, and premier campus festivals (IITs, NITs, BITS, IIITs). It equips builders with live deadline countdowns, skill-matching radar, calendar export, and direct Telegram reminders.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is SideQuest free for students and participants?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. SideQuest is 100% free for students and independent developers. You can discover hackathons, save events to your Quest Log, download iCal calendar feeds, and receive Telegram deadline pings with zero cost.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How does the Telegram Deadline Radar work?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "By starting @SideQuestAlertsBot on Telegram, you receive timely high-priority notifications 24 hours and 3 hours before registration closes for your bookmarked quests—completely free of promotional noise or spam.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can college organizers submit their hackathons to SideQuest?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! Student clubs, IEEE student branches, and university tech societies can submit their events through our public submission portal at /submit. Events are verified and normalized into our live directory.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How does SideQuest protect user privacy and data security?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "SideQuest complies with India's Digital Personal Data Protection (DPDP) Act 2023 and the GDPR. We enforce strict database Row-Level Security (RLS), avoid invasive behavioral cookies, and provide instant one-click cascading account erasure at /profile.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }

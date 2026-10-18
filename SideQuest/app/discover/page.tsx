@@ -10,6 +10,7 @@ import { HackathonDetail } from "@/components/sidequest/hackathon-detail";
 import { DiscoveryFiltersPanel } from "@/components/sidequest/discovery-filters";
 import { DiscoverySkeleton } from "@/components/sidequest/discovery-skeleton";
 import { QuestDialog } from "@/components/sidequest/quest-dialog";
+import { NoSearchResultsState, EmptyState } from "@/components/ui/states";
 import { useCountdownClock, useBookmarks } from "@/components/sidequest/discovery-state";
 import { useAuth } from "@/components/sidequest/auth-state";
 import {
@@ -468,14 +469,16 @@ function DiscoverView() {
               </nav>
             </>
           ) : (
-            <div className="sq-discovery-empty">
-              <Mascot />
-              <h2>No quests found in this realm.</h2>
-              <p>The scouts couldn’t find any hackathons matching your search runes. Try widening your radius or clearing filters!</p>
-              <Button onClick={reset} className="sq-empty-reset-btn">
-                Reset All Runes & Filters
-              </Button>
-            </div>
+            filters.q ? (
+              <NoSearchResultsState query={filters.q} onClear={reset} />
+            ) : (
+              <EmptyState
+                title="No quests found in this realm."
+                description="The scouts couldn't find any hackathons matching your active filters. Try widening your radius, changing mode, or clearing filters."
+                actionText="Reset All Filters"
+                onAction={reset}
+              />
+            )
           )}
         </section>
       </div>

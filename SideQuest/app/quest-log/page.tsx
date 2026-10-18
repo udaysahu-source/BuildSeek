@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { normalizeHackathon, type HackathonUI } from "@/lib/hackathons";
 import { questGroups, questTab, type QuestTab } from "@/lib/quests";
 import { getHackathons } from "@/lib/db/hackathons";
+import { EmptyState } from "@/components/ui/states/EmptyState";
+import { ErrorState } from "@/components/ui/states/ErrorState";
 
 import { SEED_HACKATHONS } from "@/seed/hackathons";
 
@@ -193,11 +195,15 @@ function QuestLogView() {
           )}
 
           {error ? (
-            <p role="alert" className="sq-auth-error">
-              Your saved quests couldn’t load. Please refresh and try again.
-            </p>
+            <ErrorState
+              title="Could not load your Quest Log"
+              description="Your saved quests couldn't be loaded from the server right now. Try checking your internet connection or reload."
+              onRetry={() => window.location.reload()}
+            />
           ) : bookmarksLoading || dataLoading ? (
-            <p role="status">Gathering your saved quests…</p>
+            <div className="py-12 text-center" role="status">
+              <p className="text-muted-foreground animate-pulse">Gathering your saved quests…</p>
+            </div>
           ) : total ? (
             groups
               .filter((g) => g.events.length)
@@ -215,24 +221,16 @@ function QuestLogView() {
                 </section>
               ))
           ) : (
-            <div className="sq-discovery-empty">
-              <Mascot />
-              <h2>
-                {saved.length
-                  ? "No quests on this timeline."
-                  : "Your next quest is out there."}
-              </h2>
-              <p>
-                {saved.length
-                  ? "Check another tab for your saved hackathons."
-                  : "Find a hackathon that sparks an idea, and save it here."}
-              </p>
-              <Button asChild>
-                <Link href="/discover">
-                  Discover hackathons <ArrowUpRight size={17} />
-                </Link>
-              </Button>
-            </div>
+            <EmptyState
+              title={saved.length ? "No quests on this timeline" : "Your next quest is out there"}
+              description={
+                saved.length
+                  ? "Check another tab for your saved hackathons, or bookmark new upcoming hackathons."
+                  : "Find a hackathon that sparks an idea, save it here, and track all deadlines effortlessly."
+              }
+              actionLabel="Discover hackathons"
+              actionHref="/discover"
+            />
           )}
         </>
     </main>

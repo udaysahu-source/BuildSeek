@@ -21,7 +21,7 @@
 .env*.local
 .env
 
-# Vercel & Cloudflare
+# Deployment & Caches
 .vercel
 .open-next/
 .wrangler/

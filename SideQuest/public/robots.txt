@@ -1,8 +1,20 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /api/
+Disallow: /profile
+Disallow: /reset-password
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /profile
+Disallow: /reset-password
 
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
+Disallow: /profile
+Disallow: /reset-password
 
 User-agent: Twitterbot
 Allow: /
@@ -12,3 +24,8 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /profile
+Disallow: /reset-password
+
+Sitemap: https://sidequest.camp/sitemap.xml
