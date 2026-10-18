@@ -74,6 +74,22 @@ export function AuthForm({ next = "/quest-log" }: { next?: AuthDestination | str
     }
   }
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const errDesc = params.get("error_description") || params.get("error");
+      if (errDesc) {
+        if (errDesc.includes("redirect_uri_mismatch")) {
+          setError("Google OAuth configuration mismatch: Redirect URI must be authorized in Google Cloud Console.");
+        } else if (errDesc === "oauth_exchange_failed") {
+          setError("Authentication session could not be established. Please try logging in with email/password.");
+        } else {
+          setError(decodeURIComponent(errDesc.replace(/\+/g, " ")));
+        }
+      }
+    }
+  }, []);
+
   async function google() {
     setBusy(true);
     setError("");
@@ -83,10 +99,11 @@ export function AuthForm({ next = "/quest-log" }: { next?: AuthDestination | str
       if (typeof window !== "undefined") {
         sessionStorage.setItem("sidequest-auth-next", next);
       }
+      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/login`,
+          redirectTo: callbackUrl,
         },
       });
       if (error) throw error;
