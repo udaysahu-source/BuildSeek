@@ -67,7 +67,7 @@
 
   .btn-retro-ink {
     background-color: #0B1033;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     border: 2px solid #0B1033;
     box-shadow: 2px 2px 0px rgba(11, 16, 51, 0.4);
     border-radius: 9999px;
@@ -75,8 +75,15 @@
     transition: transform 100ms ease, box-shadow 100ms ease;
   }
 
+  .btn-retro-ink *,
+  .btn-retro-ink svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+  }
+
   .btn-retro-ink:hover {
     background-color: #1C2350;
+    color: #FFFFFF !important;
     transform: translateY(-1px);
   }
 

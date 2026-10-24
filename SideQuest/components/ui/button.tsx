@@ -4,29 +4,37 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold cursor-pointer transition-transform duration-100 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink active:translate-x-[1px] active:translate-y-[1px] disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "sq-glossy text-primary-foreground hover:opacity-90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default:
+          "sq-btn-primary bg-ink text-white hover:bg-ink-900 border-2 border-ink shadow-solid hover:shadow-solid-md [&_svg]:text-white [&_svg]:stroke-white",
+        destructive:
+          "bg-urgent text-white shadow-solid border-2 border-ink hover:bg-urgent/90 font-bold [&_svg]:text-white",
         outline:
-          "rounded-full border border-foreground/25 bg-transparent hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-white text-ink border-2 border-ink shadow-solid hover:bg-parchment-subtle [&_svg]:text-ink",
+        secondary:
+          "bg-parchment-subtle text-ink border-2 border-ink shadow-solid-sm hover:bg-parchment [&_svg]:text-ink",
+        ghost:
+          "text-ink hover:bg-parchment-subtle font-semibold [&_svg]:text-ink",
+        link:
+          "text-ink underline-offset-4 hover:underline font-bold [&_svg]:text-ink",
         // Legacy aliases
-        lime: "sq-glossy text-primary-foreground hover:opacity-90",
-        primary: "sq-glossy text-primary-foreground hover:opacity-90",
-        danger: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        lime:
+          "bg-lime text-ink border-2 border-ink shadow-solid hover:bg-lime/90 font-bold [&_svg]:text-ink",
+        primary:
+          "sq-btn-primary bg-ink text-white hover:bg-ink-900 border-2 border-ink shadow-solid hover:shadow-solid-md [&_svg]:text-white [&_svg]:stroke-white",
+        danger:
+          "bg-urgent text-white shadow-solid border-2 border-ink hover:bg-urgent/90 font-bold [&_svg]:text-white",
       },
       size: {
-        default: "h-12 rounded-full px-6 py-2",
-        sm: "h-11 rounded-full px-4 text-xs",
-        lg: "h-14 rounded-full px-7 text-sm",
-        icon: "h-11 w-11 rounded-full",
+        default: "h-12 px-6 py-2 text-sm",
+        sm: "h-10 px-4 text-xs",
+        lg: "h-14 px-7 text-base font-bold",
+        icon: "h-10 w-10 p-0",
         // Legacy alias
-        md: "h-12 rounded-full px-6 py-2",
+        md: "h-12 px-6 py-2 text-sm",
       },
     },
     defaultVariants: {
