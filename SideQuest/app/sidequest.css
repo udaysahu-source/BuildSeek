@@ -1859,9 +1859,185 @@ a.sq-btn-primary:hover {
   }
   .sq-card-action-row > * {
     flex: 1;
+    min-height: 44px;
   }
   .sq-error-card {
     padding: 32px 20px;
     border-radius: 20px;
+  }
+  .sq-card-quick-action {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ==========================================================================
+   10. Cross-Platform & Device Adaptation Suite (/adapt workflow)
+   ========================================================================== */
+
+/* A. Extra Small Mobile Devices (320px - 380px) */
+@media (max-width: 380px) {
+  .sq-hero h1 {
+    font-size: 34px !important;
+  }
+  .sq-discover-heading h1 {
+    font-size: 26px !important;
+  }
+  .sq-filter-options.sq-filter-options-3 {
+    grid-template-columns: 1fr;
+  }
+  .sq-filter-options.sq-filter-options-2 {
+    grid-template-columns: 1fr;
+  }
+  .sq-quest-tabs {
+    grid-template-columns: 1fr !important;
+  }
+  .sq-countdown-tiles {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .sq-countdown-tiles > div {
+    width: 100% !important;
+    height: 72px !important;
+  }
+}
+
+/* B. Tablet & Foldable Hybrid Context (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sq-event-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .sq-hero-content {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+  .sq-hero-copy {
+    margin: 0 auto;
+    max-width: 580px;
+  }
+  .sq-hero-actions {
+    justify-content: center;
+  }
+  .sq-social-proof {
+    justify-content: center;
+  }
+  .sq-problem-grid,
+  .sq-steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .sq-bento {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .sq-feature,
+  .sq-feature:first-child,
+  .sq-feature:nth-child(2) {
+    grid-column: span 1 !important;
+  }
+}
+
+/* C. Large Screens & 4K Displays (>= 1600px) */
+@media (min-width: 1600px) {
+  .sq-container,
+  .sq-discover,
+  .sq-detail {
+    max-width: 1440px;
+  }
+  .sq-event-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 28px !important;
+  }
+}
+
+/* D. Touch Ergonomics (Coarse Pointer Devices / Smartphones & Tablets) */
+@media (pointer: coarse) {
+  .sq-card-quick-action,
+  .sq-bookmark,
+  .sq-filter-options button,
+  .sq-nav-item,
+  .sq-card-btn,
+  .sq-detail-actions button,
+  .sq-detail-actions a {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sq-filter-options button {
+    height: 42px;
+  }
+}
+
+/* E. Landscape Mobile Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .sq-bottom-nav {
+    height: 52px;
+    bottom: 6px;
+  }
+  .sq-mobile-item {
+    min-height: 40px;
+    padding: 0 10px;
+  }
+  .sq-filters-dialog {
+    max-height: 96dvh;
+  }
+  .sq-phone-scene {
+    height: 340px;
+  }
+  .sq-phone {
+    transform: scale(0.65) !important;
+  }
+}
+
+/* F. Clean Print Stylesheet (Screen -> Print Adaptation) */
+@media print {
+  .sq-nav,
+  .sq-bottom-nav,
+  .sq-footer,
+  .sq-search-row,
+  .sq-desktop-filters,
+  .sq-mobile-filter-button,
+  .sq-card-action-row,
+  .sq-detail-actions,
+  .sq-bookmark,
+  .sq-radar-strip,
+  .sq-onboarding-banner,
+  .sq-dialog-overlay,
+  .sq-quest-dialog {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+
+  .sq-container,
+  .sq-discover,
+  .sq-detail {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sq-event-grid {
+    display: block !important;
+  }
+
+  .sq-event-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #333333 !important;
+    margin-bottom: 16pt;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555555;
   }
 }
