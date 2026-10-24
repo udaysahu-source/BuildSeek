@@ -36,7 +36,7 @@ export function Mascot({
     <div
       className={`sq-mascot-wrapper ${interactive ? "sq-mascot-interactive" : ""} ${
         animating ? "sq-mascot-bounce" : ""
-      }`}
+      } ${className}`.trim()}
       onClick={handleClick}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -51,7 +51,7 @@ export function Mascot({
           ? "BuildSeek Mascot. Click for advice and cheers!"
           : "BuildSeek Mascot"
       }
-      style={{ position: "relative", display: "inline-block", outline: "none" }}
+      style={{ outline: "none" }}
     >
       {quoteIdx !== null && (
         <div className="sq-mascot-speech-bubble" role="status" aria-live="polite">
@@ -59,7 +59,8 @@ export function Mascot({
         </div>
       )}
       <svg
-        className={className}
+        className="sq-mascot-svg"
+        style={{ width: "100%", height: "100%", display: "block" }}
         viewBox="0 0 240 240"
         fill="none"
         role="img"
