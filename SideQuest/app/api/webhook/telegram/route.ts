@@ -62,12 +62,97 @@ export async function POST(req: NextRequest) {
     if (message?.text) {
       const text = message.text.trim();
       const chatId = message.chat.id;
+      const firstName = message.from?.first_name || "Builder";
+
+      const { sendTelegramMessage } = await import("@/lib/telegram");
 
       // Handle standard commands securely
       if (text.startsWith("/start")) {
-        // e.g., /start or /start sync_saved_quests
+        const parts = text.split(/\s+/);
+        const param = parts[1]; // e.g. "event_<id>" or "web_connect"
+
+        if (param && param.startsWith("event_")) {
+          const eventId = param.replace("event_", "");
+          const { getHackathonById } = await import("@/lib/db/hackathons");
+          const { cleanPrizeText } = await import("@/lib/hackathons");
+          const event = await getHackathonById(eventId);
+
+          if (event) {
+            const prize = cleanPrizeText({
+              prize_amount_inr: event.prize_amount_inr ?? 0,
+              prize_text: event.prize_text,
+            });
+            const deadlineMsg = event.reg_deadline
+              ? `📅 <b>Registration Deadline:</b> ${new Date(event.reg_deadline).toUTCString()}`
+              : "📅 <b>Deadline:</b> Open / not stated";
+
+            await sendTelegramMessage({
+              chatId,
+              text: `🎯 <b>BuildSeek Deadline Alert Active</b>\n\n` +
+                `<b>${event.title}</b>\n` +
+                `🏢 <i>${event.organizer}</i>\n` +
+                `📍 Mode: ${event.mode} ${event.city ? `(${event.city})` : ""}\n` +
+                `🏆 Prize Pool: ${prize}\n` +
+                `${deadlineMsg}\n\n` +
+                `🔔 You will receive high-priority alerts 24 hours and 3 hours before this deadline closes!`,
+              replyMarkup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "🌐 View on BuildSeek",
+                      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"}/h/${event.id}`,
+                    },
+                    {
+                      text: "🚀 Direct Apply",
+                      url: event.apply_url || event.official_page || event.source_url,
+                    },
+                  ],
+                ],
+              },
+            });
+          } else {
+            await sendTelegramMessage({
+              chatId,
+              text: `👋 Hey ${firstName}! Welcome to <b>BuildSeek Alerts</b>.\n\n` +
+                `Your deadline radar is active! We'll alert you 24h & 3h before your tracked hackathons close.`,
+            });
+          }
+        } else {
+          // Standard /start
+          await sendTelegramMessage({
+            chatId,
+            text: `👋 Hey ${firstName}! Welcome to <b>BuildSeek Alerts</b>.\n\n` +
+              `🚀 <b>Never miss a hackathon deadline again.</b>\n\n` +
+              `• ⏰ <b>24-Hour Warnings:</b> High-priority alerts before registrations end.\n` +
+              `• 🏆 <b>Weekly Digest:</b> The top campus hackathons every Friday.\n` +
+              `• 🎯 <b>Event Tracking:</b> Tap the Telegram button on any hackathon card on BuildSeek to track it directly.\n\n` +
+              `Explore live hackathons: ${process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"}/discover`,
+            replyMarkup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "🔍 Browse Hackathons",
+                    url: `${process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"}/discover`,
+                  },
+                ],
+              ],
+            },
+          });
+        }
+      } else if (text.startsWith("/help")) {
+        await sendTelegramMessage({
+          chatId,
+          text: `ℹ️ <b>BuildSeek Bot Help</b>\n\n` +
+            `• /start - Activate bot & check radar status\n` +
+            `• /mute - Pause upcoming deadline notifications\n\n` +
+            `To track a hackathon, browse ${process.env.NEXT_PUBLIC_APP_URL || "https://sidequesttt.vercel.app"}/discover and click the Telegram icon on any card!`,
+        });
       } else if (text.startsWith("/mute")) {
-        // Handle alert muting
+        await sendTelegramMessage({
+          chatId,
+          text: `🔕 <b>Alerts Muted</b>\n\n` +
+            `Your notifications have been temporarily paused. Send /start anytime to reactivate your radar!`,
+        });
       }
     }
 
