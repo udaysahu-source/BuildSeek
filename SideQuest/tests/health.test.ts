@@ -8,7 +8,7 @@ describe("Health API Route", () => {
 
     const json = await res.json();
     expect(json.status).toBe("ok");
-    expect(json.app).toBe("SideQuest");
+    expect(json.app).toBe("BuildSeek");
     expect(json.timestamp).toBeDefined();
     expect(json.supabase).toBeDefined();
   });

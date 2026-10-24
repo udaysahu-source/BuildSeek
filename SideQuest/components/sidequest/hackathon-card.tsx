@@ -255,10 +255,10 @@ export function HackathonCard({
             <CalendarDays size={13} />
           </a>
           <a
-            href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+            href={`https://t.me/BuildSeekAlertsBot?start=event_${event.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            title="Get Telegram deadline ping (@SideQuestAlertsBot)"
+            title="Get Telegram deadline ping (@BuildSeekAlertsBot)"
             aria-label="Get Telegram deadline ping"
             style={{ display: "inline-flex", alignItems: "center", color: "#229ED9", padding: "2px" }}
           >

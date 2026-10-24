@@ -118,7 +118,7 @@ export function OnboardingCard({
           </div>
 
           <h2 style={{ fontSize: "22px", fontWeight: 800, lineHeight: 1.25, margin: "0 0 6px" }}>
-            New to SideQuest? Here’s your 60-second jumpstart.
+            New to BuildSeek? Here’s your 60-second jumpstart.
           </h2>
           <p style={{ fontSize: "14px", color: "var(--muted-foreground)", margin: "0 0 18px", maxWidth: "560px" }}>
             Find the right collegiate hackathon, bookmark your targets, and get automated Telegram reminders before deadlines expire.
@@ -283,13 +283,13 @@ export function OnboardingCard({
                   <span style={{ color: "var(--brand-dark, #3b7c00)", fontWeight: 600 }}>Radar active!</span>
                 ) : (
                   <a
-                    href="https://t.me/SideQuestAlertsBot"
+                    href="https://t.me/BuildSeekAlertsBot"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={handleSyncClick}
                     style={{ textDecoration: "underline", fontWeight: 700, color: "#229ED9" }}
                   >
-                    Open @SideQuestAlertsBot <ArrowRight size={11} className="inline" />
+                    Open @BuildSeekAlertsBot <ArrowRight size={11} className="inline" />
                   </a>
                 )}
               </p>

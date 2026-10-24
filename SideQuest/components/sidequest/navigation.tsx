@@ -18,12 +18,12 @@ export function Logo({ footer = false }: { footer?: boolean }) {
     <Link
       href="/"
       className={`sq-logo ${footer ? "sq-logo-footer" : ""}`}
-      aria-label="SideQuest home"
+      aria-label="BuildSeek home"
     >
       <span className="sq-logo-icon">
         <Zap size={21} fill="currentColor" />
       </span>
-      sidequest<span className="sq-logo-dot">.</span>
+      buildseek<span className="sq-logo-dot">.</span>
     </Link>
   );
 }

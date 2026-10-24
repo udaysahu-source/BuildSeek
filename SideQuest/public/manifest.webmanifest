@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "SideQuest — Find your next hackathon",
-  "short_name": "SideQuest",
+  "name": "BuildSeek — Find your next hackathon",
+  "short_name": "BuildSeek",
   "description": "Every hackathon. One place. Never miss a deadline.",
   "start_url": "/",
   "scope": "/",

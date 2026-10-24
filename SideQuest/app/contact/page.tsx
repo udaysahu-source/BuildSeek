@@ -71,7 +71,7 @@ export default function ContactPage() {
           <div>
             <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "8px" }}>Entity Details</h2>
             <p style={{ fontSize: "14px", color: "var(--muted-foreground)", lineHeight: 1.6 }}>
-              SideQuest is built and maintained by independent developers and student campus ambassadors across India.
+              BuildSeek is built and maintained by independent developers and student campus ambassadors across India.
             </p>
           </div>
 
@@ -107,7 +107,7 @@ export default function ContactPage() {
               <div>
                 <strong style={{ display: "block" }}>Registered Desk</strong>
                 <span style={{ color: "var(--muted-foreground)" }}>
-                  SideQuest Technologies<br />
+                  BuildSeek Technologies<br />
                   Raipur, Chhattisgarh, India - 492001
                 </span>
               </div>

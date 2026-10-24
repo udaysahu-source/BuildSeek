@@ -30,7 +30,7 @@ export class Hack2skillAdapter implements SourceAdapter {
       const res = await fetch("https://hack2skill.com/sitemap.xml", {
         headers: {
           "User-Agent":
-            "SideQuestBot/1.0 (+https://sidequest.app; student hackathon aggregator)",
+            "BuildSeekBot/1.0 (+https://buildseek.app; student hackathon aggregator)",
         },
         signal: controller.signal,
       });

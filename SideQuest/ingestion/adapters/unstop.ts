@@ -32,7 +32,7 @@ export class UnstopAdapter implements SourceAdapter {
         {
           headers: {
             "User-Agent":
-              "SideQuestBot/1.0 (+https://sidequest.app; student hackathon aggregator)",
+              "BuildSeekBot/1.0 (+https://buildseek.app; student hackathon aggregator)",
             Accept: "application/json",
           },
           signal: controller.signal,

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "SideQuest — Every Hackathon. One Place. Never Miss a Deadline.";
+export const alt = "BuildSeek — Every Hackathon. One Place. Never Miss a Deadline.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,7 +45,7 @@ export default async function Image() {
               letterSpacing: "-0.5px",
             }}
           >
-            sidequest.
+            buildseek.
           </div>
         </div>
 

@@ -17,7 +17,7 @@ export function PhonePreview() {
         <div className="sq-phone-content">
           <div className="sq-phone-brand">
             <span>
-              <Zap size={15} fill="currentColor" /> sidequest.
+              <Zap size={15} fill="currentColor" /> buildseek.
             </span>
             <span className="sq-mini-avatar">U</span>
           </div>
@@ -59,7 +59,7 @@ export function PhonePreview() {
       </div>
       <div className="sq-float-chip sq-float-saved">
         <Bookmark size={18} fill="currentColor" />
-        <span>Saved. Sorted. SideQuest.</span>
+        <span>Saved. Sorted. BuildSeek.</span>
       </div>
       <Mascot className="sq-hero-mascot" />
       <span className="sq-scene-spark sq-scene-spark-one">✳</span>

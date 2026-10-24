@@ -1,13 +1,13 @@
 # Architectural & Technical Decisions Log
 
-This document records all meaningful architectural decisions, library selections, and accepted trade-offs across SideQuest.
+This document records all meaningful architectural decisions, library selections, and accepted trade-offs across BuildSeek.
 
 ---
 
 ## 1. Multi-Source Ingestion Pipeline with Fault Isolation
 
 ### Context
-SideQuest aggregates hackathon opportunities across multiple platforms: Curated real data, Devpost, Unstop, Devfolio, and Hack2skill. External platforms can suffer API rate limits, schema drifts, or network timeouts.
+BuildSeek aggregates hackathon opportunities across multiple platforms: Curated real data, Devpost, Unstop, Devfolio, and Hack2skill. External platforms can suffer API rate limits, schema drifts, or network timeouts.
 
 ### Decision
 - **SourceAdapter Interface**: Standardized adapter pattern (`isEnabled()`, `fetchListings(useFixture)`, `normalize(raw)`).
@@ -16,7 +16,7 @@ SideQuest aggregates hackathon opportunities across multiple platforms: Curated 
 
 ### Alternatives Considered
 - *Monolithic Scraper Script*: Single failure aborts entire scraping process, leading to data loss.
-- *Distributed Task Queue (Celery/BullMQ)*: Heavy operational complexity with Redis/worker infrastructure unnecessary for SideQuest's batch cron workflow.
+- *Distributed Task Queue (Celery/BullMQ)*: Heavy operational complexity with Redis/worker infrastructure unnecessary for BuildSeek's batch cron workflow.
 
 ### Trade-Offs Accepted
 - Adapters are executed sequentially in a single process rather than asynchronously in parallel to respect rate limits of free target endpoints and avoid triggering anti-bot IP bans.

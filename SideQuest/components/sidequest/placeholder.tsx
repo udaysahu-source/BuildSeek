@@ -13,14 +13,14 @@ export function Placeholder({
   return (
     <main className="sq-placeholder sq-container">
       <Link href="/" className="sq-placeholder-top">
-        <ArrowLeft size={16} /> Back to SideQuest
+        <ArrowLeft size={16} /> Back to BuildSeek
       </Link>
       <div className="sq-placeholder-body">
         <div>
           <span className="sq-coming-tag">The next quest is loading</span>
           <h1>{title}</h1>
           <p>{description}</p>
-          <p>This page is coming in the next chapter. Until then, meet SideQuest.</p>
+          <p>This page is coming in the next chapter. Until then, meet BuildSeek.</p>
           <div className="sq-placeholder-actions">
             <Button asChild>
               <Link href="/">
@@ -40,16 +40,16 @@ export function Placeholder({
 
 export function pageHead(title: string, description: string) {
   return {
-    title: `${title} — SideQuest`,
+    title: `${title} — BuildSeek`,
     description,
     openGraph: {
-      title: `${title} — SideQuest`,
+      title: `${title} — BuildSeek`,
       description,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} — SideQuest`,
+      title: `${title} — BuildSeek`,
       description,
     },
   };

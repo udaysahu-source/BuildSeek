@@ -4,9 +4,9 @@ import { ShieldCheck, Mail, MapPin, Clock, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | SideQuest",
+  title: "Privacy Policy | BuildSeek",
   description:
-    "Privacy Policy for SideQuest, detailing compliance with the Digital Personal Data Protection (DPDP) Act 2023 and GDPR.",
+    "Privacy Policy for BuildSeek, detailing compliance with the Digital Personal Data Protection (DPDP) Act 2023 and GDPR.",
   alternates: {
     canonical: "https://sidequest.camp/privacy",
   },
@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
             1. Overview & Data Fiduciary
           </h2>
           <p>
-            SideQuest (“we”, “us”, or “our”) is dedicated to building tools for India’s student builders and hackathon
+            BuildSeek (“we”, “us”, or “our”) is dedicated to building tools for India’s student builders and hackathon
             participants. We value your digital privacy and ensure full compliance with the{" "}
             <strong>Digital Personal Data Protection Act, 2023 (DPDP Act, India)</strong>, the{" "}
             <strong>General Data Protection Regulation (GDPR, EU)</strong>, and applicable global privacy laws.
@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
           </h2>
           <p>
             Under Section 12 of the DPDP Act and Article 17 of the GDPR, you maintain an absolute right to erasure.
-            SideQuest provides an automated, self-serve data erasure tool:
+            BuildSeek provides an automated, self-serve data erasure tool:
           </p>
           <div
             style={{
@@ -171,7 +171,7 @@ export default function PrivacyPolicyPage() {
             6. Cookies & Tracking
           </h2>
           <p>
-            SideQuest does not use cross-site tracking cookies, behavioral ad-tech beacons, or fingerprinting scripts. We only utilize strictly necessary functional local storage keys for your dark/light UI preference and encrypted Supabase session tokens.
+            BuildSeek does not use cross-site tracking cookies, behavioral ad-tech beacons, or fingerprinting scripts. We only utilize strictly necessary functional local storage keys for your dark/light UI preference and encrypted Supabase session tokens.
           </p>
         </section>
 
@@ -202,7 +202,7 @@ export default function PrivacyPolicyPage() {
               </a>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <MapPin size={15} /> <strong>Jurisdiction & Address:</strong> SideQuest Technologies, Raipur, Chhattisgarh, India - 492001
+              <MapPin size={15} /> <strong>Jurisdiction & Address:</strong> BuildSeek Technologies, Raipur, Chhattisgarh, India - 492001
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <Clock size={15} /> <strong>Response SLA:</strong> Acknowledged within 24 hours; resolved within 72 hours.

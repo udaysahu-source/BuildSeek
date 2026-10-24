@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ SideQuest
+# ⚡ BuildSeek
 ### Every Hackathon. One Place. Never Miss a Deadline.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.4-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -13,7 +13,7 @@
 
 <br />
 
-**SideQuest** aggregates developer sprints, college hackathons, and global open-innovation challenges from Devfolio, Unstop, Devpost, Hack2skill, and community boards into a single, high-contrast, zero-fluff dashboard with live countdown radars, personalized match scoring, and calendar sync.
+**BuildSeek** aggregates developer sprints, college hackathons, and global open-innovation challenges from Devfolio, Unstop, Devpost, Hack2skill, and community boards into a single, high-contrast, zero-fluff dashboard with live countdown radars, personalized match scoring, and calendar sync.
 
 [**Explore Live App**](https://sidequesttt.vercel.app) • [**Report Vulnerability**](#-security--hardening) • [**Ingestion Pipeline**](#-multi-source-ingestion-pipeline) • [**Contributing**](#-contributing)
 
@@ -26,7 +26,7 @@
 - ⏱️ **Deadline Radar**: Live countdown clocks and dynamic urgency states (`closing_soon`, `open`, `upcoming`, `closed`). Never miss a registration window again.
 - 🎯 **Match Scoring Engine**: Calculates relevance score (0–100%) based on your technical skills, graduation year, team size, and geographical proximity.
 - 📅 **One-Click iCal & Google Calendar Sync**: Live subscription feeds (`/api/calendar/[token]`) that automatically sync deadlines to your Apple or Google Calendar.
-- 🤖 **Telegram Alert Integration**: Direct notifications via `@SideQuestAlertsBot` with timing-safe cryptographically signed webhooks.
+- 🤖 **Telegram Alert Integration**: Direct notifications via `@BuildSeekAlertsBot` with timing-safe cryptographically signed webhooks.
 - 🔍 **Multi-Source Aggregation**: Automated scraping and normalization across Devpost, Devfolio, Unstop, and college hackathon portals.
 - 🛡️ **Hardened for Production**: Zero-trust BOLA defenses, Row-Level Security (RLS) across all tables, sliding-window rate limiting, and strict Zod runtime schema validation.
 - 🎨 **Neo-Brutalist Visual Identity**: High-contrast, tactile parchment & ink styling tailored for high readability and lightning-fast loading speeds on mobile networks.
@@ -35,7 +35,7 @@
 
 ## 🏗️ Architecture & Technical Design
 
-SideQuest combines an **in-memory edge dataset** for sub-10ms query execution with an **event-driven Supabase PostgreSQL mirror** for persistent bookmarks, user profiles, and alert rules.
+BuildSeek combines an **in-memory edge dataset** for sub-10ms query execution with an **event-driven Supabase PostgreSQL mirror** for persistent bookmarks, user profiles, and alert rules.
 
 ```mermaid
 graph TD
@@ -70,7 +70,7 @@ graph TD
 
 ## 🛡️ Security & Hardening Guarantees
 
-SideQuest is hardened according to enterprise security standards:
+BuildSeek is hardened according to enterprise security standards:
 
 | Security Vector | Implementation Detail | Primary Module |
 | :--- | :--- | :--- |
@@ -91,8 +91,8 @@ SideQuest is hardened according to enterprise security standards:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/sidequest.git
-cd sidequest
+git clone https://github.com/your-username/buildseek.git
+cd buildseek
 ```
 
 ### 2. Install Dependencies
@@ -126,7 +126,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🧪 Testing Suite
 
-SideQuest includes comprehensive unit, integration, and security tests powered by **Vitest**:
+BuildSeek includes comprehensive unit, integration, and security tests powered by **Vitest**:
 
 ```bash
 # Run all tests once
@@ -146,7 +146,7 @@ Test coverage includes:
 
 ## 🤖 Multi-Source Ingestion Pipeline
 
-SideQuest runs an automated ingestion pipeline to discover new hackathons:
+BuildSeek runs an automated ingestion pipeline to discover new hackathons:
 
 ```bash
 # Dry run: fetch and normalize without writing to disk or database

@@ -163,7 +163,7 @@ function QuestLogView() {
                   </div>
                   <div>
                     <strong style={{ fontSize: "14px", display: "block", color: "var(--ink)" }}>
-                      Sync your Quest Log with @SideQuestAlertsBot
+                      Sync your Quest Log with @BuildSeekAlertsBot
                     </strong>
                     <span style={{ fontSize: "12px", color: "#475569" }}>
                       Get instant 24h & 3h Telegram pings for your {saved.length} saved {saved.length === 1 ? "quest" : "quests"}.
@@ -172,7 +172,7 @@ function QuestLogView() {
                 </div>
                 <Button asChild size="sm" style={{ background: "#229ED9", color: "#fff", fontWeight: 700 }}>
                   <a
-                    href="https://t.me/SideQuestAlertsBot?start=sync_saved_quests"
+                    href="https://t.me/BuildSeekAlertsBot?start=sync_saved_quests"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

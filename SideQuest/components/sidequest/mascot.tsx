@@ -48,8 +48,8 @@ export function Mascot({
       role={interactive ? "button" : undefined}
       aria-label={
         interactive
-          ? "SideQuest Mascot. Click for advice and cheers!"
-          : "SideQuest Mascot"
+          ? "BuildSeek Mascot. Click for advice and cheers!"
+          : "BuildSeek Mascot"
       }
       style={{ position: "relative", display: "inline-block", outline: "none" }}
     >

@@ -19,7 +19,7 @@ export function Footer() {
             <Link href="/alerts">Stay in the loop</Link>
             <Link href="/contact">Contact</Link>
             <a
-              href="https://t.me/SideQuestAlertsBot"
+              href="https://t.me/BuildSeekAlertsBot"
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "inline-flex", alignItems: "center", gap: "5px", color: "var(--brand)" }}
@@ -30,7 +30,7 @@ export function Footer() {
         </div>
         <div className="sq-footer-bottom">
           <div className="flex flex-wrap items-center gap-4 text-xs">
-            <span>© 2026 SideQuest. Built for the builders.</span>
+            <span>© 2026 BuildSeek. Built for the builders.</span>
             <span className="text-muted-foreground">•</span>
             <Link href="/privacy" className="hover:underline">Privacy</Link>
             <Link href="/terms" className="hover:underline">Terms</Link>

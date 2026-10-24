@@ -1,6 +1,6 @@
 # System Execution Flow & Call Graph
 
-This document details the exact execution paths, entry points, sequence of operations, and cross-module function call graphs for SideQuest.
+This document details the exact execution paths, entry points, sequence of operations, and cross-module function call graphs for BuildSeek.
 
 ---
 

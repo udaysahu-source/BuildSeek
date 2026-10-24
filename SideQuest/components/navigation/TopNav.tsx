@@ -28,7 +28,7 @@ export const TopNav: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-display font-extrabold text-xl text-ink tracking-tight flex items-center gap-1">
-              SideQuest
+              BuildSeek
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-lime rounded border border-ink text-ink ml-1">
                 Beta
               </span>

@@ -347,7 +347,7 @@ export function HackathonDetail({
                 <p>Get instant 24-hour and 3-hour deadline notifications delivered straight to your Telegram chat.</p>
               </div>
               <a
-                href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+                href={`https://t.me/BuildSeekAlertsBot?start=event_${event.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="sq-telegram-quest-btn"
@@ -708,7 +708,7 @@ export function HackathonDetail({
           }}
         >
           <a
-            href={`https://t.me/SideQuestAlertsBot?start=event_${event.id}`}
+            href={`https://t.me/BuildSeekAlertsBot?start=event_${event.id}`}
             target="_blank"
             rel="noopener noreferrer"
             title="Get 24h & 3h deadline alert on Telegram"

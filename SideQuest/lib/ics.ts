@@ -20,12 +20,12 @@ function escapeIcsText(text: string): string {
  */
 export function generateIcsFeed(
   hackathons: Hackathon[],
-  calendarName: string = "SideQuest Bookmarked Hackathons"
+  calendarName: string = "BuildSeek Bookmarked Hackathons"
 ): string {
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//SideQuest//Hackathon Radar v1.0//EN",
+    "PRODID:-//BuildSeek//Hackathon Radar v1.0//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${escapeIcsText(calendarName)}`,

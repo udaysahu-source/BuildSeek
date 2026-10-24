@@ -18,7 +18,7 @@ import devpostFixture from "@/ingestion/fixtures/devpost.json";
 import curatedFixture from "@/ingestion/fixtures/curated.json";
 import hack2skillFixture from "@/ingestion/fixtures/hack2skill.json";
 
-describe("SideQuest Auto-Ingest Pipeline", () => {
+describe("BuildSeek Auto-Ingest Pipeline", () => {
   const origEnv = { ...process.env };
 
   beforeEach(() => {

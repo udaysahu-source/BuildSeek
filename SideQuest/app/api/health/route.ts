@@ -34,7 +34,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     status: "ok",
-    app: "SideQuest",
+    app: "BuildSeek",
     timestamp,
     supabase: supabaseStatus,
   });

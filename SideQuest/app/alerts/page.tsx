@@ -49,7 +49,7 @@ export default function AlertsPage() {
     setTimeout(() => {
       setEmailLoading(false);
       setEmailSubscribed(true);
-      toast.success("Subscribed to the SideQuest weekly digest!");
+      toast.success("Subscribed to the BuildSeek weekly digest!");
     }, 400);
   };
 
@@ -92,7 +92,7 @@ export default function AlertsPage() {
             </p>
 
             <ol style={{ fontSize: "13px", color: "var(--foreground)", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px", paddingLeft: "20px" }}>
-              <li>Click the button below to open <strong>@SideQuestAlertsBot</strong></li>
+              <li>Click the button below to open <strong>@BuildSeekAlertsBot</strong></li>
               <li>Press <strong>Start</strong> in Telegram</li>
               <li>Receive reminders 24h & 3h before registrations close</li>
             </ol>
@@ -109,11 +109,11 @@ export default function AlertsPage() {
             }}
           >
             <a
-              href="https://t.me/SideQuestAlertsBot?start=web_connect"
+              href="https://t.me/BuildSeekAlertsBot?start=web_connect"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Send size={16} /> Open @SideQuestAlertsBot <ArrowUpRight size={16} />
+              <Send size={16} /> Open @BuildSeekAlertsBot <ArrowUpRight size={16} />
             </a>
           </Button>
         </section>
@@ -147,7 +147,7 @@ export default function AlertsPage() {
             }}
           >
             <div style={{ color: "#B6F500", fontWeight: 700, fontSize: "14px", marginBottom: "4px" }}>
-              ⏰ SideQuest Deadline Alert
+              ⏰ BuildSeek Deadline Alert
             </div>
             <div style={{ fontWeight: 600, fontSize: "15px", marginBottom: "6px" }}>
               OpenCV AI Competition 2026

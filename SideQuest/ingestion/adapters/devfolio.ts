@@ -30,7 +30,7 @@ export class DevfolioAdapter implements SourceAdapter {
       const res = await fetch("https://api.devfolio.co/api/hackathons?filter=all", {
         headers: {
           "User-Agent":
-            "SideQuestBot/1.0 (+https://sidequest.app; student hackathon aggregator)",
+            "BuildSeekBot/1.0 (+https://buildseek.app; student hackathon aggregator)",
           Accept: "application/json",
         },
         signal: controller.signal,

@@ -14,7 +14,7 @@ export default function ErrorBoundary({
 }) {
   useEffect(() => {
     // Log sanitized error telemetry
-    console.error("[SideQuest Client Error]", error);
+    console.error("[BuildSeek Client Error]", error);
   }, [error]);
 
   return (

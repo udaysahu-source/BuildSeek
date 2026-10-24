@@ -237,7 +237,7 @@ function DiscoverView() {
             <Sparkles size={13} /> Your next main character moment
           </span>
           <h1>
-            Find your next <span>SideQuest.</span>
+            Find your next <span>BuildSeek.</span>
           </h1>
           <p>Big ideas, fresh challenges, and a deadline worth beating.</p>
         </div>

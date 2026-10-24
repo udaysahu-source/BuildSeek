@@ -23,7 +23,7 @@ function formatLog(level: LogLevel, payload: LogPayload) {
   return {
     timestamp,
     level,
-    context: payload.context || "SideQuest",
+    context: payload.context || "BuildSeek",
     message: redactPII(payload.message),
     ...(safeData ? { data: safeData } : {}),
     ...(safeError ? { error: safeError } : {}),

@@ -4,9 +4,9 @@ import { RotateCcw, CreditCard, Clock, Mail, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy | SideQuest",
+  title: "Refund & Cancellation Policy | BuildSeek",
   description:
-    "Refund and Cancellation Policy for SideQuest services, partnerships, and event listings.",
+    "Refund and Cancellation Policy for BuildSeek services, partnerships, and event listings.",
   alternates: {
     canonical: "https://sidequest.camp/refunds",
   },
@@ -50,7 +50,7 @@ export default function RefundsPage() {
             1. Free Tier for Students & Hackers
           </h2>
           <p>
-            SideQuest is completely free for students, developers, and campus builders. Browsing the hackathon directory, bookmarking events, exporting iCal feeds, and receiving automated Telegram reminders are free of cost. No subscription fees or payment methods are collected for student participation.
+            BuildSeek is completely free for students, developers, and campus builders. Browsing the hackathon directory, bookmarking events, exporting iCal feeds, and receiving automated Telegram reminders are free of cost. No subscription fees or payment methods are collected for student participation.
           </p>
         </section>
 
@@ -59,7 +59,7 @@ export default function RefundsPage() {
             2. Featured Organizer Listings & Sponsorships
           </h2>
           <p>
-            Hackathon organizers, collegiate societies, and enterprise sponsors may purchase featured placement, spotlight newsletter mentions, or priority broadcast alerts on SideQuest. The following refund and cancellation conditions apply:
+            Hackathon organizers, collegiate societies, and enterprise sponsors may purchase featured placement, spotlight newsletter mentions, or priority broadcast alerts on BuildSeek. The following refund and cancellation conditions apply:
           </p>
           <ul style={{ listStyleType: "disc", paddingLeft: "24px", marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
             <li>
@@ -69,7 +69,7 @@ export default function RefundsPage() {
               <strong>Live Campaigns:</strong> Once a featured badge, banner, or Telegram broadcast blast has been deployed to our audience, listing fees are <strong>non-refundable</strong> due to immediate distribution of impressions and clicks.
             </li>
             <li>
-              <strong>Technical Non-Delivery:</strong> In the rare event that a verified technical failure on SideQuest prevents your paid event from being displayed as agreed, we will either extend your placement or issue a <strong>100% full refund</strong> within 5 to 7 business days.
+              <strong>Technical Non-Delivery:</strong> In the rare event that a verified technical failure on BuildSeek prevents your paid event from being displayed as agreed, we will either extend your placement or issue a <strong>100% full refund</strong> within 5 to 7 business days.
             </li>
           </ul>
         </section>

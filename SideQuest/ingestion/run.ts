@@ -231,7 +231,7 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
 
 // Direct CLI execution
 if (require.main === module || process.argv[1]?.includes("run.ts")) {
-  console.log("🚀 Starting SideQuest Auto-Ingest Pipeline...");
+  console.log("🚀 Starting BuildSeek Auto-Ingest Pipeline...");
   const useFixture = process.argv.includes("--fixture");
   const dryRun = process.argv.includes("--dry-run");
 

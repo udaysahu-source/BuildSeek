@@ -121,7 +121,7 @@ export function AuthForm({ next = "/quest-log" }: { next?: AuthDestination | str
         <h1>
           Your next
           <br />
-          SideQuest.
+          BuildSeek.
         </h1>
         <p>Big ideas deserve a place on the board.</p>
         <Mascot className="sq-auth-mascot" />

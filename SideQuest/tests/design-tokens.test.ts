@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-describe("SideQuest Design Tokens", () => {
+describe("BuildSeek Design Tokens", () => {
   it("defines exact colors from approved mockups", () => {
     const tokens = {
       parchment: "#FFFBE8",

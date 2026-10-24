@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: DetailPageProps) {
   const { id } = await params;
   const hackathon = await getHackathonById(id);
   if (!hackathon) {
-    return { title: "Quest not found — SideQuest" };
+    return { title: "Quest not found — BuildSeek" };
   }
   return {
-    title: `${hackathon.title} — SideQuest`,
+    title: `${hackathon.title} — BuildSeek`,
     description: `Explore ${hackathon.title}. Deadlines, prize pool, team size, eligibility, and direct registration details.`,
   };
 }
