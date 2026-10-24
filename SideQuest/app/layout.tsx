@@ -25,12 +25,23 @@ const safeAppUrl = rawUrl.startsWith("http://") || rawUrl.startsWith("https://")
 
 export const metadata: Metadata = {
   metadataBase: new URL(safeAppUrl),
-  title: "Every hackathon. One place. — BuildSeek",
+  title: {
+    default: "BuildSeek — Every hackathon. One place.",
+    template: "%s | BuildSeek",
+  },
   description:
     "Find your next hackathon with BuildSeek. One place for Indian student hackathons, deadlines, saved events, and reminders.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
