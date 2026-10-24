@@ -55,17 +55,25 @@ export function AuthForm({ next = "/quest-log" }: { next?: AuthDestination | str
         if (error) throw error;
         setNotice("If an account exists, a password reset link is on its way. Check your inbox.");
       } else if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+          },
         });
         if (error) throw error;
-        setNotice("Check your email to confirm your account, then come back to log in.");
+        if (data.session) {
+          router.replace(next);
+        } else {
+          setNotice("Check your email to confirm your account, then come back to log in.");
+        }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        router.replace(next);
+        if (data.user) {
+          router.replace(next);
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
