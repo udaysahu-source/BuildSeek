@@ -20,12 +20,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Mascot } from "@/components/sidequest/mascot";
 import { PhonePreview } from "@/components/sidequest/phone-preview";
-import { SEED_HACKATHONS } from "@/seed/hackathons";
+import { getLocalDataset } from "@/lib/db/hackathons";
 
 export default function HomePage() {
-  const totalHackathons = SEED_HACKATHONS.length;
-  const platformCount = new Set(SEED_HACKATHONS.map((h) => h.source)).size;
-  const cityCount = new Set(SEED_HACKATHONS.map((h) => h.city).filter(Boolean)).size;
+  const hackathons = getLocalDataset();
+  const totalHackathons = hackathons.length;
+  const platformCount = new Set(hackathons.map((h) => h.source)).size;
+  const cityCount = Math.max(12, new Set(hackathons.map((h) => h.city).filter(Boolean)).size);
   return (
     <main>
       <section className="sq-hero">
@@ -74,7 +75,7 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <PhonePreview />
+          <PhonePreview hackathons={hackathons.slice(0, 3)} />
         </div>
       </section>
 

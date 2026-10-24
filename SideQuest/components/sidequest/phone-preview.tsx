@@ -3,8 +3,13 @@
 import { useState, useEffect } from "react";
 import { ArrowUpRight, Bookmark, Clock3, Globe2, MapPin, Sparkles, Trophy, Users, Zap } from "lucide-react";
 import { Mascot } from "./mascot";
+import { Hackathon } from "@/lib/types";
+import { cleanPrizeText } from "@/lib/hackathons";
 
-export function PhonePreview() {
+export function PhonePreview({ hackathons }: { hackathons?: Hackathon[] }) {
+  const card1 = hackathons?.[0];
+  const card2 = hackathons?.[1];
+
   return (
     <div className="sq-phone-scene" aria-label="Preview featuring verified hackathons with live countdowns">
       <span className="sq-orbit sq-orbit-one" />
@@ -31,21 +36,35 @@ export function PhonePreview() {
             <span>Online</span>
           </div>
           <SampleCard
-            title="OpenCV AI Competition 2026"
-            organizer="OpenCV, sponsored by AWS"
-            prize="$20,250"
-            mode="Online"
-            location="Global"
-            tag="Computer Vision"
+            title={card1 ? card1.title : "OpenCV AI Competition 2026"}
+            organizer={card1 ? card1.organizer : "OpenCV, sponsored by AWS"}
+            prize={
+              card1
+                ? cleanPrizeText({
+                    prize_amount_inr: card1.prize_amount_inr ?? 0,
+                    prize_text: card1.prize_text,
+                  })
+                : "$20,250"
+            }
+            mode={card1 ? (card1.mode === "online" ? "Online" : card1.mode === "offline" ? "In-Person" : "Hybrid") : "Online"}
+            location={card1 ? (card1.city || "Global") : "Global"}
+            tag={card1?.tags?.[0] || "AI / ML"}
             kind="build"
           />
           <SampleCard
-            title="ETHIndia 2026"
-            organizer="Devfolio & Ethereum Community"
-            prize="₹85,00,000"
-            mode="Offline"
-            location="Bengaluru"
-            tag="Web3"
+            title={card2 ? card2.title : "Bengaluru ETH Buildathon 2026"}
+            organizer={card2 ? card2.organizer : "Devfolio Web3 Guild"}
+            prize={
+              card2
+                ? cleanPrizeText({
+                    prize_amount_inr: card2.prize_amount_inr ?? 0,
+                    prize_text: card2.prize_text,
+                  })
+                : "₹10,00,000"
+            }
+            mode={card2 ? (card2.mode === "online" ? "Online" : card2.mode === "offline" ? "In-Person" : "Hybrid") : "In-Person"}
+            location={card2 ? (card2.city || "Bengaluru") : "Bengaluru"}
+            tag={card2?.tags?.[0] || "Web3"}
             kind="horizon"
           />
           <div className="sq-phone-label">Verified events · Live deadlines</div>
@@ -54,7 +73,7 @@ export function PhonePreview() {
       </div>
       <div className="sq-float-chip sq-float-deadline">
         <span className="sq-status-dot" />
-        <LiveTicker targetIso="2026-10-27T06:59:00Z" fallback="11d : 14h : 38m" />
+        <LiveTicker targetIso={card1?.reg_deadline || "2026-10-27T06:59:00Z"} fallback="11d : 14h : 38m" />
         <span>left to make your move</span>
       </div>
       <div className="sq-float-chip sq-float-saved">

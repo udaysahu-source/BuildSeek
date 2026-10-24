@@ -25,25 +25,39 @@ export class DevpostAdapter implements SourceAdapter {
     }
 
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
+      const allListings: RawItem[] = [];
+      const pagesToFetch = [1, 2, 3, 4];
 
-      const res = await fetch("https://devpost.com/api/hackathons?page=1", {
-        headers: {
-          "User-Agent":
-            "BuildSeekBot/1.0 (+https://buildseek.app; student hackathon aggregator)",
-          Accept: "application/json",
-        },
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
+      for (const pageNum of pagesToFetch) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 8000);
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status} from Devpost API`);
+          const res = await fetch(`https://devpost.com/api/hackathons?page=${pageNum}`, {
+            headers: {
+              "User-Agent":
+                "BuildSeekBot/1.0 (+https://buildseek.app; student hackathon aggregator)",
+              Accept: "application/json",
+            },
+            signal: controller.signal,
+          });
+          clearTimeout(timeout);
+
+          if (res.ok) {
+            const json = await res.json();
+            if (Array.isArray(json?.hackathons)) {
+              allListings.push(...json.hackathons);
+            }
+          }
+        } catch {
+          // Continue with what we have
+        }
       }
 
-      const json = await res.json();
-      return json?.hackathons || [];
+      if (allListings.length > 0) {
+        return allListings;
+      }
+      throw new Error("No listings retrieved from Devpost");
     } catch (err) {
       console.warn("Devpost live fetch failed, using fixture fallback if available:", err);
       const fixturePath = path.join(
@@ -119,20 +133,36 @@ export class DevpostAdapter implements SourceAdapter {
       }
     }
 
+    // Discard hackathons closed for more than 7 days per retention requirement
+    if (regDeadline) {
+      const deadlineTime = new Date(regDeadline).getTime();
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      if (!isNaN(deadlineTime) && deadlineTime < Date.now() - SEVEN_DAYS_MS) {
+        return null;
+      }
+    }
+
     // Parse prize amount
     let prizeAmount: number | null = null;
     let prizeText: string | null = null;
+    let prizeAmountInr: number | null = null;
+    let prizeCurrency = "USD";
+
     if (raw.prize_amount) {
       const cleanText = String(raw.prize_amount).replace(/<[^>]+>/g, "").trim();
       prizeText = cleanText;
       const digits = cleanText.replace(/[^0-9]/g, "");
       if (digits) {
         prizeAmount = parseInt(digits, 10);
+        if (cleanText.includes("₹") || cleanText.includes("INR") || cleanText.includes("rupee")) {
+          prizeCurrency = "INR";
+          prizeAmountInr = prizeAmount;
+        } else {
+          prizeCurrency = "USD";
+          prizeAmountInr = Math.round(prizeAmount * 85);
+        }
       }
     }
-
-    // Derived INR from USD
-    const prizeAmountInr = prizeAmount ? Math.round(prizeAmount * 85) : null;
 
     const organizer = (raw.organization_name || "Devpost Partner").trim();
     const organizerType = detectOrganizerType(organizer);

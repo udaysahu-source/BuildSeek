@@ -81,7 +81,10 @@ export class UnstopAdapter implements SourceAdapter {
       raw.approved_date ||
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    if (!regDeadline) {
+    // Discard hackathons closed for more than 7 days per retention requirement
+    const deadlineTime = new Date(regDeadline).getTime();
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+    if (isNaN(deadlineTime) || deadlineTime < Date.now() - SEVEN_DAYS_MS) {
       return null;
     }
 
@@ -92,12 +95,67 @@ export class UnstopAdapter implements SourceAdapter {
         ? "hybrid"
         : "offline";
 
-    const prizeAmount =
-      typeof raw.prize_amount === "number"
-        ? raw.prize_amount
-        : raw.prizes
-        ? parseInt(String(raw.prizes).replace(/[^0-9]/g, ""), 10) || 0
-        : 0;
+    // Clean prize parsing
+    let calculatedPrizeAmount = 0;
+    let cleanPrizeText: string | null = null;
+
+    if (typeof raw.prize_amount === "number" && raw.prize_amount > 0) {
+      calculatedPrizeAmount = raw.prize_amount;
+      cleanPrizeText = `₹${calculatedPrizeAmount.toLocaleString("en-IN")}`;
+    } else if (Array.isArray(raw.prizes)) {
+      let sum = 0;
+      const rankList: string[] = [];
+      for (const p of raw.prizes) {
+        const cashVal = Number(p.cash) || 0;
+        sum += cashVal;
+        if (p.rank) {
+          if (cashVal > 0) {
+            rankList.push(`${p.rank}: ₹${cashVal.toLocaleString("en-IN")}`);
+          } else if (p.certificate) {
+            rankList.push(`${p.rank}: Certificate`);
+          }
+        }
+      }
+      if (sum > 0) {
+        calculatedPrizeAmount = sum;
+        cleanPrizeText = `₹${sum.toLocaleString("en-IN")}`;
+      } else if (rankList.length > 0) {
+        cleanPrizeText = rankList.slice(0, 2).join(", ");
+      } else {
+        cleanPrizeText = "Certificates & Swag";
+      }
+    } else if (typeof raw.prizes === "string" && raw.prizes.trim()) {
+      const trimmed = raw.prizes.trim();
+      if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            let sum = 0;
+            for (const p of parsed) {
+              sum += Number(p.cash) || 0;
+            }
+            if (sum > 0) {
+              calculatedPrizeAmount = sum;
+              cleanPrizeText = `₹${sum.toLocaleString("en-IN")}`;
+            } else {
+              cleanPrizeText = "Certificates & Swag";
+            }
+          }
+        } catch {
+          cleanPrizeText = "Prizes in kind";
+        }
+      } else {
+        const digits = parseInt(trimmed.replace(/[^0-9]/g, ""), 10);
+        if (digits > 0) {
+          calculatedPrizeAmount = digits;
+          cleanPrizeText = `₹${digits.toLocaleString("en-IN")}`;
+        } else {
+          cleanPrizeText = trimmed.length > 50 ? `${trimmed.slice(0, 47)}…` : trimmed;
+        }
+      }
+    }
+
+    const prizeAmount = calculatedPrizeAmount;
 
     const organizer = (raw.organisation?.name || raw.organisation || raw.organizer || "Unstop Organizers").trim();
     const organizerType = detectOrganizerType(organizer);
@@ -130,7 +188,7 @@ export class UnstopAdapter implements SourceAdapter {
       country: "India",
       prize_amount: prizeAmount > 0 ? prizeAmount : null,
       prize_amount_inr: prizeAmount > 0 ? prizeAmount : null,
-      prize_text: raw.prizes || (prizeAmount > 0 ? `₹${prizeAmount.toLocaleString("en-IN")}` : null),
+      prize_text: cleanPrizeText,
       team_min: raw.team_min ? Number(raw.team_min) : 1,
       team_max: raw.team_max ? Number(raw.team_max) : 4,
       tags,
@@ -165,7 +223,7 @@ export class UnstopAdapter implements SourceAdapter {
       deadline_precision: "exact",
       fee_type: feeType,
       fee_amount_inr: feeAmountInr,
-      prize_text: raw.prizes || (prizeAmount > 0 ? `₹${prizeAmount.toLocaleString("en-IN")}` : null),
+      prize_text: cleanPrizeText,
       prize_amount: prizeAmount > 0 ? prizeAmount : null,
       prize_currency: "INR",
       prize_amount_inr: prizeAmount > 0 ? prizeAmount : null,

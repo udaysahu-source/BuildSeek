@@ -84,7 +84,7 @@ export function DiscoveryFiltersPanel({
       {/* 1. Price Segmented Control (v2) */}
       <fieldset>
         <legend>Price</legend>
-        <div className="sq-filter-options">
+        <div className="sq-filter-options sq-filter-options-3">
           {[
             { id: "all", label: "All" },
             { id: "free", label: "Free" },
@@ -110,7 +110,7 @@ export function DiscoveryFiltersPanel({
       {/* 2. Scope Chips (v2) */}
       <fieldset>
         <legend>Scope</legend>
-        <div className="sq-filter-options">
+        <div className="sq-filter-options sq-filter-options-2">
           {[
             { id: "global", label: "Global" },
             { id: "national", label: "National" },
@@ -227,7 +227,7 @@ export function DiscoveryFiltersPanel({
       {/* 4. Mode */}
       <fieldset>
         <legend>Mode</legend>
-        <div className="sq-filter-options">
+        <div className="sq-filter-options sq-filter-options-3">
           {(["online", "offline", "hybrid"] as const).map((mode) => (
             <Button
               key={mode}

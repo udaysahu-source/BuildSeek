@@ -11,11 +11,9 @@ import { Mascot } from "@/components/sidequest/mascot";
 import { Button } from "@/components/ui/button";
 import { normalizeHackathon, type HackathonUI } from "@/lib/hackathons";
 import { questGroups, questTab, type QuestTab } from "@/lib/quests";
-import { getHackathons } from "@/lib/db/hackathons";
+import { getHackathons, getLocalDataset } from "@/lib/db/hackathons";
 import { EmptyState } from "@/components/ui/states/EmptyState";
 import { ErrorState } from "@/components/ui/states/ErrorState";
-
-import { SEED_HACKATHONS } from "@/seed/hackathons";
 
 function QuestLogView() {
   const router = useRouter();
@@ -25,7 +23,7 @@ function QuestLogView() {
   const { user, loading: authLoading } = useAuth();
   const { saved, loading: bookmarksLoading, error } = useBookmarks();
   const [allEvents, setAllEvents] = useState<HackathonUI[]>(() =>
-    SEED_HACKATHONS.map(normalizeHackathon)
+    getLocalDataset().map(normalizeHackathon)
   );
   const [dataLoading, setDataLoading] = useState(false);
   const [calendarCopied, setCalendarCopied] = useState(false);

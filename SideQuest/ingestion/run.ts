@@ -170,7 +170,6 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
   }
 
   // Aging out rule: "Rows a healthy source stops listing for 14 days get hidden: true."
-  // "A source that fails never breaks the others, and its rows are never aged out."
   const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
   for (const h of existingHackathons) {
     if (healthySources.has(h.source)) {
@@ -179,6 +178,57 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
         h.hidden = true;
       }
     }
+  }
+
+  // Pruning rule: Closed hackathons are kept for only 7 days after deadline, then deleted
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const nowMs = Date.now();
+  const cleanedHackathons: Hackathon[] = [];
+
+  for (const h of existingHackathons) {
+    // 1. Check deadline age: delete if closed > 7 days
+    if (h.reg_deadline) {
+      const deadlineTime = new Date(h.reg_deadline).getTime();
+      if (!isNaN(deadlineTime) && (nowMs - deadlineTime) > SEVEN_DAYS_MS) {
+        continue; // Pruned / deleted
+      }
+    }
+
+    // 2. Sanitize prizes: ensure no raw JSON array or string leaks
+    if (Array.isArray(h.prize_text)) {
+      let sum = 0;
+      for (const p of h.prize_text as any[]) {
+        sum += Number(p.cash) || 0;
+      }
+      if (sum > 0) {
+        h.prize_amount_inr = sum;
+        h.prize_text = `₹${sum.toLocaleString("en-IN")}`;
+      } else {
+        h.prize_text = "Certificates & Swag";
+      }
+    } else if (typeof h.prize_text === "string" && (h.prize_text.startsWith("[") || h.prize_text.startsWith("{"))) {
+      try {
+        const parsed = JSON.parse(h.prize_text);
+        if (Array.isArray(parsed)) {
+          let sum = 0;
+          for (const p of parsed) {
+            sum += Number(p.cash) || 0;
+          }
+          if (sum > 0) {
+            h.prize_amount_inr = sum;
+            h.prize_text = `₹${sum.toLocaleString("en-IN")}`;
+          } else {
+            h.prize_text = "Certificates & Swag";
+          }
+        } else {
+          h.prize_text = "Prizes in kind";
+        }
+      } catch {
+        h.prize_text = "Prizes in kind";
+      }
+    }
+
+    cleanedHackathons.push(h);
   }
 
   // Write to data/hackathons.json if not dryRun
@@ -191,12 +241,12 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
 
       const outputData = {
         updated_at: new Date().toISOString(),
-        total: existingHackathons.length,
-        hackathons: existingHackathons,
+        total: cleanedHackathons.length,
+        hackathons: cleanedHackathons,
       };
 
       fs.writeFileSync(dataFilePath, JSON.stringify(outputData, null, 2), "utf-8");
-      console.log(`\n💾 Saved ${existingHackathons.length} hackathons to data/hackathons.json`);
+      console.log(`\n💾 Saved ${cleanedHackathons.length} active/recent hackathons to data/hackathons.json (pruned ${existingHackathons.length - cleanedHackathons.length} closed/expired items)`);
     } catch (err) {
       console.error("Failed to write data/hackathons.json:", err);
     }
@@ -205,7 +255,7 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
     if (supabaseClient) {
       try {
         console.log("Syncing hackathons to Supabase mirror...");
-        for (const h of existingHackathons) {
+        for (const h of cleanedHackathons) {
           await supabaseClient.from("hackathons").upsert(h, {
             onConflict: "source,source_id",
           });
@@ -225,7 +275,7 @@ export async function runIngestion(options: IngestOptions = {}): Promise<IngestR
     totalInserted,
     totalUpdated,
     totalDuplicatesMerged,
-    hackathons: existingHackathons,
+    hackathons: cleanedHackathons,
   };
 }
 

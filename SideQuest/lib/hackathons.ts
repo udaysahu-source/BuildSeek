@@ -231,6 +231,42 @@ export function formatPrize(amount?: number | null) {
   return amount ? `₹${amount.toLocaleString("en-IN")}` : "No cash prize";
 }
 
+export function cleanPrizeText(event: Pick<HackathonUI, "prize_amount_inr" | "prize_text">): string {
+  if (event.prize_amount_inr && event.prize_amount_inr > 0) {
+    return formatPrize(event.prize_amount_inr);
+  }
+  const raw = event.prize_text;
+  if (!raw) return "Not stated";
+  if (typeof raw === "string") {
+    const trimmed = raw.trim();
+    if (trimmed.startsWith("[") || trimmed.startsWith("{")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          let sum = 0;
+          for (const item of parsed) {
+            sum += Number(item.cash) || 0;
+          }
+          if (sum > 0) return `₹${sum.toLocaleString("en-IN")}`;
+        }
+      } catch {}
+      return "Certificates & Swag";
+    }
+    const clean = trimmed.replace(/<[^>]+>/g, "").trim();
+    if (clean.length > 36) return `${clean.slice(0, 33)}…`;
+    return clean || "Not stated";
+  }
+  if (Array.isArray(raw)) {
+    let sum = 0;
+    for (const item of raw as any[]) {
+      sum += Number(item.cash) || 0;
+    }
+    if (sum > 0) return `₹${sum.toLocaleString("en-IN")}`;
+    return "Certificates & Swag";
+  }
+  return "Not stated";
+}
+
 export function formatFee(event: Pick<HackathonUI, "fee_type" | "fee_amount_inr">) {
   if (event.fee_type === "free") return "Free";
   if (event.fee_type === "paid") {
@@ -317,6 +353,15 @@ export function filterHackathons(
       !filters.city ||
       (e.city && e.city.toLowerCase() === filters.city.toLowerCase()) ||
       (filters.city === "Pan India" && (!e.city || e.mode === "online"));
+
+    // 0. Closed retention limit: closed hackathons are only shown for up to 7 days, then deleted
+    if (e.reg_deadline) {
+      const deadline = Date.parse(e.reg_deadline);
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      if (!isNaN(deadline) && now - deadline > SEVEN_DAYS_MS) {
+        return false;
+      }
+    }
 
     // 4. Status
     const matchesStatus = !filters.status || getStatus(e, now) === filters.status;
@@ -459,6 +504,45 @@ export function normalizeHackathon(h: DbHackathon): HackathonUI {
   const fallbackCoords = CITY_COORDINATES[cityKey];
   const rich = generateRichDetails(h);
 
+  // Robust prize normalization
+  let prizeAmountInr = h.prize_amount_inr ?? 0;
+  let prizeText: string | null = null;
+
+  if (Array.isArray(h.prize_text)) {
+    let sum = 0;
+    const ranks: string[] = [];
+    for (const p of h.prize_text as any[]) {
+      const cash = Number(p.cash) || 0;
+      sum += cash;
+      if (p.rank) {
+        if (cash > 0) ranks.push(`${p.rank}: ₹${cash.toLocaleString("en-IN")}`);
+        else if (p.certificate) ranks.push(`${p.rank}: Certificate`);
+      }
+    }
+    if (prizeAmountInr <= 0 && sum > 0) prizeAmountInr = sum;
+    prizeText = sum > 0 ? `₹${sum.toLocaleString("en-IN")}` : ranks.slice(0, 2).join(", ") || "Certificates & Swag";
+  } else if (typeof h.prize_text === "string" && (h.prize_text.startsWith("[") || h.prize_text.startsWith("{"))) {
+    try {
+      const parsed = JSON.parse(h.prize_text);
+      if (Array.isArray(parsed)) {
+        let sum = 0;
+        for (const p of parsed) sum += Number(p.cash) || 0;
+        if (prizeAmountInr <= 0 && sum > 0) prizeAmountInr = sum;
+        prizeText = sum > 0 ? `₹${sum.toLocaleString("en-IN")}` : "Certificates & Swag";
+      } else {
+        prizeText = "Prizes in kind";
+      }
+    } catch {
+      prizeText = "Prizes in kind";
+    }
+  } else if (typeof h.prize_text === "string") {
+    prizeText = h.prize_text.replace(/<[^>]+>/g, "").trim();
+  }
+
+  if (!prizeText && prizeAmountInr > 0) {
+    prizeText = `₹${prizeAmountInr.toLocaleString("en-IN")}`;
+  }
+
   return {
     id: h.id,
     source_id: h.source_id,
@@ -480,10 +564,10 @@ export function normalizeHackathon(h: DbHackathon): HackathonUI {
     lat: h.lat ?? fallbackCoords?.lat ?? null,
     lng: h.lng ?? fallbackCoords?.lng ?? null,
     tags: h.tags ?? [],
-    prize_amount_inr: h.prize_amount_inr ?? 0,
-    prize_amount: h.prize_amount ?? null,
-    prize_currency: h.prize_currency ?? null,
-    prize_text: h.prize_text ?? null,
+    prize_amount_inr: prizeAmountInr,
+    prize_amount: h.prize_amount ?? (prizeAmountInr > 0 ? prizeAmountInr : null),
+    prize_currency: h.prize_currency ?? "INR",
+    prize_text: prizeText,
     team_min: h.team_min ?? 1,
     team_max: h.team_max ?? null,
     team_note: h.team_note ?? null,

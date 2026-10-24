@@ -1,4 +1,4 @@
-import { SEED_HACKATHONS } from "@/seed/hackathons";
+import { getLocalDataset } from "@/lib/db/hackathons";
 import { Hackathon, HackathonStatus } from "@/lib/types";
 import { computeHackathonStatus } from "@/lib/status";
 import { isSupabaseConfigured, getSupabaseClient } from "@/lib/supabase";
@@ -42,8 +42,9 @@ export async function getUserBookmarkedHackathons(
     }
   }
 
-  // Fallback to in-memory items
-  return SEED_HACKATHONS.filter((h) => inMemoryBookmarks.has(h.id)).map(
+  // Fallback to in-memory items from live dataset
+  const dataset = getLocalDataset();
+  return dataset.filter((h) => inMemoryBookmarks.has(h.id)).map(
     (h) => ({
       ...h,
       status: computeHackathonStatus(h.reg_start, h.reg_deadline),

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import {
   countdown,
   formatPrize,
+  cleanPrizeText,
   formatFee,
   getStatus,
   statusLabel,
@@ -209,11 +210,7 @@ export function HackathonCard({
           <Trophy size={17} />
           <span>
             <small>Prize pool</small>
-            <strong>
-              {event.prize_amount_inr
-                ? formatPrize(event.prize_amount_inr)
-                : event.prize_text || "Not stated"}
-            </strong>
+            <strong>{cleanPrizeText(event)}</strong>
           </span>
         </div>
         <div>

@@ -54,20 +54,58 @@ export function getLocalDataset(): Hackathon[] {
     ? (hackathonsData as any).hackathons
     : [];
 
-  if (jsonList.length > 0) {
-    const seedMap = new Map(SEED_HACKATHONS.map((s) => [s.id, s]));
-    const combined = jsonList.map((h: Hackathon) => seedMap.get(h.id) || h);
-    for (const seed of SEED_HACKATHONS) {
-      if (!jsonList.some((h) => h.id === seed.id)) {
-        combined.push(seed);
-      }
+  const rawList = jsonList.length > 0 ? jsonList : SEED_HACKATHONS;
+  const seedMap = new Map(SEED_HACKATHONS.map((s) => [s.id, s]));
+  const combined = rawList.map((h: Hackathon) => seedMap.get(h.id) || h);
+
+  for (const seed of SEED_HACKATHONS) {
+    if (!rawList.some((h) => h.id === seed.id)) {
+      combined.push(seed);
     }
-    cachedDataset = combined;
-    return combined;
   }
 
-  cachedDataset = SEED_HACKATHONS;
-  return SEED_HACKATHONS;
+  // Retention Rule: Closed hackathons are kept for only 7 days, then deleted
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
+  const cleaned = combined
+    .filter((h) => {
+      if (!h.reg_deadline) return true;
+      const deadline = new Date(h.reg_deadline).getTime();
+      if (isNaN(deadline)) return true;
+      return now - deadline <= SEVEN_DAYS_MS;
+    })
+    .map((h) => {
+      // Clean prize text if it leaked raw JSON
+      let prizeAmountInr = h.prize_amount_inr ?? 0;
+      let prizeText = h.prize_text;
+      if (Array.isArray(prizeText)) {
+        let sum = 0;
+        for (const p of prizeText as any[]) sum += Number(p.cash) || 0;
+        if (prizeAmountInr <= 0 && sum > 0) prizeAmountInr = sum;
+        prizeText = sum > 0 ? `₹${sum.toLocaleString("en-IN")}` : "Certificates & Swag";
+      } else if (typeof prizeText === "string" && (prizeText.startsWith("[") || prizeText.startsWith("{"))) {
+        try {
+          const parsed = JSON.parse(prizeText);
+          if (Array.isArray(parsed)) {
+            let sum = 0;
+            for (const p of parsed) sum += Number(p.cash) || 0;
+            if (prizeAmountInr <= 0 && sum > 0) prizeAmountInr = sum;
+            prizeText = sum > 0 ? `₹${sum.toLocaleString("en-IN")}` : "Certificates & Swag";
+          }
+        } catch {
+          prizeText = "Prizes in kind";
+        }
+      }
+      return {
+        ...h,
+        prize_amount_inr: prizeAmountInr,
+        prize_text: prizeText,
+      };
+    });
+
+  cachedDataset = cleaned;
+  return cleaned;
 }
 
 /**

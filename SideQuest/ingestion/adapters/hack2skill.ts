@@ -48,16 +48,49 @@ export class Hack2skillAdapter implements SourceAdapter {
       for (const m of matches.slice(0, 15)) {
         const url = m.replace(/<\/?loc>/g, "");
         const slug = url.split("/").pop() || "";
-        if (slug && !["about", "contact", "privacy", "terms", "blog"].includes(slug)) {
-          const title = slug
-            .split("-")
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(" ");
-          items.push({
-            slug,
-            url,
-            title,
-          });
+        const excludedSlugs = new Set([
+          "about",
+          "contact",
+          "contact-us",
+          "privacy",
+          "terms",
+          "blog",
+          "login",
+          "career",
+          "careers",
+          "brand-guidelines",
+          "cis",
+          "fellows",
+          "event-listing",
+          "corporatehackathon",
+          "collegehackathon",
+        ]);
+
+        if (slug && !excludedSlugs.has(slug.toLowerCase())) {
+          // Check if likely an event (contains keywords or not a generic word)
+          const lower = slug.toLowerCase();
+          const isEventSlug =
+            lower.includes("hackathon") ||
+            lower.includes("camp") ||
+            lower.includes("challenge") ||
+            lower.includes("jam") ||
+            lower.includes("sprint") ||
+            lower.includes("build") ||
+            lower.includes("code") ||
+            lower.includes("apac") ||
+            lower.includes("google");
+
+          if (isEventSlug) {
+            const title = slug
+              .split("-")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" ");
+            items.push({
+              slug,
+              url,
+              title,
+            });
+          }
         }
       }
 

@@ -31,6 +31,7 @@ import {
   countdown,
   formatDate,
   formatPrize,
+  cleanPrizeText,
   formatFee,
   toCalendar,
   toGoogleCalendar,
@@ -83,15 +84,11 @@ export function HackathonDetail({
     event.organizer_type.charAt(0).toUpperCase() + event.organizer_type.slice(1);
 
   // Compute Prize label with original currency if present
-  let prizeLabel = "Not stated";
-  if (event.prize_currency && event.prize_amount) {
+  let prizeLabel = cleanPrizeText(event);
+  if (event.prize_currency && event.prize_currency !== "INR" && event.prize_amount) {
     prizeLabel = `${event.prize_currency} ${event.prize_amount.toLocaleString()} (₹${(
       event.prize_amount_inr || 0
     ).toLocaleString("en-IN")})`;
-  } else if (event.prize_amount_inr) {
-    prizeLabel = formatPrize(event.prize_amount_inr);
-  } else if (event.prize_text) {
-    prizeLabel = event.prize_text;
   }
 
   // Compute team size label
