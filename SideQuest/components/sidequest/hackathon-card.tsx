@@ -239,9 +239,9 @@ export function HackathonCard({
         ))}
       </div>
 
-      <div className="sq-card-footer" style={{ gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-          <span style={{ fontWeight: 600, fontSize: "11px", textTransform: "capitalize", color: "#475569" }}>
+      <div className="sq-card-footer">
+        <div className="sq-card-source-row">
+          <span className="sq-card-source-name">
             {event.source}
           </span>
           <a
@@ -250,9 +250,9 @@ export function HackathonCard({
             rel="noopener noreferrer"
             title="Add deadline to Google Calendar"
             aria-label="Add deadline to Google Calendar"
-            style={{ display: "inline-flex", alignItems: "center", color: "#64748b", padding: "2px" }}
+            className="sq-card-quick-action"
           >
-            <CalendarDays size={13} />
+            <CalendarDays size={14} />
           </a>
           <a
             href={`https://t.me/BuildSeekAlertsBot?start=event_${event.id}`}
@@ -260,14 +260,14 @@ export function HackathonCard({
             rel="noopener noreferrer"
             title="Get Telegram deadline ping (@BuildSeekAlertsBot)"
             aria-label="Get Telegram deadline ping"
-            style={{ display: "inline-flex", alignItems: "center", color: "#229ED9", padding: "2px" }}
+            className="sq-card-quick-action telegram"
           >
-            <Send size={13} />
+            <Send size={14} />
           </a>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
-          <Button asChild variant="outline" size="sm" style={{ height: "32px", fontSize: "12px", padding: "0 10px" }}>
+        <div className="sq-card-action-row">
+          <Button asChild variant="outline" size="sm" className="sq-card-btn">
             <Link
               href={`/h/${event.id}`}
               onClick={handleClick}
@@ -277,14 +277,14 @@ export function HackathonCard({
             </Link>
           </Button>
 
-          <Button asChild size="sm" style={{ height: "32px", fontSize: "12px", padding: "0 12px" }}>
+          <Button asChild size="sm" className="sq-card-btn">
             <a
               href={event.apply_url || event.official_page || event.source_url}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Register for ${event.title}`}
             >
-              Register <ArrowUpRight size={13} style={{ marginLeft: 3 }} />
+              Register <ArrowUpRight size={14} style={{ marginLeft: 3 }} />
             </a>
           </Button>
         </div>

@@ -56,139 +56,64 @@ export function OnboardingCard({
   const progressPercent = Math.round((completedCount / 3) * 100);
 
   return (
-    <div
-      className="sq-onboarding-banner"
-      style={{
-        background: "linear-gradient(135deg, rgba(182, 245, 0, 0.12) 0%, rgba(34, 158, 217, 0.08) 100%)",
-        border: "2.5px solid var(--border)",
-        boxShadow: "5px 5px 0 var(--border)",
-        borderRadius: "22px",
-        padding: "24px 28px",
-        marginBottom: "28px",
-        position: "relative",
-      }}
-    >
+    <div className="sq-onboarding-banner">
       <button
         onClick={handleDismiss}
         aria-label="Dismiss starter quest guide"
         title="Hide starter quest"
-        style={{
-          position: "absolute",
-          top: "16px",
-          right: "16px",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          padding: "6px",
-          borderRadius: "8px",
-          color: "var(--muted-foreground)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        className="hover:bg-black/5 dark:hover:bg-white/10"
+        className="sq-onboarding-dismiss"
       >
         <X size={18} />
       </button>
 
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: "260px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-            <span
-              style={{
-                background: "var(--brand)",
-                color: "#0B1033",
-                fontWeight: 800,
-                fontSize: "11px",
-                padding: "3px 8px",
-                borderRadius: "999px",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "4px",
-                textTransform: "uppercase",
-              }}
-            >
+      <div className="sq-onboarding-grid">
+        <div className="sq-onboarding-main">
+          <div className="sq-onboarding-top">
+            <span className="sq-onboarding-badge">
               <Sparkles size={11} /> Starter Quest
             </span>
-            <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--ink)" }}>
+            <span className="sq-onboarding-status">
               {completedCount === 3
                 ? "🎉 Quest Completed!"
                 : `${completedCount} of 3 steps completed (${progressPercent}%)`}
             </span>
           </div>
 
-          <h2 style={{ fontSize: "22px", fontWeight: 800, lineHeight: 1.25, margin: "0 0 6px" }}>
+          <h2 className="sq-onboarding-title">
             New to BuildSeek? Here’s your 60-second jumpstart.
           </h2>
-          <p style={{ fontSize: "14px", color: "var(--muted-foreground)", margin: "0 0 18px", maxWidth: "560px" }}>
+          <p className="sq-onboarding-desc">
             Find the right collegiate hackathon, bookmark your targets, and get automated Telegram reminders before deadlines expire.
           </p>
 
           {/* Progress bar */}
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "460px",
-              height: "6px",
-              background: "rgba(0, 0, 0, 0.08)",
-              borderRadius: "999px",
-              overflow: "hidden",
-              marginBottom: "20px",
-            }}
-          >
+          <div className="sq-onboarding-progress-track">
             <div
-              style={{
-                width: `${progressPercent}%`,
-                height: "100%",
-                background: "var(--brand)",
-                transition: "width 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
+              className="sq-onboarding-progress-fill"
+              style={{ width: `${progressPercent}%` }}
             />
           </div>
 
           {/* Interactive Steps */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
+          <div className="sq-onboarding-steps">
             {/* Step 1 */}
-            <div
-              style={{
-                background: step1 ? "rgba(182, 245, 0, 0.18)" : "var(--card)",
-                border: step1 ? "1.5px solid var(--brand)" : "1px solid var(--border)",
-                borderRadius: "14px",
-                padding: "12px 14px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px",
-              }}
-            >
+            <div className={`sq-onboarding-step ${step1 ? "is-complete" : ""}`}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: step1 ? "var(--brand)" : "var(--muted)",
-                    color: step1 ? "#0B1033" : "var(--muted-foreground)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                    fontWeight: 800,
-                  }}
-                >
+                <span className="sq-onboarding-step-num">
                   {step1 ? <Check size={13} strokeWidth={3} /> : "1"}
                 </span>
                 <strong style={{ fontSize: "13px" }}>Filter by interest</strong>
               </div>
               <p style={{ fontSize: "12px", color: "var(--muted-foreground)", margin: 0 }}>
                 {step1 ? (
-                  <span style={{ color: "var(--brand-dark, #3b7c00)", fontWeight: 600 }}>Active filter applied!</span>
+                  <span style={{ color: "#166534", fontWeight: 700 }}>Active filter applied!</span>
                 ) : (
                   <span>
                     Try clicking{" "}
                     <button
                       type="button"
                       onClick={() => onFilterPreset?.("AI")}
-                      style={{ textDecoration: "underline", fontWeight: 700, color: "var(--ink)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                      className="sq-onboarding-btn-link"
                     >
                       AI
                     </button>{" "}
@@ -196,7 +121,7 @@ export function OnboardingCard({
                     <button
                       type="button"
                       onClick={() => onFilterPreset?.("Web3")}
-                      style={{ textDecoration: "underline", fontWeight: 700, color: "var(--ink)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                      className="sq-onboarding-btn-link"
                     >
                       Web3
                     </button>
@@ -206,39 +131,16 @@ export function OnboardingCard({
             </div>
 
             {/* Step 2 */}
-            <div
-              style={{
-                background: step2 ? "rgba(182, 245, 0, 0.18)" : "var(--card)",
-                border: step2 ? "1.5px solid var(--brand)" : "1px solid var(--border)",
-                borderRadius: "14px",
-                padding: "12px 14px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px",
-              }}
-            >
+            <div className={`sq-onboarding-step ${step2 ? "is-complete" : ""}`}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: step2 ? "var(--brand)" : "var(--muted)",
-                    color: step2 ? "#0B1033" : "var(--muted-foreground)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                    fontWeight: 800,
-                  }}
-                >
+                <span className="sq-onboarding-step-num">
                   {step2 ? <Check size={13} strokeWidth={3} /> : "2"}
                 </span>
                 <strong style={{ fontSize: "13px" }}>Bookmark an event</strong>
               </div>
               <p style={{ fontSize: "12px", color: "var(--muted-foreground)", margin: 0 }}>
                 {step2 ? (
-                  <span style={{ color: "var(--brand-dark, #3b7c00)", fontWeight: 600 }}>
+                  <span style={{ color: "#166534", fontWeight: 700 }}>
                     {savedCount} {savedCount === 1 ? "quest" : "quests"} saved in Quest Log!
                   </span>
                 ) : (
@@ -248,46 +150,23 @@ export function OnboardingCard({
             </div>
 
             {/* Step 3 */}
-            <div
-              style={{
-                background: step3 ? "rgba(182, 245, 0, 0.18)" : "var(--card)",
-                border: step3 ? "1.5px solid var(--brand)" : "1px solid var(--border)",
-                borderRadius: "14px",
-                padding: "12px 14px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px",
-              }}
-            >
+            <div className={`sq-onboarding-step ${step3 ? "is-complete" : ""}`}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: step3 ? "var(--brand)" : "var(--muted)",
-                    color: step3 ? "#0B1033" : "var(--muted-foreground)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                    fontWeight: 800,
-                  }}
-                >
+                <span className="sq-onboarding-step-num">
                   {step3 ? <Check size={13} strokeWidth={3} /> : "3"}
                 </span>
                 <strong style={{ fontSize: "13px" }}>Enable Deadline Radar</strong>
               </div>
               <p style={{ fontSize: "12px", color: "var(--muted-foreground)", margin: 0 }}>
                 {step3 ? (
-                  <span style={{ color: "var(--brand-dark, #3b7c00)", fontWeight: 600 }}>Radar active!</span>
+                  <span style={{ color: "#166534", fontWeight: 700 }}>Radar active!</span>
                 ) : (
                   <a
                     href="https://t.me/BuildSeekAlertsBot"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={handleSyncClick}
-                    style={{ textDecoration: "underline", fontWeight: 700, color: "#229ED9" }}
+                    style={{ textDecoration: "underline", fontWeight: 700, color: "#0284c7" }}
                   >
                     Open @BuildSeekAlertsBot <ArrowRight size={11} className="inline" />
                   </a>
@@ -303,7 +182,7 @@ export function OnboardingCard({
             variant="ghost"
             size="sm"
             onClick={handleDismiss}
-            style={{ fontSize: "12px", height: "28px" }}
+            style={{ fontSize: "12px", minHeight: "44px" }}
           >
             Don’t show again
           </Button>

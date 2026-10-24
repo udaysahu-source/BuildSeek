@@ -918,3 +918,381 @@ a:focus-visible,button:focus-visible { outline: 3px solid var(--ink); outline-of
     font-size: 11px;
   }
 }
+
+/* 5. Quick Presets (Horizontal Scrollable Filter Bar) */
+.sq-quick-presets {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 2px 12px;
+  margin-bottom: 14px;
+}
+
+.sq-quick-presets::-webkit-scrollbar {
+  display: none;
+}
+
+.sq-preset-btn {
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.sq-preset-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.sq-preset-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* 6. Onboarding Starter Quest Banner */
+.sq-onboarding-banner {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 24px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+}
+
+.sq-onboarding-dismiss {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+  color: var(--muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.sq-onboarding-dismiss:hover {
+  color: var(--ink);
+  background: var(--mint);
+}
+
+.sq-onboarding-grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.sq-onboarding-main {
+  flex: 1;
+  min-width: 260px;
+}
+
+.sq-onboarding-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.sq-onboarding-badge {
+  background: var(--brand);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sq-onboarding-status {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sq-onboarding-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+
+.sq-onboarding-desc {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin: 0 0 18px;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.sq-onboarding-progress-track {
+  width: 100%;
+  max-width: 460px;
+  height: 8px;
+  background: var(--mint);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.sq-onboarding-progress-fill {
+  height: 100%;
+  background: var(--brand);
+  border-right: 1px solid var(--ink);
+  transition: width 0.4s var(--ease-out-quint);
+}
+
+.sq-onboarding-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.sq-onboarding-step {
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.sq-onboarding-step.is-complete {
+  background: #f0fdf4;
+  border-color: #166534;
+}
+
+.sq-onboarding-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--mint);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sq-onboarding-step.is-complete .sq-onboarding-step-num {
+  background: var(--brand);
+  border-color: var(--ink);
+}
+
+.sq-onboarding-btn-link {
+  text-decoration: underline;
+  font-weight: 700;
+  color: var(--ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+}
+
+/* 7. Event Card Actions & Mobile Ergonomics */
+.sq-card-source-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sq-card-source-name {
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: capitalize;
+  color: #475569;
+}
+
+.sq-card-quick-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+  color: #475569;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.sq-card-quick-action:hover {
+  background: var(--mint);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.sq-card-quick-action.telegram {
+  color: #0284c7;
+}
+
+.sq-card-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.sq-card-btn {
+  min-height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 14px;
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.sq-card-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.sq-card-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* 8. Error Boundary Normalized Styles */
+.sq-error-container {
+  padding: 80px 16px 120px;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sq-error-card {
+  max-width: 540px;
+  width: 100%;
+  text-align: center;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  border-radius: 24px;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.sq-error-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sq-error-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.sq-error-actions > * {
+  min-height: 44px;
+  font-weight: 700;
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* 9. Destructive Actions & Privacy Confirmation Box */
+.sq-destructive-box {
+  background: #fef2f2;
+  border: 2px solid #b91c1c;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 3px 3px 0 #7f1d1d;
+}
+
+.sq-destructive-btn {
+  background: #b91c1c !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: 1.5px solid #7f1d1d !important;
+  box-shadow: 2px 2px 0 #7f1d1d !important;
+  min-height: 44px;
+}
+
+@media (max-width: 767px) {
+  .sq-onboarding-banner {
+    padding: 18px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .sq-onboarding-main {
+    min-width: 0;
+    width: 100%;
+  }
+  .sq-onboarding-title {
+    font-size: 18px;
+  }
+  .sq-onboarding-desc {
+    font-size: 13px;
+  }
+  .sq-onboarding-steps {
+    grid-template-columns: 1fr;
+  }
+  .sq-card-action-row {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+  .sq-card-action-row > * {
+    flex: 1;
+  }
+  .sq-error-card {
+    padding: 32px 20px;
+    border-radius: 20px;
+  }
+}

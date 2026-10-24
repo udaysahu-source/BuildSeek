@@ -110,7 +110,7 @@ export default function ProfilePage() {
 
             {/* Privacy & Cascading Account Deletion (DPDP Act & GDPR compliant) */}
             <div className="mt-8 pt-6 border-t border-border w-full text-left">
-              <span className="sq-eyebrow" style={{ color: "var(--urgent, #C62F3A)" }}>Data Privacy & Erasure</span>
+              <span className="sq-eyebrow" style={{ color: "#b91c1c" }}>Data Privacy & Erasure</span>
               <p className="text-sm text-muted-foreground mt-1 mb-3">
                 Permanently erase your account, personal data, saved quests, alert rules, and active sessions in accordance with the DPDP Act and GDPR. This action is irreversible.
               </p>
@@ -118,31 +118,24 @@ export default function ProfilePage() {
                 <Button
                   size="sm"
                   variant="outline"
-                  style={{ borderColor: "rgba(198, 47, 58, 0.4)", color: "#C62F3A" }}
+                  className="sq-destructive-btn"
                   onClick={() => setShowDeleteConfirm(true)}
                 >
                   Delete Account & All Data
                 </Button>
               ) : (
-                <div
-                  style={{
-                    background: "rgba(198, 47, 58, 0.08)",
-                    border: "1.5px solid #C62F3A",
-                    borderRadius: "16px",
-                    padding: "16px",
-                  }}
-                >
-                  <p style={{ fontSize: "14px", fontWeight: 700, color: "#C62F3A", marginBottom: "8px" }}>
+                <div className="sq-destructive-box">
+                  <p style={{ fontSize: "14px", fontWeight: 800, color: "#991b1b", marginBottom: "8px" }}>
                     Are you absolutely sure?
                   </p>
-                  <p style={{ fontSize: "13px", color: "var(--ink)", marginBottom: "12px" }}>
+                  <p style={{ fontSize: "13px", color: "var(--ink)", marginBottom: "12px", lineHeight: 1.6 }}>
                     All your saved quests, alerts, and account history will be permanently deleted from our servers immediately.
                   </p>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                     <Button
                       size="sm"
                       disabled={deleting}
-                      style={{ background: "#C62F3A", color: "#fff", fontWeight: 700 }}
+                      className="sq-destructive-btn"
                       onClick={handleDeleteAccount}
                     >
                       {deleting ? "Deleting everything…" : "Yes, Permanently Delete My Data"}
@@ -152,6 +145,7 @@ export default function ProfilePage() {
                       variant="ghost"
                       disabled={deleting}
                       onClick={() => setShowDeleteConfirm(false)}
+                      style={{ minHeight: "44px" }}
                     >
                       Cancel
                     </Button>

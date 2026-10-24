@@ -318,55 +318,48 @@ function DiscoverView() {
       {/* Quick filter presets */}
       <div
         className="sq-quick-presets"
-        style={{
-          display: "flex",
-          gap: "8px",
-          overflowX: "auto",
-          paddingBottom: "10px",
-          marginBottom: "12px",
-          scrollbarWidth: "none",
-        }}
         role="group"
         aria-label="Popular filter presets"
       >
         <Button
           size="sm"
+          className="sq-preset-btn"
           variant={filters.status === "closing-soon" ? "default" : "outline"}
           onClick={() =>
             update({
               status: filters.status === "closing-soon" ? undefined : "closing-soon",
             })
           }
-          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
         >
           ⏰ Closing in 7 days
         </Button>
         <Button
           size="sm"
+          className="sq-preset-btn"
           variant={filters.price === "free" ? "default" : "outline"}
           onClick={() =>
             update({
               price: filters.price === "free" ? undefined : "free",
             })
           }
-          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
         >
           🆓 Free only
         </Button>
         <Button
           size="sm"
+          className="sq-preset-btn"
           variant={filters.mode === "online" ? "default" : "outline"}
           onClick={() =>
             update({
               mode: filters.mode === "online" ? undefined : "online",
             })
           }
-          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
         >
           🌐 Online
         </Button>
         <Button
           size="sm"
+          className="sq-preset-btn"
           variant={
             filters.organizer_types?.includes("college") ? "default" : "outline"
           }
@@ -377,12 +370,12 @@ function DiscoverView() {
                 : ["college"],
             })
           }
-          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
         >
           🎓 College
         </Button>
         <Button
           size="sm"
+          className="sq-preset-btn"
           variant={
             filters.scope === "national" ? "default" : "outline"
           }
@@ -391,7 +384,6 @@ function DiscoverView() {
               scope: filters.scope === "national" ? undefined : "national",
             })
           }
-          style={{ height: "32px", fontSize: "12px", whiteSpace: "nowrap" }}
         >
           🇮🇳 National
         </Button>
