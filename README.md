@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ SideQuest
+# ⚡ BuildSeek
 ### Every Hackathon. One Place. Never Miss a Deadline.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.4-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
