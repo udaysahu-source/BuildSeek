@@ -22,20 +22,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = getSupabaseBrowserClient();
     let active = true;
 
+    const checkLocalDemo = () => {
+      try {
+        const stored = typeof window !== "undefined" ? localStorage.getItem("buildseek_demo_user") : null;
+        return stored ? JSON.parse(stored) : null;
+      } catch {
+        return null;
+      }
+    };
+
     supabase.auth.getUser().then(({ data }: any) => {
       if (active) {
-        setUser(data?.user ?? null);
+        if (data?.user) {
+          setUser(data.user);
+        } else {
+          setUser(checkLocalDemo());
+        }
         setLoading(false);
       }
     }).catch(() => {
       if (active) {
-        setUser(null);
+        setUser(checkLocalDemo());
         setLoading(false);
       }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
-      setUser(session?.user ?? null);
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        setUser(checkLocalDemo());
+      }
       setLoading(false);
     });
 

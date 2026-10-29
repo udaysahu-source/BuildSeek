@@ -6,6 +6,17 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") || "/quest-log";
 
+  // Check if provider returned an OAuth error or user cancelled
+  const errorDesc = searchParams.get("error_description");
+  const errorCode = searchParams.get("error");
+  if (errorDesc || errorCode) {
+    const message = errorDesc || errorCode || "oauth_failed";
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(message)}`);
+  }
+
+  // Sanitize redirect target to avoid open redirects
+  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/quest-log";
+
   if (code) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -13,12 +24,14 @@ export async function GET(request: Request) {
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
       if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`);
+        return NextResponse.redirect(`${origin}${safeNext}`);
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
+        return NextResponse.redirect(`https://${forwardedHost}${safeNext}`);
       } else {
-        return NextResponse.redirect(`${origin}${next}`);
+        return NextResponse.redirect(`${origin}${safeNext}`);
       }
+    } else {
+      return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`);
     }
   }
 

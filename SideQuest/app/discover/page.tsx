@@ -1,17 +1,30 @@
 "use client";
 
-import React, { Suspense, useState, useEffect, useTransition } from "react";
+import React, { Suspense, useState, useEffect, useTransition, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Search,
+  SlidersHorizontal,
+  X,
+  Radio,
+  Clock3,
+  RotateCcw,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Mascot } from "@/components/sidequest/mascot";
-import { HackathonCard } from "@/components/sidequest/hackathon-card";
-import { HackathonDetail } from "@/components/sidequest/hackathon-detail";
+import { DepartureBoardRow } from "@/components/sidequest/departure-board-row";
+import {
+  MobileFilterSheet,
+  AppliedFilterSummary,
+} from "@/components/sidequest/mobile-filter-sheet";
 import { DiscoveryFiltersPanel } from "@/components/sidequest/discovery-filters";
 import { DiscoverySkeleton } from "@/components/sidequest/discovery-skeleton";
+import { HackathonDetail } from "@/components/sidequest/hackathon-detail";
 import { QuestDialog } from "@/components/sidequest/quest-dialog";
-import { NoSearchResultsState, EmptyState } from "@/components/ui/states";
 import { OnboardingCard } from "@/components/sidequest/onboarding-card";
+import { Mascot } from "@/components/sidequest/mascot";
 import { useCountdownClock, useBookmarks } from "@/components/sidequest/discovery-state";
 import { useAuth } from "@/components/sidequest/auth-state";
 import {
@@ -22,23 +35,40 @@ import {
   type HackathonUI,
 } from "@/lib/hackathons";
 import { getHackathons, getLocalDataset } from "@/lib/db/hackathons";
+import { calculateMatchScore } from "@/lib/match-score";
 
 function DiscoverView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [rawEvents, setRawEvents] = useState<HackathonUI[]>(() =>
     getLocalDataset().map(normalizeHackathon)
   );
   const [loading, setLoading] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const now = useCountdownClock();
+  const [userSkills, setUserSkills] = useState<string[]>([]);
+  const [userCity, setUserCity] = useState<string>("");
+  const now = useCountdownClock(Date.now());
   const { saved } = useBookmarks();
   const { user } = useAuth();
 
+  // Load user skills and city from localStorage or profile
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("buildseek_user_skills");
+      if (stored) {
+        setUserSkills(JSON.parse(stored));
+      }
+      const storedCity = localStorage.getItem("buildseek_user_city");
+      if (storedCity) {
+        setUserCity(storedCity);
+      }
+    } catch {}
+  }, []);
+
   // Parse filters from URL
-  const filters: DiscoveryFilters = React.useMemo(() => {
+  const filters: DiscoveryFilters = useMemo(() => {
     const q = searchParams.get("q") || undefined;
     const mode = (searchParams.get("mode") as any) || undefined;
     const status = (searchParams.get("status") as any) || undefined;
@@ -50,7 +80,6 @@ function DiscoverView() {
     const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
     const event = searchParams.get("event") || undefined;
 
-    // V2 Filters
     const price = (searchParams.get("price") as any) || undefined;
     const scope = (searchParams.get("scope") as any) || undefined;
     const user_state = searchParams.get("user_state") || undefined;
@@ -90,10 +119,10 @@ function DiscoverView() {
     };
   }, [searchParams]);
 
-  // Load hackathons
+  // Load latest hackathons from DB / cache
   useEffect(() => {
     let mounted = true;
-    getHackathons({ limit: 100, include_closed: true })
+    getHackathons({ limit: 100, include_closed: false })
       .then((res) => {
         if (!mounted) return;
         const normalized = res.hackathons.map(normalizeHackathon);
@@ -116,23 +145,30 @@ function DiscoverView() {
     };
   }, []);
 
-  const results = React.useMemo(
-    () => filterHackathons(rawEvents, filters, now),
-    [rawEvents, filters, now]
-  );
+  // Filter hackathons strictly sorted by nearest deadline first
+  const results = useMemo(() => {
+    const list = filterHackathons(rawEvents, filters, now);
+    // Sort logic: "closing" sorts strictly by nearest deadline first
+    if (!filters.sort || filters.sort === "closing") {
+      return [...list].sort((a, b) => {
+        const aDl = a.reg_deadline ? Date.parse(a.reg_deadline) : Infinity;
+        const bDl = b.reg_deadline ? Date.parse(b.reg_deadline) : Infinity;
+        return aDl - bDl;
+      });
+    }
+    return list;
+  }, [rawEvents, filters, now]);
 
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 15;
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const page = Math.min(filters.page ?? 1, pageCount);
   const visible = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const selected = rawEvents.find((event) => event.id === filters.event);
-  const count = activeFilterCount(filters);
 
   const update = (patch: Partial<DiscoveryFilters>) => {
     const nextParams = new URLSearchParams(searchParams.toString());
     const merged = { ...filters, ...patch };
 
-    // Reset page if filtering changed (unless page explicitly in patch)
     if (!("page" in patch)) {
       merged.page = undefined;
     }
@@ -183,90 +219,53 @@ function DiscoverView() {
     });
   };
 
-  const chips = [
-    ...(filters.q ? [{ label: `“${filters.q}”`, clear: () => update({ q: undefined }) }] : []),
-    ...(filters.price && filters.price !== "all"
-      ? [{ label: `Fee: ${filters.price}`, clear: () => update({ price: undefined }) }]
-      : []),
-    ...(filters.scope
-      ? [
-          {
-            label: `Scope: ${filters.scope}${
-              filters.scope === "nearby" ? ` (${filters.radius_km || 100}km)` : ""
-            }`,
-            clear: () =>
-              update({
-                scope: undefined,
-                radius_km: undefined,
-                user_lat: undefined,
-                user_lng: undefined,
-              }),
-          },
-        ]
-      : []),
-    ...(filters.user_state
-      ? [{ label: `State: ${filters.user_state}`, clear: () => update({ user_state: undefined }) }]
-      : []),
-    ...(filters.organizer_types ?? []).map((org) => ({
-      label: `Org: ${org}`,
-      clear: () =>
-        update({
-          organizer_types: filters.organizer_types?.filter((o) => o !== org),
-        }),
-    })),
-    ...(filters.mode ? [{ label: filters.mode, clear: () => update({ mode: undefined }) }] : []),
-    ...(filters.status
-      ? [{ label: filters.status.replace("-", " "), clear: () => update({ status: undefined }) }]
-      : []),
-    ...(filters.city ? [{ label: filters.city, clear: () => update({ city: undefined }) }] : []),
-    ...(filters.prize
-      ? [{ label: `₹${filters.prize.toLocaleString("en-IN")}+`, clear: () => update({ prize: undefined }) }]
-      : []),
-    ...(filters.tags ?? []).map((tag) => ({
-      label: tag,
-      clear: () => update({ tags: filters.tags?.filter((t) => t !== tag) }),
-    })),
-    ...(filters.students ? [{ label: "Students only", clear: () => update({ students: undefined }) }] : []),
-  ];
-
   return (
-    <main className="sq-discover sq-container">
-      <header className="sq-discover-heading">
-        <div>
-          <span className="sq-eyebrow">
-            <Sparkles size={13} /> Your next main character moment
-          </span>
-          <h1>
-            Find your next <span>BuildSeek.</span>
-          </h1>
-          <p>Big ideas, fresh challenges, and a deadline worth beating.</p>
-        </div>
-        <Mascot className="sq-discover-mascot" />
-      </header>
+    <main className="sq-departure-board-container">
+      {/* Station Departure Board Banner */}
+      <section className="sq-board-header-banner" aria-label="Departure Board Header">
+        <div className="flex items-start justify-between gap-6">
+          <div className="flex-1">
+            <div className="sq-board-header-top">
+              <span className="sq-board-station-tag">
+                <Radio size={14} /> Live Multi-Platform Radar
+              </span>
+              <div className="sq-board-live-indicator">
+                <span className="sq-live-pulse-green" aria-hidden="true" />
+                <span>Nearest deadline first</span>
+              </div>
+            </div>
 
+            <h1 className="sq-board-title">Hackathon Departures.</h1>
+            <p className="sq-board-subtitle">
+              Real-time deadline radar aggregating Devfolio, Unstop, Devpost, Hack2skill and verified student submissions.
+            </p>
+          </div>
+          <div className="hidden sm:block shrink-0 -mt-2 -mr-2">
+            <Mascot className="w-24 h-24 transform rotate-6" />
+          </div>
+        </div>
+      </section>
+
+      {/* Onboarding Starter Quest (if not dismissed) */}
       <OnboardingCard
         savedCount={saved.length}
-        hasActiveFilters={chips.length > 0}
+        hasActiveFilters={activeFilterCount(filters) > 0}
         onFilterPreset={(tag) => update({ tags: [tag] })}
+        onComplete={(skills, city) => {
+          setUserSkills(skills);
+          if (city) {
+            setUserCity(city);
+          }
+        }}
       />
 
-      <div className="sq-discovery-notice">
-        <span>
-          <strong>Live radar</strong> · {rawEvents.length} hackathons across India’s campus clubs & platforms.
-        </span>
-        <span role="status">
-          {user
-            ? `${saved.length} saved in your Quest Log`
-            : "Log in to keep your favourite quests"}
-        </span>
-      </div>
-
-      <div className="sq-search-row">
-        <label className="sq-search-box">
-          <Search size={20} />
+      {/* Search Input Bar */}
+      <div className="sq-search-row" style={{ marginBottom: "14px" }}>
+        <label className="sq-search-box w-full" style={{ minHeight: "46px" }}>
+          <Search size={18} className="text-muted-foreground" />
           <input
             aria-label="Search hackathons"
-            placeholder="Search hackathons, themes, colleges…"
+            placeholder="Search departures by title, organizer, city, or tech stack…"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -280,233 +279,197 @@ function DiscoverView() {
                 update({ q: undefined });
               }}
             >
-              <X />
+              <X size={16} />
             </Button>
           )}
         </label>
+
+        {/* Mobile / Tablet filter button */}
         <Button
           variant="outline"
-          className="sq-mobile-filter-button"
+          className="sq-mobile-filter-button lg:hidden"
           onClick={() => setSheetOpen(true)}
-          aria-label={`Filters${count ? `, ${count} active` : ""}`}
+          aria-label={`Open filters${
+            activeFilterCount(filters) ? `, ${activeFilterCount(filters)} active` : ""
+          }`}
         >
-          <SlidersHorizontal />
-          {count > 0 && <span>{count}</span>}
+          <SlidersHorizontal size={16} />
+          <span>Filters</span>
+          {activeFilterCount(filters) > 0 && (
+            <span className="sq-filter-count-badge">
+              {activeFilterCount(filters)}
+            </span>
+          )}
         </Button>
       </div>
 
-      {chips.length > 0 && (
-        <div className="sq-active-filters">
-          {chips.map((chip) => (
-            <Button
-              key={chip.label}
-              variant="outline"
-              size="sm"
-              onClick={chip.clear}
-              aria-label={`Remove ${chip.label} filter`}
-            >
-              {chip.label}
-              <X size={12} />
-            </Button>
-          ))}
-          <Button variant="ghost" size="sm" onClick={reset}>
-            Clear all
-          </Button>
-        </div>
-      )}
+      {/* Mobile / Tablet Applied Filter Summary Row */}
+      <AppliedFilterSummary
+        filters={filters}
+        onChange={update}
+        onReset={reset}
+        onOpenSheet={() => setSheetOpen(true)}
+      />
 
-      {/* Quick filter presets */}
-      <div
-        className="sq-quick-presets"
-        role="group"
-        aria-label="Popular filter presets"
-      >
-        <Button
-          size="sm"
-          className="sq-preset-btn"
-          variant={filters.status === "closing-soon" ? "default" : "outline"}
-          onClick={() =>
-            update({
-              status: filters.status === "closing-soon" ? undefined : "closing-soon",
-            })
-          }
-        >
-          ⏰ Closing in 7 days
-        </Button>
-        <Button
-          size="sm"
-          className="sq-preset-btn"
-          variant={filters.price === "free" ? "default" : "outline"}
-          onClick={() =>
-            update({
-              price: filters.price === "free" ? undefined : "free",
-            })
-          }
-        >
-          🆓 Free only
-        </Button>
-        <Button
-          size="sm"
-          className="sq-preset-btn"
-          variant={filters.mode === "online" ? "default" : "outline"}
-          onClick={() =>
-            update({
-              mode: filters.mode === "online" ? undefined : "online",
-            })
-          }
-        >
-          🌐 Online
-        </Button>
-        <Button
-          size="sm"
-          className="sq-preset-btn"
-          variant={
-            filters.organizer_types?.includes("college") ? "default" : "outline"
-          }
-          onClick={() =>
-            update({
-              organizer_types: filters.organizer_types?.includes("college")
-                ? undefined
-                : ["college"],
-            })
-          }
-        >
-          🎓 College
-        </Button>
-        <Button
-          size="sm"
-          className="sq-preset-btn"
-          variant={
-            filters.scope === "national" ? "default" : "outline"
-          }
-          onClick={() =>
-            update({
-              scope: filters.scope === "national" ? undefined : "national",
-            })
-          }
-        >
-          🇮🇳 National
-        </Button>
-      </div>
-
+      {/* Main Split Layout: Desktop Left Filter Rail + Board Schedule */}
       <div className="sq-discovery-layout">
-        <aside className="sq-desktop-filters">
-          <DiscoveryFiltersPanel filters={filters} onChange={update} onReset={reset} />
+        {/* Desktop Persistent Left Filter Rail */}
+        <aside className="sq-desktop-filters hidden lg:block">
+          <DiscoveryFiltersPanel
+            filters={filters}
+            onChange={update}
+            onReset={reset}
+          />
         </aside>
 
-        <section className="sq-discovery-results" aria-label="Hackathon results">
-          <div className="sq-results-toolbar">
-            <p>
-              <strong>{results.length}</strong> hackathons
-              {count ? " for you" : " to explore"}
-            </p>
-            <label>
-              Sort by
-              <select
-                aria-label="Sort hackathons"
-                value={filters.sort ?? "closing"}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  update({
-                    sort: value === "match" || value === "prize" ? value : "closing",
-                  });
-                }}
-              >
-                <option value="closing">Closing soon</option>
-                <option value="match">Best match</option>
-                <option value="prize">Prize</option>
-              </select>
-            </label>
+        {/* Departure Board Results Area */}
+        <section
+          className="sq-discovery-results flex-1"
+          aria-label="Departure board schedule"
+        >
+          {/* Board Schedule Header */}
+          <div className="sq-board-table-header hidden lg:grid">
+            <span>Departure / Deadline</span>
+            <span>Event &amp; Organiser</span>
+            <span>Location &amp; Team</span>
+            <span>Prize Pool</span>
+            <span className="text-right">Action</span>
           </div>
 
           {loading ? (
             <DiscoverySkeleton />
-          ) : visible.length ? (
+          ) : visible.length > 0 ? (
             <>
-              <div className="sq-event-grid">
-                {visible.map((event) => (
-                  <HackathonCard
-                    key={event.id}
-                    event={event}
-                    now={now}
-                    onOpen={(id) => update({ event: id })}
-                  />
-                ))}
+              <div className="sq-departure-list">
+                {visible.map((event) => {
+                  let matchScore: number | null = null;
+                  if (userSkills.length > 0 || userCity) {
+                    const match = calculateMatchScore(event as any, {
+                      skills: userSkills,
+                      city: userCity || undefined,
+                    });
+                    matchScore = match.score;
+                  }
+
+                  return (
+                    <DepartureBoardRow
+                      key={event.id}
+                      event={event}
+                      now={now}
+                      matchScore={matchScore}
+                      onOpenDetail={(id) => update({ event: id })}
+                    />
+                  );
+                })}
               </div>
 
-              <nav className="sq-pagination" aria-label="Results pages">
-                <Button
-                  size="icon"
-                  variant="outline"
-                  disabled={page === 1}
-                  aria-label="Previous page"
-                  onClick={() => update({ page: page - 1 })}
-                >
-                  <ArrowLeft />
-                </Button>
-                {Array.from({ length: pageCount }, (_, i) => (
+              {/* Pagination controls */}
+              {pageCount > 1 && (
+                <nav className="sq-pagination" aria-label="Results pages">
                   <Button
-                    key={i}
                     size="icon"
-                    variant={page === i + 1 ? "default" : "outline"}
-                    aria-label={`Page ${i + 1}`}
-                    aria-current={page === i + 1 ? "page" : undefined}
-                    onClick={() => update({ page: i + 1 })}
+                    variant="outline"
+                    disabled={page === 1}
+                    aria-label="Previous page"
+                    onClick={() => update({ page: page - 1 })}
                   >
-                    {i + 1}
+                    <ArrowLeft size={16} />
                   </Button>
-                ))}
-                <Button
-                  size="icon"
-                  variant="outline"
-                  disabled={page === pageCount}
-                  aria-label="Next page"
-                  onClick={() => update({ page: page + 1 })}
-                >
-                  <ArrowRight />
-                </Button>
-              </nav>
+                  {Array.from({ length: pageCount }, (_, i) => (
+                    <Button
+                      key={i}
+                      size="icon"
+                      variant={page === i + 1 ? "default" : "outline"}
+                      aria-label={`Page ${i + 1}`}
+                      aria-current={page === i + 1 ? "page" : undefined}
+                      onClick={() => update({ page: i + 1 })}
+                    >
+                      {i + 1}
+                    </Button>
+                  ))}
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    disabled={page === pageCount}
+                    aria-label="Next page"
+                    onClick={() => update({ page: page + 1 })}
+                  >
+                    <ArrowRight size={16} />
+                  </Button>
+                </nav>
+              )}
             </>
           ) : (
-            filters.q ? (
-              <NoSearchResultsState query={filters.q} onClear={reset} />
-            ) : (
-              <EmptyState
-                title="No quests found in this realm."
-                description="The scouts couldn't find any hackathons matching your active filters. Try widening your radius, changing mode, or clearing filters."
-                actionText="Reset All Filters"
-                onAction={reset}
-              />
-            )
+            /* Actionable Empty State */
+            <div className="sq-actionable-empty-state" role="status">
+              <div className="sq-empty-board-icon" aria-hidden="true">
+                <Clock3 size={32} />
+              </div>
+              <h2 className="sq-empty-board-heading">
+                No departures match your active filters
+              </h2>
+              <p className="sq-empty-board-sub">
+                The radar didn’t find any hackathons matching your exact criteria.
+              </p>
+
+              <div className="sq-empty-remedies">
+                <strong>What to adjust:</strong>
+                <ul>
+                  {filters.city && (
+                    <li>
+                      Remove city filter (<strong>{filters.city}</strong>) or switch to Pan-India.
+                    </li>
+                  )}
+                  {filters.mode === "offline" && (
+                    <li>Switch mode to <strong>Online</strong> to see remote hackathons.</li>
+                  )}
+                  {filters.tags && filters.tags.length > 0 && (
+                    <li>
+                      Broaden your interest tags (currently: {filters.tags.join(", ")}).
+                    </li>
+                  )}
+                  {filters.prize && filters.prize > 0 && (
+                    <li>Lower the minimum prize threshold.</li>
+                  )}
+                  {filters.q && (
+                    <li>
+                      Clear keyword &ldquo;<strong>{filters.q}</strong>&rdquo; or try terms like &ldquo;AI&rdquo; or &ldquo;Web&rdquo;.
+                    </li>
+                  )}
+                </ul>
+              </div>
+
+              <Button onClick={reset} className="sq-empty-reset-btn">
+                <RotateCcw size={15} />
+                <span>Reset all filters</span>
+              </Button>
+            </div>
           )}
         </section>
       </div>
 
-      <QuestDialog
-        open={sheetOpen}
+      {/* Mobile Bottom Filter Sheet Drawer */}
+      <MobileFilterSheet
+        isOpen={sheetOpen}
+        onOpen={() => setSheetOpen(true)}
         onClose={() => setSheetOpen(false)}
-        title="Find your kind of quest"
-        kind="filters"
-      >
-        <DiscoveryFiltersPanel filters={filters} onChange={update} onReset={reset} />
-        <div className="sq-sheet-actions">
-          <Button onClick={() => setSheetOpen(false)}>
-            Show {results.length} hackathons <ArrowRight />
-          </Button>
-        </div>
-      </QuestDialog>
+        filters={filters}
+        totalResults={results.length}
+        onChange={update}
+        onReset={reset}
+      />
 
+      {/* Desktop Quick-View Modal */}
       <QuestDialog
         open={Boolean(filters.event)}
         onClose={() => update({ event: undefined })}
-        title={selected?.title ?? "Hackathon not found"}
+        title={selected?.title ?? "Hackathon Details"}
         kind="detail"
       >
         {selected ? (
           <HackathonDetail event={selected} now={now} drawer />
         ) : (
           <div className="sq-discovery-empty">
-            <Mascot />
             <h2>This quest isn’t on the board.</h2>
             <Button onClick={() => update({ event: undefined })}>Back to results</Button>
           </div>

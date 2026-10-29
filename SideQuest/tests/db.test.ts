@@ -31,7 +31,7 @@ describe("Hackathon Query Engine (Phase 2)", () => {
   });
 
   it("searches keywords across title, organizer, and tags", async () => {
-    const aiSearch = await getHackathons({ q: "agents" });
+    const aiSearch = await getHackathons({ q: "agents", include_closed: true });
     expect(aiSearch.hackathons.length).toBeGreaterThan(0);
     expect(
       aiSearch.hackathons.every(

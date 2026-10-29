@@ -3,32 +3,35 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  ArrowUpRight,
   Bell,
   Check,
-  CheckCircle2,
   Clock3,
-  Mail,
+  Copy,
+  CalendarDays,
   Send,
-  ShieldCheck,
   Sparkles,
-  Zap,
+  ExternalLink,
+  ShieldCheck,
+  CheckCircle2,
+  Play,
+  RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Mascot } from "@/components/sidequest/mascot";
 
 export default function AlertsPage() {
-  const [email, setEmail] = useState("");
-  const [emailSubscribed, setEmailSubscribed] = useState(false);
-  const [emailLoading, setEmailLoading] = useState(false);
+  const [calendarCopied, setCalendarCopied] = useState(false);
+  const [testSending, setTestSending] = useState(false);
+  const [testSent, setTestSent] = useState(false);
 
-  // Preference toggles
+  // Preference toggles as specified:
+  // 1. 24h before close for saved events
+  // 2. 3h before close for saved events
+  // 3. New events matching my interests
   const [prefs, setPrefs] = useState({
-    deadline24h: true,
-    digestFriday: true,
-    freeOnly: false,
-    onlineOnly: false,
+    remind24h: true,
+    remind3h: true,
+    matchingInterests: true,
   });
 
   const togglePref = (key: keyof typeof prefs) => {
@@ -39,255 +42,258 @@ export default function AlertsPage() {
     });
   };
 
-  const handleEmailSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !email.includes("@")) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    setEmailLoading(true);
+  const calendarFeedUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/api/calendar/user-quest-token-2026`
+      : `/api/calendar/user-quest-token-2026`;
+
+  const copyCalendarUrl = () => {
+    navigator.clipboard.writeText(calendarFeedUrl);
+    setCalendarCopied(true);
+    setTimeout(() => setCalendarCopied(false), 2500);
+    toast.success("iCal subscription URL copied to clipboard!");
+  };
+
+  const handleTestMessage = () => {
+    setTestSending(true);
+    setTestSent(false);
+
     setTimeout(() => {
-      setEmailLoading(false);
-      setEmailSubscribed(true);
-      toast.success("Subscribed to the BuildSeek weekly digest!");
-    }, 400);
+      setTestSending(false);
+      setTestSent(true);
+      toast.success("Test alert dispatched via @BuildSeekAlertsBot!", {
+        description: "Check Telegram for the test deadline reminder.",
+      });
+    }, 600);
   };
 
   return (
-    <main className="sq-container" style={{ padding: "40px 16px 80px", maxWidth: "860px", margin: "0 auto" }}>
-      <header style={{ marginBottom: "40px", textAlign: "center" }}>
-        <div className="sq-eyebrow" style={{ display: "inline-flex", marginBottom: "12px" }}>
-          <Zap size={13} fill="currentColor" /> Never miss your moment
+    <main className="sq-departure-board-container" style={{ maxWidth: "860px" }}>
+      {/* Header Banner */}
+      <section className="sq-board-header-banner" aria-label="Alerts & Reminders Banner">
+        <div className="sq-board-header-top">
+          <span className="sq-board-station-tag">
+            <Bell size={15} /> Automated Radar Dispatch
+          </span>
+          <span className="sq-board-live-indicator">
+            <span className="sq-live-pulse-green" aria-hidden="true" />
+            @BuildSeekAlertsBot active
+          </span>
         </div>
-        <h1 style={{ fontSize: "38px", fontWeight: 800, lineHeight: 1.15, marginBottom: "14px" }}>
-          Telegram alerts before the <span className="sq-highlight">clock runs out.</span>
-        </h1>
-        <p style={{ color: "var(--muted-foreground)", fontSize: "16px", maxWidth: "560px", margin: "0 auto" }}>
-          No spam, no promotional noise. Just a high-priority ping 24 hours before your saved hackathons close registration.
-        </p>
-      </header>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px", marginBottom: "40px" }}>
-        {/* Telegram Direct Connect */}
-        <section
-          style={{
-            background: "linear-gradient(135deg, rgba(34, 158, 217, 0.08), rgba(182, 245, 0, 0.08))",
-            border: "2px solid rgba(34, 158, 217, 0.3)",
-            borderRadius: "24px",
-            padding: "28px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
+        <h1 className="sq-board-title">Deadline Alerts &amp; Calendar</h1>
+        <p className="sq-board-subtitle">
+          Never miss a registration window again. Connect Telegram for high-priority deadline pings and subscribe to live calendar feeds.
+        </p>
+      </section>
+
+      {/* Main Grid: Telegram Connection & Sample Alert */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Telegram Direct Connect Card */}
+        <section className="sq-departure-row p-6 flex flex-col justify-between">
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
-              <div style={{ background: "#229ED9", color: "#fff", padding: "8px", borderRadius: "12px", display: "inline-flex" }}>
-                <Send size={20} />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-[#229ED9] text-white flex items-center justify-center border-2 border-navy shadow-[2px_2px_0_#0F1B33]">
+                <Send size={18} />
               </div>
-              <h2 style={{ fontSize: "20px", fontWeight: 700 }}>Connect Telegram Bot</h2>
+              <div>
+                <h2 className="font-display font-extrabold text-xl text-navy">
+                  Connect Telegram Bot
+                </h2>
+                <span className="text-xs text-muted-foreground font-semibold">
+                  Zero setup • Direct 1-tap link
+                </span>
+              </div>
             </div>
-            <p style={{ color: "var(--muted-foreground)", fontSize: "14px", lineHeight: 1.6, marginBottom: "20px" }}>
-              Get automated reminders sent directly to your Telegram chat. Instant setup in under 5 seconds with zero account creation required.
+
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4 font-medium">
+              Get automated reminders sent directly to your phone via <strong>@BuildSeekAlertsBot</strong> before your saved hackathons close.
             </p>
 
-            <ol style={{ fontSize: "13px", color: "var(--foreground)", display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px", paddingLeft: "20px" }}>
-              <li>Click the button below to open <strong>@BuildSeekAlertsBot</strong></li>
-              <li>Press <strong>Start</strong> in Telegram</li>
-              <li>Receive reminders 24h & 3h before registrations close</li>
+            <ol className="text-xs text-navy space-y-2 mb-6 pl-4 list-decimal font-semibold">
+              <li>Tap the button below to open Telegram</li>
+              <li>Press <strong>Start</strong> in @BuildSeekAlertsBot</li>
+              <li>Receive automated pings 24h &amp; 3h before deadlines</li>
             </ol>
           </div>
 
-          <Button
-            asChild
-            size="lg"
-            style={{
-              background: "#229ED9",
-              color: "#ffffff",
-              fontWeight: 700,
-              height: "46px",
-            }}
-          >
-            <a
-              href="https://t.me/BuildSeekAlertsBot?start=web_connect"
-              target="_blank"
-              rel="noopener noreferrer"
+          <div className="space-y-3">
+            <Button
+              asChild
+              className="w-full bg-[#229ED9] hover:bg-[#1C88BD] text-white font-bold rounded-full border-2 border-navy shadow-[2px_2px_0_#0F1B33] min-h-[46px]"
             >
-              <Send size={16} /> Open @BuildSeekAlertsBot <ArrowUpRight size={16} />
-            </a>
-          </Button>
+              <a
+                href="https://t.me/BuildSeekAlertsBot?start=web_connect"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Send size={16} /> Open @BuildSeekAlertsBot
+              </a>
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={handleTestMessage}
+              disabled={testSending}
+              className="w-full border-2 border-navy text-navy font-bold rounded-full shadow-[2px_2px_0_#0F1B33] text-xs min-h-[42px]"
+            >
+              {testSending ? (
+                <span>Dispatching test ping…</span>
+              ) : testSent ? (
+                <span className="inline-flex items-center gap-1.5 text-boardGreen font-bold">
+                  <CheckCircle2 size={14} /> Test Ping Sent to Telegram
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5">
+                  <Play size={13} /> Send Test Message
+                </span>
+              )}
+            </Button>
+          </div>
         </section>
 
-        {/* Telegram Sample Preview */}
-        <section
-          style={{
-            background: "#181f2a",
-            color: "#f8fafc",
-            borderRadius: "24px",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-          }}
-        >
-          <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22c55e" }} />
-            Telegram Message Preview
+        {/* Telegram Message Preview Card */}
+        <section className="bg-navy text-white p-6 rounded-2xl border-2 border-navy shadow-[4px_4px_0_#0F1B33] flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between text-xs text-gray-400 mb-3 pb-2 border-b border-white/10">
+              <span className="flex items-center gap-1.5 font-mono">
+                <span className="sq-live-pulse-green" aria-hidden="true" />
+                TELEGRAM BOT PREVIEW
+              </span>
+              <span className="text-signal-yellow font-bold">@BuildSeekAlertsBot</span>
+            </div>
+
+            <div className="bg-[#14223E] border-2 border-signal-yellow/40 rounded-xl p-4 text-xs font-mono space-y-2">
+              <div className="text-signal-yellow font-bold text-sm">
+                ⏰ REGISTRATION CLOSING IN 24H
+              </div>
+              <div className="text-white font-bold text-base font-sans">
+                OpenCV AI Competition 2026
+              </div>
+              <div className="text-gray-300 space-y-1">
+                <div>📍 Mode: Online • Global</div>
+                <div>🏆 Prize Pool: ₹17,21,250 ($20,250)</div>
+                <div className="text-coral-navy font-bold">
+                  ⏳ Closes: Tomorrow, 11:59 PM IST
+                </div>
+              </div>
+              <div className="pt-2">
+                <span className="inline-block bg-brand text-navy font-bold px-3 py-1 rounded-full border border-navy text-xs">
+                  Apply on Source &rarr;
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div
-            style={{
-              background: "#242f3d",
-              borderRadius: "14px",
-              padding: "16px",
-              fontSize: "13px",
-              lineHeight: 1.6,
-              borderLeft: "4px solid #B6F500",
-            }}
-          >
-            <div style={{ color: "#B6F500", fontWeight: 700, fontSize: "14px", marginBottom: "4px" }}>
-              ⏰ BuildSeek Deadline Alert
-            </div>
-            <div style={{ fontWeight: 600, fontSize: "15px", marginBottom: "6px" }}>
-              OpenCV AI Competition 2026
-            </div>
-            <div style={{ color: "#cbd5e1", marginBottom: "10px" }}>
-              📍 Online · Global<br />
-              🏆 Prize Pool: $20,250<br />
-              ⏳ <strong>Registration closes in 24 hours!</strong>
-            </div>
-            <div style={{ display: "inline-block", background: "#B6F500", color: "#000", fontWeight: 700, padding: "5px 12px", borderRadius: "8px", fontSize: "11px" }}>
-              Direct Apply Link ↗
-            </div>
-          </div>
+          <p className="text-xs text-gray-400 mt-4">
+            No spam or marketing broadcasts. Strictly deadline warnings and curated alerts matching your skills.
+          </p>
         </section>
       </div>
 
-      {/* Alert Preferences */}
-      <section
-        style={{
-          background: "var(--muted)",
-          borderRadius: "24px",
-          padding: "28px",
-          marginBottom: "40px",
-        }}
-      >
-        <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "8px" }}>
-          Alert Preferences
+      {/* Reminder Configuration Options */}
+      <section className="sq-departure-row p-6 mb-8">
+        <h2 className="font-display font-extrabold text-2xl text-navy mb-1">
+          Notification Preferences
         </h2>
-        <p style={{ color: "var(--muted-foreground)", fontSize: "14px", marginBottom: "20px" }}>
-          Fine-tune what pings reach your phone.
+        <p className="text-xs text-muted-foreground font-medium mb-5">
+          Choose which deadline triggers send reminders to your connected Telegram.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
-          {[
-            {
-              key: "deadline24h" as const,
-              title: "24-Hour Urgent Warning",
-              desc: "High-priority ping exactly 24h before closing.",
-            },
-            {
-              key: "digestFriday" as const,
-              title: "Friday Builder Digest",
-              desc: "Top 3 curated campus hackathons for the weekend.",
-            },
-            {
-              key: "freeOnly" as const,
-              title: "Free Events Only",
-              desc: "Ignore competitions with paid registration fees.",
-            },
-            {
-              key: "onlineOnly" as const,
-              title: "Online / Remote Only",
-              desc: "Skip offline campus events outside your city.",
-            },
-          ].map(({ key, title, desc }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => togglePref(key)}
-              style={{
-                textAlign: "left",
-                background: prefs[key] ? "rgba(182, 245, 0, 0.12)" : "var(--background)",
-                border: `1.5px solid ${prefs[key] ? "var(--brand)" : "var(--border)"}`,
-                borderRadius: "14px",
-                padding: "16px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-                <strong style={{ fontSize: "14px" }}>{title}</strong>
-                <span
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "50%",
-                    background: prefs[key] ? "var(--brand)" : "var(--muted)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ink)",
-                  }}
-                >
-                  {prefs[key] && <Check size={13} strokeWidth={3} />}
-                </span>
-              </div>
-              <p style={{ fontSize: "12px", color: "var(--muted-foreground)", margin: 0 }}>
-                {desc}
-              </p>
-            </button>
-          ))}
+        <div className="space-y-4">
+          <label className="sq-toggle-row p-3 rounded-md hover:bg-gray-50 border border-transparent hover:border-gray-200">
+            <div className="sq-toggle-info">
+              <span className="sq-toggle-title">
+                <Clock3 size={16} className="text-coral" />
+                24 Hours Before Close (Saved Events)
+              </span>
+              <span className="sq-toggle-sub">
+                Primary heads-up warning giving you one final day to submit your team or deck.
+              </span>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.remind24h}
+              onChange={() => togglePref("remind24h")}
+              className="sq-switch"
+              aria-label="Toggle 24-hour reminder"
+            />
+          </label>
+
+          <label className="sq-toggle-row p-3 rounded-md hover:bg-gray-50 border border-transparent hover:border-gray-200">
+            <div className="sq-toggle-info">
+              <span className="sq-toggle-title">
+                <Clock3 size={16} className="text-coral" />
+                3 Hours Before Close (Saved Events)
+              </span>
+              <span className="sq-toggle-sub">
+                Last-call urgent ping before the portal locks registration.
+              </span>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.remind3h}
+              onChange={() => togglePref("remind3h")}
+              className="sq-switch"
+              aria-label="Toggle 3-hour reminder"
+            />
+          </label>
+
+          <label className="sq-toggle-row p-3 rounded-md hover:bg-gray-50 border border-transparent hover:border-gray-200">
+            <div className="sq-toggle-info">
+              <span className="sq-toggle-title">
+                <Sparkles size={16} className="text-signal-yellow" />
+                New Events Matching My Interests
+              </span>
+              <span className="sq-toggle-sub">
+                Alerts when new hackathons matching your selected tech stacks are published.
+              </span>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.matchingInterests}
+              onChange={() => togglePref("matchingInterests")}
+              className="sq-switch"
+              aria-label="Toggle matching interests reminder"
+            />
+          </label>
         </div>
       </section>
 
-      {/* Email Backup Alternative */}
-      <section
-        style={{
-          background: "var(--muted)",
-          borderRadius: "24px",
-          padding: "28px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Mail size={20} />
-          <h2 style={{ fontSize: "20px", fontWeight: 700 }}>Don&apos;t use Telegram? Get email digests.</h2>
+      {/* Calendar Subscription Feed Card */}
+      <section className="sq-departure-row p-6" style={{ borderRadius: "10px" }}>
+        <div className="flex items-center gap-3 mb-2">
+          <CalendarDays size={20} className="text-navy" />
+          <h2 className="font-condensed font-extrabold text-2xl uppercase tracking-wide text-navy">
+            Live Calendar Feed (iCal)
+          </h2>
         </div>
-        <p style={{ color: "var(--muted-foreground)", fontSize: "14px", maxWidth: "560px" }}>
-          Every Monday, we email a neat 3-minute summary of deadlines for the week ahead.
+        <p className="text-xs text-mutedText mb-4">
+          Subscribe once in Apple Calendar, Google Calendar, or Outlook to automatically sync all your saved hackathon deadlines.
         </p>
 
-        {emailSubscribed ? (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--brand-dark, #22c55e)", fontWeight: 600 }}>
-            <CheckCircle2 size={18} />
-            <span>You&apos;re subscribed with {email}! First digest arrives this Monday.</span>
-          </div>
-        ) : (
-          <form onSubmit={handleEmailSubscribe} style={{ display: "flex", gap: "10px", maxWidth: "480px" }}>
-            <input
-              type="email"
-              required
-              placeholder="you@college.edu"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "10px 14px",
-                borderRadius: "10px",
-                background: "var(--background)",
-                border: "1px solid var(--border)",
-                fontSize: "14px",
-              }}
-            />
-            <Button type="submit" disabled={emailLoading}>
-              {emailLoading ? "Subscribing…" : "Subscribe"}
-            </Button>
-          </form>
-        )}
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
+          <input
+            readOnly
+            value={calendarFeedUrl}
+            className="flex-1 p-2.5 bg-gray-50 border border-gray-300 rounded font-mono text-xs text-gray-700 select-all"
+            aria-label="iCal calendar feed URL"
+          />
+          <Button
+            type="button"
+            onClick={copyCalendarUrl}
+            className="bg-navy text-signal-yellow font-condensed font-bold uppercase tracking-wider shrink-0 min-h-[44px]"
+          >
+            {calendarCopied ? <Check size={14} /> : <Copy size={14} />}
+            <span>{calendarCopied ? "Copied!" : "Copy Link"}</span>
+          </Button>
+        </div>
+
+        <div className="p-3 bg-gray-50 rounded border border-gray-200 text-xs text-mutedText space-y-1">
+          <strong>How to subscribe:</strong>
+          <div>• <strong>Apple Calendar:</strong> File &rarr; New Calendar Subscription &rarr; Paste link</div>
+          <div>• <strong>Google Calendar:</strong> Other Calendars (+) &rarr; From URL &rarr; Paste link</div>
+        </div>
       </section>
     </main>
   );

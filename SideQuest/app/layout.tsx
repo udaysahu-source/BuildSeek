@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { Barlow, Barlow_Condensed, Bricolage_Grotesque, Inter } from "next/font/google";
 import { Navigation } from "@/components/sidequest/navigation";
 import { Footer } from "@/components/sidequest/footer";
 import { AuthProvider } from "@/components/sidequest/auth-state";
@@ -7,6 +7,20 @@ import { BookmarksProvider } from "@/components/sidequest/discovery-state";
 import { Toaster } from "@/components/ui/sonner";
 import { GlobalUIStateProvider } from "@/components/ui/states";
 import "./globals.css";
+
+const barlowCondensed = Barlow_Condensed({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-barlow-condensed",
+  display: "swap",
+});
+
+const barlow = Barlow({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-barlow",
+  display: "swap",
+});
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -101,7 +115,7 @@ const jsonLd = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#B6F500",
+  themeColor: "#0F1B33",
   width: "device-width",
   initialScale: 1,
 };
@@ -112,7 +126,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${barlowCondensed.variable} ${barlow.variable} ${bricolage.variable} ${inter.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"

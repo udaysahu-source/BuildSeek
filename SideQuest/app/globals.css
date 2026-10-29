@@ -7,20 +7,34 @@
   :root {
     --background: #FFFBE8;
     --foreground: #0B1033;
+    --paper: #FFFBE8;
+    --navy: #0F1B33;
+    --brand: #D4F933;
+    --signal-yellow: #FFC629;
+    --coral-navy: #FF8A6B;
+    --coral-light: #D83A1F;
+    --green-navy: #6EDDA0;
+    --green-light: #17794A;
+    --muted-text: #4A5670;
   }
 
   body {
     background-color: #FFFBE8;
     color: #0B1033;
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-inter), var(--font-barlow), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bricolage), sans-serif;
+    font-family: var(--font-bricolage), var(--font-barlow-condensed), sans-serif;
     letter-spacing: -0.02em;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-barlow-condensed), ui-monospace, monospace;
   }
 }
 
